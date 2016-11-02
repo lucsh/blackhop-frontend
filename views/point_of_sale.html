@@ -1,0 +1,31 @@
+<div class="wrapper wrapper-content animated fadeInRight" ng-controller="posCtrl">
+    <div class="col-centered " >
+        <div class="col-lg-4 col-md-5 col-sm-5">
+            <div class="ibox nopadding float-e-margins">
+                <div ventas-resumen-compra resumen="resumen"></div>
+                <div ventas-calculadora resumen="resumen" modal="modal" venta-productos="ventaProductos"></div>
+            </div>
+        </div> 
+        <div class="col-lg-8 col-sm-7 col-md-7">
+
+            <div productos-slim-scroll>
+                <div ng-repeat="producto in ventaProductos | filter:'!Cerveza Tirada' | filter:'!No vendible'">
+                    <div ibox-product resumen="resumen" producto="producto"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+        <div class="canillas-right-container">
+        <div class="canillas-right-left">
+        <div ng-repeat="canilla in canillas">
+        <span class="canilla-pos"><div class="canilla-color" style="background-color:{{canilla.productoColor || '#aaa'}};"><div class="canilla-numero">{{canilla.numero|number}}</div></div><div class="canilla-nombre">{{canilla.productoNombre}} - {{canilla.productoMarca}}
+        <br><uib-progressbar class="barra-birra" value="(canilla.productoStock/300*100)" type="{{canilla.productoStock<10 && 'danger' || canilla.productoStock<50 && 'warning' || ''}}"></uib-progressbar>    
+        </div></span>
+        </div>    
+        
+        
+    </div>
+
+</div>

@@ -1,0 +1,31 @@
+<div class="middle-box text-center loginscreen  animated fadeInDown">
+    <div>
+        <div>
+            <h1 class="logo-name"><div class="profile-element text-center">
+                    <img alt="image" class="q-logo" src="img/quantum-logo-chico.png"/>
+                </div></h1>
+        </div>
+        <h3>Bienvenido a Quantum</h3> 
+            
+        <table class="table table-hover tabla-usuarios" ng-controller="loginLista">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Usuario</th>
+                        <th>Modo</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="usuario in usuarios" ng-click="saLoggout(usuario.id, usuario.nombre)">
+                        <td>{{ usuario.id}}</td>
+                        <td>{{ usuario.nombre}}</td>
+                        <td>{{ usuario.modo}}</td>
+                        <td><i class="fa fa-times text-danger "></i> </td>
+                    </tr>
+
+                    </tbody>
+        </table>
+        
+    </div>
+</div>

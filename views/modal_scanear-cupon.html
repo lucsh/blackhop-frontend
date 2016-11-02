@@ -1,0 +1,29 @@
+<div class="modal-body">
+    
+    <div class="panel-body">
+        <row>       
+            <fieldset>
+                <h3 class="m-t-none m-b">Escanear Cupon</h3>
+                <div class="col-sm-12 ">
+                    <form role="form">
+                        <div class="form-group">
+                            <div><input type="text" ng-model="cupon" autofocus="true" placeholder="Buscar" class="form-control"></div>
+                        </div>             
+                    </form>
+                    <!--mostrar detalles? -->
+                    
+                    <div ng-if="error" class="alert alert-danger">
+                        Nopes
+                    </div>
+                </div>
+            </fieldset>   
+        </row>
+        <div class="pull-right">
+            <button type="button" class="btn btn-white  " ng-click="cancel()">Cerrar</button>
+            <button ng-if="cupon" type="button" class="btn btn-primary " ng-click="ok()">Guardar</button>
+        </div>
+
+    </div>
+</div>
+
+

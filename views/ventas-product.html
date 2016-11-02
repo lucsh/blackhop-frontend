@@ -1,0 +1,28 @@
+        <div class="col-md-6 col-lg-3" ng-click="addProduct()">
+            <div class="ibox noselect">
+                <div class="ibox-content product-box">
+                    
+                    <div class="product-imitation">
+                        [ {{producto.nombre | limitTo:19}} ]
+                    </div>
+                    
+                    <div class="product-desc">
+                        <span class="product-price">
+                            $ {{producto.valor}}
+                        </span>   
+                        <small class="text-muted">{{producto.categoria}}</small>
+                        <a class="product-name"> {{producto.marca}} - {{producto.nombre}}</a>
+                        <div ng-show="producto.stock>=0">
+                        <small class="text-muted">Stock : {{producto.stock}} {{producto.unidad.abr}}</small>
+                        <uib-progressbar class="barra-birra" value="(producto.stock/100*100)" type="{{producto.stock<16 && 'danger' ||producto.stock<50 && 'warning' || ''}}"></uib-progressbar>
+                        </div>
+                        <div ng-show="producto.stock<0">
+                        <small class="text-muted">Stock : &infin;</small>
+                        <uib-progressbar class="barra-birra" value="100" ></uib-progressbar>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+        </div>

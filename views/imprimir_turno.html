@@ -1,0 +1,41 @@
+<div class="modal-body">
+    <!--
+
+                codigo:'9658321456258',
+                turnoNumero = 'A14'
+    -->
+    
+
+    <button class="btn btn-info btn-xs pull-right" type="button" ng-click="cancel()" tooltip-placement="top" uib-tooltip="Cerrar"><i class="fa fa-times"></i></button>
+
+    <div id="printThisElement" class="text-center"> 
+    <!-- <Print> -->
+    <div id="printBody">
+        <img class="cupon-bg-img" src="../img/bh_bg.jpg">
+        <row>
+        <div class="text-center print-full-width">
+            <img alt="image" class="" src="/img/blackhop-isologo.png">
+        </div>
+        </row>
+        <br>
+        <h2  class="text-center nopadding print-full-width">
+        Turno
+        </h2>
+        <br>
+        <h1 class="text-center nopadding print-full-width font-huge">
+        {{turno}}
+        </h1>
+        <br>
+        <h3 class="text-center print-full-width small nopadding nomargins">Emitido:</h3><br>
+        <h2 class="text-center print-full-width nopadding nomargins ">{{fecha}}</h2>
+    <hr>
+    </div>
+    </div>
+    <!-- </Print> -->
+    
+    <div class="col-md-12">
+    <button class="pull-right btn btn-primary hide-in-print" ng-print print-element-id="printThisElement">
+      <i class="fa fa-print"></i> Imprimir</button>
+    </div>
+    <hr>
+</div>

@@ -1,0 +1,121 @@
+<div class="inmodal">
+    <div class="modal-body">
+        <wizard on-finish="finishedWizard()" hide-indicators="indicatorsDisabled"> 
+            <wz-step wz-title="{{productoNombre}}" wz-disabled="{{productoDisabled}}" canexit="exitValidation">
+                <h2>Elejir Producto</h2>
+                <p></p>
+                <fieldset>
+                    <div class="col-sm-12 ">
+                        <p>Por Nombre o Marca</p>
+                        <form role="form">
+                            <div class="form-group">
+                                <div><input type="text" ng-model="query" placeholder="Buscar" class="form-control"></div>
+                                <table class="table table-hover" ng-show="query.length >= 3" >
+                                    <tbody>
+                                        <tr class="cursor-pointer" type="submit" wz-next ng-click="seleccionarProducto(producto.id)" 
+                                            ng-repeat="producto in productos | 
+                                                       filter: query | 
+                                                       orderBy: 'nombre' ">
+                                            <td>{{producto.marca}}</td>
+                                            <td>{{producto.nombre}}</td>
+                                            <td class="text-right">{{ producto.stock}}</td>
+                                            <td class="text-left">{{producto.unidad}}</td>
+                                            <td>{{ producto.ubicacion}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>             
+                        </form>
+                    </div>
+                </fieldset> 
+                <div class="modal-footer">
+                    <button class="btn btn-danger" ng-click="cancel()" type="submit">Cancelar</button>
+                </div>                           
+            </wz-step>
+            <wz-step wz-title="{{origenNombre}}" wz-disabled="{{origenDisabled}}" >
+                <h2>Elejir origen</h2>
+                <p></p>
+                
+                <div class="col-sm-12 ">
+                        <p>Por Nombre o Direccion</p>
+                        <form role="form">
+                            <div class="form-group">
+                                <div><input type="text" ng-model="query" placeholder="Buscar" class="form-control"></div>
+                                <table class="table table-hover" ng-show="query.length >= 3" >
+                                    <tbody>
+                                        <tr class="cursor-pointer" type="submit" wz-next ng-click="seleccionarOrigen(ubicacion.nombre)" 
+                                            ng-repeat="ubicacion in ubicaciones | 
+                                                       filter:'!Ajuste' |
+                                                       filter: query | 
+                                                       orderBy: 'nombre' ">
+                                            <td>{{ubicacion.nombre}}</td>
+                                            <td>{{ubicacion.direccion}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>             
+                        </form>
+                    </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" ng-click="cancel()" type="submit">Cancelar</button>
+                </div>
+            </wz-step>
+            <wz-step wz-title="{{cantidadNombre}}" wz-disabled="{{cantidadDisabled}}" canexit="exitValidation">
+                <h2>Elejir cantidad</h2>
+                <p></p>
+                <fieldset>
+                    <div class="col-sm-12 ">
+                        <p></p>
+                        <form role="form">
+                            <div class="form-group">
+                                <div class="row m-b-lg" ng-init="single = 0">
+                                    <div class="col-sm-12 text-center m-b-sm"><span>{{cantSel=(single*productoEdit.stock/100 | number:0)}} {{productoEdit.unidad}}</span></div>
+                                    <div class="col-lg-12" >                                        
+                                        <div class="m-b-none">
+                                        <div class="col-sm-2"><small>0 {{productoEdit.unidad}}</small></div><div class="col-sm-8 text-center"></div><div class="col-sm-2 text-right"><small>{{productoEdit.stock}} {{productoEdit.unidad}}</small></div>
+                                        </div>
+                                         <div slider ng-model="single" start=0 end=100></div>
+                                    </div>
+                                </div>
+                            </div>             
+                        </form>
+                    </div>
+                </fieldset> 
+                <div class="modal-footer">
+                    <button class="btn btn-danger" ng-click="cancel()" type="submit">Cancelar</button>
+                    <button class="btn btn-primary" wz-next ng-click="seleccionarCantidad(cantSel)" type="submit">Siguiente</button>
+                </div>                           
+            </wz-step>
+            <wz-step wz-title="{{destinoNombre}}" wz-disabled="{{destinoDisabled}}" >
+                <h2>Elejir destino</h2>
+                <p></p>
+                
+                <div class="col-sm-12 ">
+                        <p>Por Nombre o Direccion</p>
+                        <form role="form">
+                            <div class="form-group">
+                                <div><input type="text" ng-model="query" placeholder="Buscar" class="form-control"></div>
+                                <table class="table table-hover" ng-show="query.length >= 3" >
+                                    <tbody>
+                                        <tr class="cursor-pointer" type="submit"  ng-click="seleccionarDestino(ubicacion.id)" 
+                                            ng-repeat="ubicacion in ubicaciones |  
+                                                       filter:'!Ajuste' |
+                                                       filter: query | 
+                                                       orderBy: 'nombre' ">
+                                            <td>{{ubicacion.nombre}}</td>
+                                            <td>{{ubicacion.direccion}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>             
+                        </form>
+                    </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" ng-click="cancel()" type="submit">Cancelar</button>
+                    <button class="btn btn-primary" ng-click="ok()" type="submit">Finalizar</button>
+                </div>
+            </wz-step>
+        </wizard>
+    </div>
+
+</div>

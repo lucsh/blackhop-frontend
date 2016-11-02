@@ -1,0 +1,24 @@
+<div class="modal-body">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h2>
+                Seleccionar Producto
+            </h2>
+            <div class="panel-body">
+                 <form role="form" class="form-horizontal">
+                        <div class="form-group">
+                            <label for="seleccionar-producto" class="sr-only">Seleccionar Producto</label>
+                            <select id="seleccionar-producto"  class="form-control m-b"  ng-options="producto.id as producto.marca + ' - ' + producto.nombre for producto in productosDisponibles"
+                                    ng-model="productoSeleccionado"></select>
+                        </div>
+                </form>
+                <div class="col-md-8"></div>
+                <div class="pull-right col-md-4">
+                    <button class="btn btn-sm btn-danger  m-t-n-xs" ng-click="vaciar()" type="submit"><strong>Vaciar</strong></button> 
+                    <button class="btn btn-sm btn-primary  m-t-n-xs" ng-click="guardar(productoSeleccionado)" type="submit"><strong>Guardar</strong></button>                                    
+            </div>
+            </div>
+        </div>
+    </div>
+</div>

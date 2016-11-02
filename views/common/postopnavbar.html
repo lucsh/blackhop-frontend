@@ -1,0 +1,32 @@
+<div ng-controller="posCtrl">
+    <div id="go-top" class="go-top in-page-scroll go-top-out">
+        <div class="circle1"></div>
+        <a ng-click="bajar = bajar == 'bajar' ? '' : 'bajar'" class="square {{bajar}}"><span></span></a>
+        <div class="rectangle"></div>
+        <div class="circle2"></div>
+    </div>
+    <div class="row pos-nav border-bottom">
+
+        <nav class="navbar navbar-fixed-top {{bajar}}" role="navigation" style="margin-bottom: 0">
+            <ul ng-if="$parent.$state.current.name=='pos.point_of_sale'" class="nav navbar-top-links navbar-left">
+                <li>
+                    <a class="text-warning" ng-click="cargarGasto()">
+                        <i class="fa fa-plus"></i> Cargar Gasto
+                    </a>
+                </li>
+
+            </ul>
+            <ul class="nav navbar-top-links navbar-right">
+                <li>
+                    <!--<a ui-sref="login">-->
+                    <a>
+                        <i class="fa fa-sign-out"></i> Terminar sesión
+                    </a>
+                </li>
+
+            </ul>
+
+        </nav>
+    </div>
+
+</div>

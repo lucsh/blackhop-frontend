@@ -1,0 +1,60 @@
+<div ng-controller="productosInventarioCtrl">
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-8">
+            <h2>Inventario</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="index.html">Escritorio</a>
+                </li>
+                <li class="active">
+                    <strong>Inventario</strong>
+                </li>
+            </ol>
+        </div>
+        <div class="col-lg-4 text-right">
+            <h2><button ng-click="modal.nuevo()" class="btn btn-primary " type="button"><i class="fa fa-plus"></i>&nbsp;Producto</button>&nbsp;<button ng-click="modal.ubicaciones()" class="btn btn-success " type="button"><i class="fa fa-list"></i>&nbsp;Ubicaciones</button></h2>
+        </div>
+    </div>
+    <div  class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <table datatable="ng" dt-options="dtOptions"  dt-column-defs="dtColumnDefs" class="table table-striped table-bordered table-hover dataTables-example">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Marca</th>                            
+                                    <th>Stock</th>
+                                    <th>unidad</th>
+                                    <th>Ubicacion</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="" ng-repeat="producto in productosInventario"  ng-init="isHover='tresde-right-hidden'" ng-mouseover="isHover='tresde-right-left';" ng-mouseleave="isHover='tresde-right-hidden'">
+                                    <td>{{ producto.id}}</td>                            
+                                    <td><span class="cerveza-color-lista" style="background-color:{{producto.color}};"></span>{{ producto.nombre}}</td>                            
+                                    <td>{{ producto.marca}}</td>
+                                    <td class="text-right">{{ producto.stock}}</td>
+                                    <td class="text-left">{{producto.unidad}}</td>
+                                    <td>{{ producto.ubicacion}}
+                                    <div class="tresde-right-container" > 
+                                    <div class="{{isHover}}">
+                                        <button class="btn btn-success btn-xs" type="button" ng-click="modal.agregar(producto)" tooltip-placement="top" uib-tooltip="Agregar"><i class="fa fa-plus"></i></button>
+                                        <button class="btn btn-primary btn-xs" type="button" ng-click="modal.mover(producto)" tooltip-placement="top" uib-tooltip="Mover"><i class="fa fa-share"></i></button>
+                                        <button class="btn btn-primary btn-xs" type="button" ng-click="modal.ajustar(producto)" tooltip-placement="top" uib-tooltip="Ajustar"><i class="fa fa-minus"></i></button>
+                                        </div>
+                                    </div> 
+                                    </td>                                    
+                                </tr>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+</div>

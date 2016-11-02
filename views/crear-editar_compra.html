@@ -1,0 +1,182 @@
+<div class="modal-body">
+
+    <div class="row wrapper white-bg page-heading">
+        <div class="col-lg-10">
+            <h1 class="">Compra n&ordm;: {{compra.id}}</h2>
+
+        </div>
+        <div class="col-lg-2">                
+            <button type="button" class="btn btn-danger btn-xs pull-right" ng-click="cancel()"><i class="fa fa fa-times"></i></button>            
+        </div>
+    </div>    
+    <div class="row wrapper white-bg page-heading">
+        <div class="col-lg-7">
+            <div class="form-group">
+                <label for="seleccionar-proveedor" class="">Proveedor</label>
+                <select ng-if="!soloMostrar" id="seleccionar-proveedor"  
+                        class="form-control m-b"  
+                        ng-options="proveedor.id as proveedor.nombre for proveedor in proveedores"
+                        ng-model="prId"
+                        ng-change="proveedorSelected(prId)"></select>
+                <h2 class="nopadding" ng-if="soloMostrar">{{compra.nombreProveedor}} </h2>
+            </div>                    
+        </div>
+        <div class="col-lg-5">
+            <div class="col-md-12 form-group" id="data_1">
+                <label class="font-normal">Fecha</label>
+
+                <div ng-if="!soloMostrar" class="input-group date">
+                    <input type="datetime"  class="form-control" date-time ng-model="compra.fecha" view="date" auto-close="true" min-view="date" format="DD/MM/YYYY">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+                
+                <h2 class="nopadding" ng-if="soloMostrar">{{compra.fecha}} </h2>
+            </div>
+        </div>
+    </div>
+        <div ng-if="prId" class="row nopadding animated fadeInDown">
+            <div class="col-lg-1">            
+            </div>
+            <div ng-if="cuitProveedor" class="col-lg-2">
+                <dl class="small nopadding">
+                    <dt>CUIT</dt>
+                    <dd>{{cuitProveedor}}</dd>
+                </dl>
+            </div>
+            <div ng-if="direccionProveedor" class="col-lg-3">
+                <dl class="small nopadding">
+                    <dt>Direccion</dt>
+                    <dd>{{direccionProveedor}}</dd>
+                </dl>
+            </div>
+            <div ng-if="!telefonoContactoProveedor&&telefonoProveedor" class="col-lg-2">
+                <dl class="small nopadding">
+                    <dt>Telefono</dt>
+                    <dd>{{telefonoProveedor}}</dd>
+                </dl>
+            </div>
+            <div ng-if="telefonoProveedor" class="col-lg-3">
+                <dl class="small nopadding">
+                    <dt>Telefono<small> ( {{contactoProveedor}} )</small></dt>
+                    <dd>{{telefonoContactoProveedor}}</dd>
+                </dl>
+            </div>
+            <div class="col-lg-2">
+            <span ng-if="soloMostrar" class="badge"  ng-class="compra.class">
+                {{compra.estado}} 
+            </span>    
+            <div ng-if="!soloMostrar" class="btn-group"  uib-dropdown>
+                <button type="button" class="btn" ng-class="claseBotonEstado" uib-dropdown-toggle>
+                    {{compra.estado}} <span class="caret"></span>
+                </button>
+                <ul role="menu" uib-dropdown-menu="">
+                    <li ng-repeat="estado in estadosCompras"><a ng-click="cambiarEstado(estado)">{{estado}}</a></li>
+                    <li class="divider"></li>
+                    <li class="m-b-sm m-l-sm"><span class="text-mutted">{{estadoAnterior}}:{{fechaAnterior}}</span></li>
+                </ul>
+            </div>
+        
+        </div>
+        </div>
+
+    </div>
+    <div class="row wrapper "> 
+        <div class="col-md-12">
+
+            <div class="ibox">
+                <div class="ibox-title">
+                    <span class="pull-right">(<strong>{{compra.items.length}}</strong>) 
+                                        <ng-pluralize count="compra.items.length" 
+                                          when="{ 'one': ' item',
+                                                  'other': ' items' }">
+                                        </ng-pluralize></span>
+                    <h5>Productos</h5>
+                </div>
+
+                <div>                    
+                    <div class="ibox-content">
+                        <div class="table-responsive">
+                            <table class="table shoping-cart-table agregar-lista-productos">
+                                <tbody>
+                                    <tr ng-repeat="item in compra.items">
+                                        <td class="text-center numeros-tabla" width="10" >
+                                            {{item.id}}    
+                                        </td>
+                                        <td width="250" class="desc">
+                                            <div ng-if="!soloMostrar" class="form-group nopadding">
+                                                <label for="seleccionar-producto" class="sr-only">Producto</label>
+                                                <select  id="seleccionar-producto"  
+                                                        class="form-control"  
+                                                        ng-options="producto.id as producto.nombre + ' ( ' + producto.marca + ' ) ' for producto in productos"
+                                                        ng-model="item.productoId"
+                                                        ng-change="productoSelected(item.productoId,item.id)"></select>
+                                            </div>
+                                            
+                                            <h2 class="" ng-if="soloMostrar">{{item.nombre}} </h2>
+                                            <p ng-if="item.descripcion"  class="small item-descripcion">
+                                                {{item.descripcion}}
+                                            </p> 
+
+                                        </td>
+
+                                        <td width="150">
+                                            <div ng-if="!soloMostrar">
+                                            <input type="text"  name="costo" touch-spin spin-options="spinSetupCosto" ng-model="item.costo">
+                                            </div>
+                                            <p class="nopadding numeros-tabla" ng-if="soloMostrar">{{item.costo|currency:"$ "}} </p>
+
+                                        </td>
+                                        <td width="100">
+                                            <input type="text" ng-if="!soloMostrar" name="costo" touch-spin spin-options="spinSetupCantidad" ng-model="item.cantidad">
+                                            <p class="nopadding numeros-tabla" ng-if="soloMostrar">{{item.cantidad}} </p>
+
+                                        </td>
+                                        <td  width="150"> 
+                                            <h2 ng-if="item.costo * item.cantidad" >
+                                                {{item.costo * item.cantidad | currency:"$ "}}
+                                            </h2>
+                                        </td>
+                                        <td ng-if="!soloMostrar">
+                                            <button  class="btn btn-primary btn-tiny" type="button" ng-click="agregarItem()"><i class="fa fa-plus"></i>
+                                            </button>
+                                            <button ng-if="compra.items.length>1"  class="btn btn-danger btn-tiny" type="button" ng-click="quitarItem(item.id)"><i class="fa fa-minus"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="ibox-content">
+
+                    <h2 ng-if="getTotal()" class="font-bold pull-right animated pulse">Total {{ getTotal() | currency:"$ "}}</h2>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row"></div>
+    <div  class="modal-footer m-t-sm">
+        <div class="col-md-1">
+                <button ng-mouseover="animarHover='animated tada'"
+                ng-mouseleave="animarHover=''"
+                class="btn btn-success" 
+                ng-click="toggleEditar()">
+                    <i ng-if="soloMostrar" class="{{animarHover}} fa fa-lock" aria-hidden="true"></i>
+                    <i ng-if="!soloMostrar" class="{{animarHover}} fa fa-unlock-alt" aria-hidden="true"></i> 
+                </button>
+        
+        </div> 
+        <div class="col-md-9"></div>
+        <div ng-if="productoReady && proveedorReady" class="col-md-2 animated pulse">
+            <button class=" btn btn-primary" ng-click="guardar()">Guardar</button>
+        </div>
+</div>
+
+</div>
+        

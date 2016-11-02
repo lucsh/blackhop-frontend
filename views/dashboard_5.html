@@ -1,0 +1,348 @@
+<div class="wrapper wrapper-content animated fadeIn" ng-controller="dashboardFive as chart">
+
+    <div class="p-w-md m-t-sm">
+        <div class="row">
+ 
+            <div class="col-sm-4">
+                <h1 class="m-b-xs">
+                    $ 26.900,00
+                </h1>
+                <small>
+                    Ventas en el mes acumuladas
+                </small>
+                <div class="m-b-sm">
+                    <div sparkline spark-data="chart.sparkline1" spark-options="chart.sparkline1Options"></div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <small class="stats-label">Cantidad de Clientes</small>
+                        <h4>1435</h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Diferencia</small>
+                        <h4>{{1435*100/4604 | number: 2}} %</h4>
+                    </div>
+                    <div class="col-xs-4">
+                        <small class="stats-label">Mes Anterior</small>
+                        <h4>4604</h4>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-sm-4">
+                <h1 class="m-b-xs">
+                    $ 12.100,00
+                </h1>
+                <small>
+                    Ventas en la semana
+                </small>
+                <div class="m-b-sm">
+                    <div sparkline spark-data="chart.sparkline2" spark-options="chart.sparkline2Options"></div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <small class="stats-label">Cantidad de clientes</small>
+                        <h4>630</h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Diferencia</small>
+                        <h4>{{63000/1625 | number: 2}} %</h4>
+                    </div>
+                    <div class="col-xs-4">
+                        <small class="stats-label">Semana Anterior</small>
+                        <h4>1625</h4>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="col-sm-4">
+
+                <div class="row m-t-xs">
+                    <div class="col-xs-6">
+                        <h5 class="m-b-xs">Ventas Mes Pasado</h5>
+                        <h1 style="font-size:22px" class="no-margins">$ 165.000</h1>
+                    </div>
+                    <div class="col-xs-6">
+                        <h5 class="m-b-xs">Ventas año en curso</h5>
+                        <h1 style="font-size:22px" class="no-margins">$542.120</h1>
+                        
+                    </div>
+                </div>
+
+
+                <table class="table small m-t-sm">
+                    <tbody>
+                    <tr>
+                        <td>
+                            <strong>1050</strong> Litros de cerveza
+                            
+                        </td>
+                        <td>
+                            <strong>15210</strong> Litros de cerveza
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>24</strong> Growleres
+                        </td>
+                        <td>
+                            <strong>356</strong> Growleres
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>24</strong> Botellas de cerveza
+                        </td>
+                        <td>
+                            <strong>432</strong> Botellas de cerveza
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+
+
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="small pull-left col-md-3 m-l-lg m-t-md">
+                    <strong>Grafico de ventas</strong> anual.
+                </div>
+                <div class="small pull-right col-md-3 m-t-md text-right">
+                    <!--<strong>There are many</strong> variations of passages of Lorem Ipsum available, but the majority have suffered.-->
+                </div>
+                <div class="flot-chart m-b-xl">
+
+                    <div class="flot-chart m-b-xl">
+                        <div flot class="flot-chart-content" dataset="chart.flotData" options="chart.flotOptions"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+<div class="row">
+<div class="col-lg-4">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>Notificaciones</h5>
+            <div ibox-tools></div>
+        </div>
+        <div class="ibox-content ibox-heading">
+            <h3><i class="fa fa-exclamation"></i> Vencimientos</h3>
+            <small><i class="fa fa-tim"></i> Hay 3 alquileres que vencen hoy</small>
+        </div>
+        <div class="ibox-content">
+            <div class="feed-activity-list">
+
+                <div class="feed-element">
+                    <div>
+                        <small class="pull-right text-navy"></small>
+                        <strong>Martin Moreira</strong>
+
+                        <div>Alquilo 3 barriles ayer.</div>
+                        <small class="text-muted">299 155713033 - Alderete 1421, Neuquen</small>
+                    </div>
+                </div>
+
+                <div class="feed-element">
+                    <div>
+                        <small class="pull-right text-navy"></small>
+                        <strong>Alejo Yornet</strong>
+
+                        <div>Alquilo 1 barril ayer.</div>
+                        <small class="text-muted">299 155123456 - Independecia 899, Neuquen</small>
+                    </div>
+                </div>
+
+                <div class="feed-element">
+                    <div>
+                        <small class="pull-right text-navy"></small>
+                        <strong>Matias Del Pozzi</strong>
+
+                        <div>Alquilo 2 barriles ayer.</div>
+                        <small class="text-muted">299 155456789 - San Martin 456, Neuquen</small>
+                    </div>
+                </div>               
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-lg-8">
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>Stock de Cerveza en Local</h5>
+                <div ibox-tools></div>
+            </div>
+            <div class="ibox-content">
+                <table class="table table-hover no-margins">
+                    <thead>
+                    <tr>
+                        <th>Fabrica</th>
+                        <th>Tipo</th>
+                        <th>Cantidad</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Crafter</td>
+                        <td>IPA</td>
+                        <td class="text-navy"><i class="fa fa-database"></i>  24 l.</td>
+                    </tr>
+                        
+                    <tr>
+                        <td>Crafter</td>
+                        <td>Scotish</td>
+                        <td class="text-navy"><i class="fa fa-database"></i>  82 l.</td>
+                    </tr>
+                        
+                    <tr>
+                        <td>Nuevo Origen</td>
+                        <td>Knock Out</td>
+                        <td class="text-navy"><i class="fa fa-database"></i>  16 l.</td>
+                    </tr>
+                        
+                    <tr>
+                        <td>Kalevala</td>
+                        <td>Irish Red</td>
+                        <td class="text-navy"><i class="fa fa-database"></i>  38 l.</td>
+                    </tr>
+                        
+                    <tr>
+                        <td>Crafter</td>
+                        <td>Pumpkin Ale</td>
+                        <td class="text-navy"><i class="fa fa-database"></i>  46 l.</td>
+                    </tr>
+                        
+                    <tr>
+                        <td>Crafter</td>
+                        <td>Porter</td>
+                        <td class="text-navy"><i class="fa fa-database"></i>  58 l.</td>
+                    </tr> 
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="col-lg-6">
+        <div class="statistic-box">
+            <h4>
+                Venta de Cervezas 
+            </h4>
+
+            <p>
+                Top 5 de ventas por Marca/Tipo
+            </p>
+
+            <div class="row text-center" ng-controller="chartJsCtrl as chart">
+                <div class="col-lg-12">
+                        <canvas doughnutchart options="chart.doughnutOptions" data="chart.doughnutData" width="300" height="200"></canvas>
+                    <h5></h5>
+                </div>
+            </div>
+            <div class="m-t">
+                <small>Segun las ventas del mes en curso</small>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</div>
+
+
+</div>
+    </div>
+
+
+</div>
+
+<div class="small-chat-box ng-small-chat fadeInRight animated" ng-show="openChat">
+
+    <div class="heading" draggable="true">
+        <small class="chat-date pull-right">
+            02.06.2016
+        </small>
+        Chat Interno
+    </div>
+
+    <div class="content" chat-slim-scroll>
+
+        <div class="left">
+            <div class="author-name">
+                Lucas <small class="chat-date">
+                10:02 pm
+            </small>
+            </div>
+            <div class="chat-message active">
+                Estaría bueno tener un chat.
+            </div>
+
+        </div>
+        <div class="right">
+            <div class="author-name">
+                Martin
+                <small class="chat-date">
+                    10:03 pm
+                </small>
+            </div>
+            <div class="chat-message">
+                La verdad que podriamos agregar uno, para charlar entre la caja y la barra.
+            </div>
+        </div>
+        <div class="left">
+            <div class="author-name">
+                Lucas
+                <small class="chat-date">
+                    10:03 pm
+                </small>
+            </div>
+            <div class="chat-message active">
+               Claro, por eso. Ademas si tiene otras sucursales, lo puede usar para eso.
+            </div>
+        </div>
+        <div class="right">
+            <div class="author-name">
+                Martin
+                <small class="chat-date">
+                    10:15 am
+                </small>
+            </div>
+            <div class="chat-message">
+                Si, muy util
+            </div>
+        </div>
+        
+
+
+    </div>
+    <div class="form-chat">
+        <div class="input-group input-group-sm"><input type="text" class="form-control"> <span class="input-group-btn"> <button
+                class="btn btn-primary" type="button">Enviar
+        </button> </span></div>
+    </div>
+
+</div>
+<div id="small-chat" ng-click="openChat = !openChat">
+
+    <span class="badge badge-warning pull-right">5</span>
+    <a class="open-small-chat">
+        <i class="fa fa-comments"></i>
+
+    </a>
+</div>

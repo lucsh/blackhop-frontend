@@ -1,0 +1,37 @@
+<div class="modal-body">
+    <!-- 
+    {
+        identificador:1,
+        fecha:new Date("11/07/1982"),
+        descripcion:"Pago a Proveedor",
+        monto:"5500",
+        sesion:"#" + "52346"
+    }
+    -->
+    <div class="row">
+        <div class="col-lg-12">
+            <h2>
+                Nuevo Gasto
+            </h2>
+            <div class="panel-body">
+
+                <fieldset class="form-horizontal">
+                    <div class="form-group"><label class="col-sm-2 control-label">Fecha:</label>
+                        <div class="col-sm-10"><div class="input-group date"><input type="datetime" class="form-control" date-time ng-model="gastoEdit.fecha" view="date" auto-close="true" min-view="date" format="DD MMM YYYY"><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div></div>
+                    </div>
+                    <div class="form-group"><label class="col-sm-2 control-label">Descripcion:</label>
+                        <div class="col-sm-10"><textarea rows="5" class="form-control" ng-model="gastoEdit.descripcion">{{gastoEdit.descripcion}}</textarea></div>
+                    </div>
+                    <div class="form-group"><label class="col-sm-2 control-label">Monto:</label>
+                        <div class="col-sm-10">                            
+                            <div class="input-group m-b"><span class="input-group-addon">$</span> <input currency-input = "" type="text" ng-model="gastoEdit.monto" class="form-control">
+                            </div>                           
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="col-md-12"><button class="btn btn-sm btn-primary pull-right m-t-n-xs" ng-click="guardar(gastoEdit)" type="submit"><strong>Guardar</strong></button>                                    
+            </div>
+            </div>
+        </div>
+    </div>
+</div>

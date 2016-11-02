@@ -1,0 +1,51 @@
+
+<div class="calculadora"> 
+    <div>            
+        <div class="row col-centered ">
+            <div class="col-sm-3 col-lg-3 col-md-3 nopadding ">
+                <button class="btn btn-white btn-lg btn-block" type="button" ng-click="modal.abrir()"><i class="fa fa-user"></i></button>
+                <button class="btn btn-white btn-lg btn-block btn-xxh" ng-click="modal.imprimir()" type="button"><i class="fa fa-arrow-circle-o-right"></i></button>
+            </div>
+            <div class="col-sm-9 col-lg-9 col-md-9">
+                <div class="botones-calculadora2"> 
+                    <div class="row nopadding ">
+
+                        <button class="btn btn-white btn-lg" type="button" ng-click="selectBtn(1)">1</button>
+                        <button class="btn btn-white btn-lg" type="button" ng-click="selectBtn(2)">2</button>
+                        <button class="btn btn-white btn-lg" type="button" ng-click="selectBtn(3)">3</button>
+                        <button class="btn btn-lg btn-70" type="button" ng-click="selectMod('Cnt')" ng-class="{'btn-primary':selectedMod=='Cnt','btn-white':selectedMod!='Cnt'}">Cnt</button>
+
+                    </div>
+                    <div class="row nopadding">
+
+                        <button class="btn btn-white btn-lg" type="button" ng-click="selectBtn(4)">4</button>
+                        <button class="btn btn-white btn-lg" type="button" ng-click="selectBtn(5)">5</button>
+                        <button class="btn btn-white btn-lg" type="button" ng-click="selectBtn(6)">6</button>
+                        <button class="btn btn-lg btn-70" type="button" ng-click="selectMod('Desc')" ng-class="{'btn-primary':selectedMod=='Desc','btn-white':selectedMod!='Desc'}" >Dto</button>
+
+                    </div>
+                    <div class="row nopadding">
+
+                        <button class="btn btn-white btn-lg" type="button" ng-click="selectBtn(7)">7</button>
+                        <button class="btn btn-white btn-lg" type="button" ng-click="selectBtn(8)">8</button>
+                        <button class="btn btn-white btn-lg" type="button" ng-click="selectBtn(9)">9</button>
+                        <button class="btn btn-lg btn-70" type="button" ng-click="selectMod('Val')" ng-class="{'btn-primary':selectedMod=='Val','btn-white':selectedMod!='Val'}"> <i class="fa fa-dollar"></i></button>
+                    </div>
+                    <div class="row nopadding">
+
+                        <button class="btn btn-white btn-lg" type="button" ng-click="selectBtn('C')">C</button>
+                        <button class="btn btn-white btn-lg" type="button" ng-click="selectBtn(0)">0</button>
+                        <button class="btn btn-white btn-lg" type="button" ng-click="selectBtn('.')">&nbsp;,</button>
+                        <button class="btn btn-white btn-lg btn-70" type="button" ng-click="funcDelete()"><i class="fa fa-caret-square-o-left"></i></button>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+</div>

@@ -1,0 +1,72 @@
+<div ng-controller="canillasCtrl">
+
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>Listado Canillas</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="index.html">Escritorio</a>
+                </li>
+                <li class="active">
+                    <strong>Listado Canillas</strong>
+                </li>
+            </ol>
+        </div>
+        <div class="col-lg-2">            
+        </div>
+    </div>
+    <div  class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+
+            <div  class="form-horizontal">
+                <div class="form-group"><label class="col-sm-2 control-label">Seleccionar Local</label>
+
+                    <div class="col-sm-4"><select  class="form-control m-b" name="ubicacion" ng-model="filtros.queryLocal" ng-init="filtros.queryLocal='Local 1'">
+                        <option ng-repeat="ubicacion in ubicaciones">{{ubicacion.nombre}}</option>
+                        </select></div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div ng-repeat="canilla in canillas |  
+                                                     filter:filtros.queryLocal">
+
+                    <div class="canilla cursor-pointer col-md-2 col-lg-2" ng-click="cambiarProducto(canilla.id)">
+                        <div class="ibox noselect">
+                            <div ng-if="canilla.productoNombre">
+                            <div class="ibox-content product-box">   
+                                <h4 class="text-center text-muted">Canilla {{canilla.numero}} </h4>
+                                <div class="product-desc">                                
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <small class="text-muted">{{canilla.productoMarca}}</small>
+                                            <a class="product-name"> {{canilla.productoNombre}} </a>
+                                        </div> 
+                                            <div class="cerveza-color" style="background-color:{{canilla.productoColor}};"></div>
+                                    </div>
+                                    <small class="text-muted">Stock : {{canilla.productoStock}} l.</small>
+                                    <uib-progressbar class="barra-birra" value="(canilla.productoStock/500*100)" type="{{canilla.productoStock<40 && 'danger' || canilla.productoStock<50 && 'warning' || ''}}"></uib-progressbar>
+                                    <small class="text-muted">IBU : {{canilla.productoIbu}}</small><small class="text-muted"> ALC : {{canilla.productoAlcohol}}</small>
+                                </div>
+                            </div>
+                            </div>
+                            <div ng-if="!canilla.productoNombre">
+                            <div class="ibox-content product-box">   
+                                <h4 class="text-center text-muted">Canilla {{canilla.numero}} </h4>
+                                 <div class="product-imitation">
+                                    [ ¡Sin Asignar! ]
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>

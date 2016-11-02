@@ -1,0 +1,77 @@
+<div >
+    <div class="middle-box text-center loginscreen  animated fadeInDown">
+        <div>
+            <div>
+                <h1 class="logo-name"><div class="profile-element text-center">
+                    <img alt="image" class="q-logo" src="img/quantum-logo-chico.png"/>
+                </div></h1>
+            </div>
+            
+
+            <!--                        
+                LOGIN INICIAL
+            -->
+            <div ng-show="!auth.full">
+                <h3>Bienvenido a Quantum</h3> 
+                
+                <form class="m-t" role="form" action="#" >
+                    <div class="form-group">
+                        <input class="form-control" placeholder="Usuario" required="" oninvalid="this.setCustomValidity('Ingresa un nombre de usuario')" ng-model="auth.email">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" placeholder="Contraseña" required=""  ng-model="auth.password">
+                    </div>
+                    <div class="form-group">
+                        <div class="btn-group">
+                            <label class="btn btn-default" ng-model="auth.modo" uib-btn-radio="'caja'">Caja</label>
+                            <label class="btn btn-default" ng-model="auth.modo" uib-btn-radio="'barra'">Barra</label>
+                            <label class="btn btn-default" ng-model="auth.modo" uib-btn-radio="'admin'">Admin</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <ui-select ng-model="auth.ubicacion.selected" theme="bootstrap">
+                            <ui-select-match>{{$select.selected.nombre}}</ui-select-match>
+                            <ui-select-choices repeat="item in auth.ubicaciones | filter: $select.search">
+                                <div ng-bind-html="item.nombre | highlight: $select.search"></div>
+                                <small ng-bind-html="item.direccion | highlight: $select.search"></small>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+
+                    <div ng-show="false" class="alert alert-danger">
+                        No tenes permiso para entrar como Administrador.
+                    </div>
+                    <button type="submit" class="btn btn-primary block full-width m-b" ng-click="auth.login()">Entrar</button>
+                </form>
+            </div>
+            <!--                        
+                LOGIN INICIAL
+            -->
+            <div ng-show="auth.full">
+                <h3>Full! elegi una a desloguear</h3> 
+                <table class="table table-hover tabla-usuarios">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Usuario</th>
+                            <th>Modo</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="usuario in auth.usuarios" ng-click="auth.saLoggout(usuario.id, usuario.nombre)">
+                            <td>{{ usuario.id}}</td>
+                            <td>{{ usuario.nombre}}</td>
+                            <td>{{ usuario.modo}}</td>
+                            <td><i class="fa fa-times text-danger "></i> </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>

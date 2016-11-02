@@ -1,0 +1,65 @@
+<div ng-controller="alquilablesCtrl">
+    <!-- 
+    {
+        identificador:1,
+        codigo:"1001",
+        descripcion:"Barril de 10 lts.",
+        estado:"Alquilado",
+    }
+    -->
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>Alquilables</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="index.html">Escritorio</a>
+                </li>
+                <li class="active">
+                    <strong>Alquilables</strong>
+                </li>
+            </ol>
+        </div>
+        <div class="col-lg-2">
+            <h2><button ng-click="modal.crear()" class="btn btn-primary " type="button"><i class="fa fa-plus"></i>&nbsp;Agregar</button></h2>
+        </div>
+    </div>
+    <div  class="wrapper wrapper-content  animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <table datatable="ng" dt-options="dtOptions"  dt-column-defs="dtColumnDefs" class="table table-striped table-bordered table-hover dataTables-example">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Codigo</th>
+                                    <th>Ubicación</th>                            
+                                    <th>Descripción</th>                            
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="cursor-pointer" ng-repeat="alquilable in alquilables"  ng-init="isHover='tresde-right-hidden'" ng-mouseover="isHover='tresde-right-left';" ng-mouseleave="isHover='tresde-right-hidden'">
+                                    <td>{{ alquilable.id}}</td>                            
+                                    <td>{{ alquilable.codigo}}</td>                            
+                                    <td>{{ alquilable.ubicacion}}</td>
+                                    <td>{{ alquilable.descripcion}}</td>
+                                    <td><span class="badge {{ alquilable.class }}">{{ alquilable.estado }}</span>
+                                        <div class="tresde-right-container" > 
+                                            <div class="{{isHover}}">
+                                                <button class="btn btn-success btn-xs" type="button" ng-click="modal.editar(alquilable)" tooltip-placement="top" uib-tooltip="Editar"><i class="fa fa-pencil"></i></button>
+                                                <button class="btn btn-danger btn-xs" type="button" ng-click="onDelete(alquilable.id)" tooltip-placement="top" uib-tooltip="Eliminar"><i class="fa fa-times"></i></button>
+                                            </div>
+                                        </div>                                     
+                                    </td>
+                                </tr>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+</div>

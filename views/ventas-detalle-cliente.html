@@ -1,0 +1,33 @@
+<div class="col-md-11 col-centered nopadding">
+    <div resumen-barra-slim-scroll class="ibox-content" >
+<!--        $scope.$parent.clienteSeleccionado={
+            nombre:'Lucas Del Pozzi',
+            telefono: '299 5713033',
+            direccion: 'Alderete 1421',
+            fNac: '25-Oct-1986',
+            ultimaCompra:'Crafter - American IPA. 4 lts',
+            fechaUltimaCompra:'25/Ago/2016'
+        }-->
+        <div class="tab-pane active" ng-show="$parent.clienteSeleccionado">
+            <div class="row nopadding">
+                <div class="col-lg-12 text-center nopadding">
+                    <h2>{{$parent.clienteSeleccionado.nombre}} {{clienteSeleccionado.apellido}}</h2>                                
+                </div>
+                <div class="col-lg-12 nopadding">
+                    <p><strong><i class="fa fa-phone"></i> Telefono:</strong> {{$parent.clienteSeleccionado.telefono}}</p>
+                    <p><strong><i class="fa fa-birthday-cake"></i> Cumpleaños:</strong> {{$parent.clienteSeleccionado.fNac}}</p>
+                    <strong>Ultima Compra</strong>
+                    <ul class="list-group clear-list nopadding">
+                        <li class="list-group-item fist-item">
+                            <span class="pull-right">{{$parent.clienteSeleccionado.fechaUltimaCompra}}</span>
+                            {{$parent.clienteSeleccionado.ultimaCompra}}
+                        </li>                                       
+                    </ul>
+                </div>
+            </div>
+
+        </div>   
+
+    </div>
+
+</div>

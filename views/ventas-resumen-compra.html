@@ -1,0 +1,36 @@
+<div class="col-md-11 col-centered nopadding">
+    <div class="resumen-compra">
+        <div> 
+            <div resumen-slim-scroll class="panel panel-default" >
+                <div class="panel-body">
+                    <div id="listado">
+                        <div  class="list-group producto-resumen">
+                            <!-- aca va la lista de productos -->
+
+                            <div>
+                                <a ng-repeat="producto in resumen.productos track by producto.id" class="list-group-item" resumen="resumen" ng-click="selectItem(producto.id)" ng-class="{'active':resumen.selected==producto.id}">
+                                    <h3 class="list-group-item-heading">{{producto.id + 1}} . {{producto.nombre}}<div class="valor-producto text-right" >{{producto.valorTotal | currency:"$ "}}</div></h3>
+                                    
+                                    <div class="cantidad-y-precio"> <!-- Deberia tener en unidades, la abreviatura, el plural y el singular-->
+                                        <ng-pluralize count="producto.cantidad" 
+                                          when="{ 'one': '1 {{ producto.unidad.singular }}',
+                                                  'other': '{} {{ producto.unidad.plural }}' }">
+                                        </ng-pluralize>
+                                         a $ {{producto.valor}} por {{ producto.unidad.singular }}</div>
+                                    <div class="cantidad-y-precio" ng-show="producto.descuento">Con un {{producto.descuento}} % de descuento</div>
+                                </a>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <hr>
+                    <div ng-model="total" class="total-resumen text-right"> Total: $ {{ resumen.total }}</br><div class="total-impuestos">Impuestos: $ 0,00</div></div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+

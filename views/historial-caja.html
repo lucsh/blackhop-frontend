@@ -1,0 +1,66 @@
+<div ng-controller="historialCajaCtrl">
+<!-- 
+        {
+        identificador: 1,
+        caja: "Barra 1",
+        usuario: "Agustin",
+        ubicacion: "Local Illia",
+        fechaIni: "2016-08-02 18:01",
+        fechaFin: "8/2/2016 22:52:16",
+        ganancia: 1225
+        }
+-->
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>Historial Caja</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="index.html">Escritorio</a>
+                </li>
+                <li class="active">
+                    <strong>Historial Caja</strong>
+                </li>
+            </ol>
+        </div>
+        <div class="col-lg-2">
+
+        </div>
+    </div>
+    <div  class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <table datatable="ng" dt-options="dtOptions"  dt-column-defs="dtColumnDefs" class="table table-striped table-bordered table-hover dataTables-example">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th><i class="fa text-navy fa-sign-in" aria-hidden="true"></i> Fecha Inicio</th>
+                                    <th><i class="fa text-danger fa-sign-out"aria-hidden="true"></i> Fecha Fin</th>
+                                    <th>Caja</th>
+                                    <th>Ubicacion</th>
+                                    <th>Usuario</th>
+                                    <th>Ganancia</th>  
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="historia in historialCaja" >
+                                    <td>{{historia.id}}</td>
+                                    <td>{{historia.fechaIni}}</td>
+                                    <td>{{historia.fechaFin}}</td>
+                                    <td>{{historia.caja}}</td>                           
+                                    <td>{{historia.ubicacion}}</td>
+                                    <td>{{historia.usuario}}</td> 
+                                    <td><span class="badge" ng-class="{'badge-warning' : historia.ganancia < 1500, 'badge-primary' : historia.ganancia > 1500 && historia.ganancia < 2000, 'badge-success' : historia.ganancia > 2000}">
+                                        {{historia.ganancia | currency:"$ "}}</span></td>
+                                </tr>
+                            </tr>
+                        </tbody>
+                    </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>

@@ -1,0 +1,37 @@
+@media screen {
+    #printSection {
+        display: none;
+    }
+}
+
+@media print {
+    body * {
+        display:none;
+    }
+
+    #printSection, #printSection * {
+        display: inline;
+    }
+
+    #printSection {
+        position:absolute;
+        left:0;
+        top:0;
+        width: 100%;
+        background: url(../../../img/blackhop-isologo.png) 
+    }
+    .print-full-width{
+        width: 100%;
+        clear:both;
+        display: block!important;
+    }
+    .text-center{
+        margin:0 auto;
+        text-align: center!important;
+        margin:auto;
+        margin-top:5px;
+    }
+    .hide-in-print{
+    visibility:hidden;
+    }
+}

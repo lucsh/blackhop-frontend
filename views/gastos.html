@@ -1,0 +1,66 @@
+<div ng-controller="gastosCtrl">
+    <!-- 
+    {
+        identificador:1,
+        fecha:new Date("11/07/1982"),
+        descripcion:"Pago a Proveedor",
+        monto:"5500",
+        sesion:"#" + "52346"
+    }
+    -->
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>Gastos</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="index.html">Escritorio</a>
+                </li>
+                <li class="active">
+                    <strong>Gastos</strong>
+                </li>
+            </ol>
+        </div>
+        <div class="col-lg-2">
+            <h2><button ng-click="modal.crear()" class="btn btn-primary " type="button"><i class="fa fa-plus"></i>&nbsp;Agregar</button></h2>
+        </div>
+    </div>
+    <div  class="wrapper wrapper-content  animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <table datatable="ng" dt-options="dtOptions"  dt-column-defs="dtColumnDefs" class="table table-striped table-bordered table-hover dataTables-example">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Fecha</th>
+                                    <th>Monto</th>
+                                    <th>Descripcion</th>
+                                    <th>Usuario</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="cursor-pointer" ng-repeat="gasto in gastos"  ng-init="isHover='tresde-right-hidden'" ng-mouseover="isHover='tresde-right-left';" ng-mouseleave="isHover='tresde-right-hidden'">
+                                    <td>{{ gasto.id}}</td>                            
+                                    <td>{{ gasto.fecha}}</td>                            
+                                    <td>{{ gasto.monto | currency:"$ "}}</td>
+                                    <td>{{ gasto.descripcion}}</td>
+                                    <td><span ng-if="gasto.sesion!=1"><a href="">{{gasto.usuario}}</a></span><span ng-if="gasto.sesion==1" class="text-warning">Admin</span>
+                                        <div class="tresde-right-container" > 
+                                            <div class="{{isHover}}">
+                                                <button class="btn btn-success btn-xs" type="button" ng-click="modal.editar(gasto)" tooltip-placement="top" uib-tooltip="Editar"><i class="fa fa-pencil"></i></button>
+                                                <button class="btn btn-danger btn-xs" type="button" ng-click="onDelete(gasto.id)" tooltip-placement="top" uib-tooltip="Eliminar"><i class="fa fa-times"></i></button>
+                                            </div>
+                                        </div>                                     
+                                    </td>
+                                </tr>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+</div>

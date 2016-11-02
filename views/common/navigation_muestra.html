@@ -1,0 +1,73 @@
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul side-navigation class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+
+                <div class="profile-element text-center">
+                    <img alt="image" class="q-logo" src="img/blackhop_quantum.png"/> 
+                </div>
+                <div class="logo-element">
+                    <img alt="image" class="q-logo" src="img/blackhop-isologo-chico.png"/>                    
+                </div>
+            </li>
+            
+            <li ui-sref-active="active">
+                <a ui-sref="dashboards.dashboard_5"><i class="fa fa-th-large"></i> <span class="nav-label">Escritorio</span> </a>
+            </li>
+
+        
+             <li ui-sref-active="active">
+                <a ui-sref="pos.point_of_sale"><i class="fa fa-calculator"></i> <span class="nav-label">Punto de Venta</span> </a>
+            </li>
+             <li ui-sref-active="active">
+                <a ui-sref="pos.point_of_sale_barra"><i class="fa fa-calculator"></i> <span class="nav-label">POS - Barra</span> </a>
+            </li>
+            
+            <li ui-sref-active="active">
+                <a ui-sref="app.gastos"><i class="fa fa-money"></i><span class="nav-label">Gastos</span></a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.clients"><i class="fa fa-users"></i> <span class="nav-label">Clientes</span> </a>
+            </li>
+            
+            <li ui-sref-active="active">
+                <a ui-sref="app.proveedores"><i class="fa fa-truck"></i> <span class="nav-label">Proveedores</span> </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.alquilables"><i class="fa fa-archive"></i> <span class="nav-label">Alquilables</span> </a>
+            </li> 
+            <li ui-sref-active="active">
+                <a ui-sref="app.productos"><i class="fa fa-archive"></i> <span class="nav-label">Productos</span> </a>
+            </li>            
+            <li ui-sref-active="active">
+                <a ui-sref="app.inventario"><i class="fa fa-file-text"></i><span class="nav-label">Inventario</span> </a>
+            </li>            
+            <li ui-sref-active="active">
+                <a ui-sref="app.canillas"><i class="fa fa-beer"></i><span class="nav-label">Canillas</span> </a>
+            </li>
+            <li ng-class="{active: $state.includes('historial')}">
+                <a href="#"><i class="fa fa-shopping-cart"></i> <span class="nav-label">Historiales</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('historial')}">
+                    <li ui-sref-active="active"><a ui-sref="historial.historial">Stock</a></li>
+                    <li ui-sref-active="active"><a ui-sref="historial.histBarra">Sesiones Barra</a></li>
+                    <li ui-sref-active="active"><a ui-sref="historial.histCaja">Sesiones Caja</a></li>
+                </ul>
+            </li>
+            <li ng-class="{active: $state.includes('commerce')}">
+                <a href="#"><i class="fa fa-shopping-cart"></i> <span class="nav-label">Ventas</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('commerce')}">
+                    <li ui-sref-active="active"><a ui-sref="pos.point_of_sale">POS</a></li>
+                    <li ui-sref-active="active"><a ui-sref="pos.point_of_sale_barra">POS - Barra</a></li>
+                    <li ui-sref-active="active"><a ui-sref="sales.ventas">Ventas</a></li>
+                    <li ui-sref-active="active"><a ui-sref="sales.compras">Compras</a></li>
+                    <li ui-sref-active="active"><a ui-sref="sales.alquileres">Alquileres</a></li>
+                    <li ui-sref-active="active"><a ui-sref="sales.cupones">Cupones</a></li>
+                </ul>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="reportes"><i class="fa fa-pie-chart"></i> <span class="nav-label">Reportes</span> </a>
+            </li>
+        </ul>
+
+    </div>
+</nav>

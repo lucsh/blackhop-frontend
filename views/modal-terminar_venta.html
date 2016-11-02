@@ -1,0 +1,73 @@
+<div class="inmodal">
+    <div class="modal-body finalizar-venta" ng-init="resumen.paga=0">
+
+        <h2>Finalizar Compra</h2>
+        <hr>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="calculadora"> 
+                    <div>            
+                        <div class="row col-centered ">
+                            <div class="col-sm-12 col-lg-12 col-md-12">
+                                <div class="botones-calculadora2"> 
+                                    <div class="row nopadding ">
+                                        <button class="btn btn-white btn-lg" type="button" ng-click="selectBtn(1)">1</button>
+                                        <button class="btn btn-white btn-lg" type="button" ng-click="selectBtn(2)">2</button>
+                                        <button class="btn btn-white btn-lg" type="button" ng-click="selectBtn(3)">3</button>
+                                        <button class="btn btn-white btn-lg btn-70 btn-text-mutted" type="button" ng-click="resumen.paga=resumen.paga+50"><small>+</small>50</button>
+                                    </div>
+                                    <div class="row nopadding">
+                                        <button class="btn btn-white btn-lg" type="button" ng-click="selectBtn(4)">4</button>
+                                        <button class="btn btn-white btn-lg" type="button" ng-click="selectBtn(5)">5</button>
+                                        <button class="btn btn-white btn-lg" type="button" ng-click="selectBtn(6)">6</button>
+                                        <button class="btn btn-white btn-lg btn-70 btn-text-mutted" type="button" ng-click="resumen.paga=resumen.paga+100"><small>+</small>100</button>
+                                    </div>
+                                    <div class="row nopadding">
+                                        <button class="btn btn-white btn-lg" type="button" ng-click="selectBtn(7)">7</button>
+                                        <button class="btn btn-white btn-lg" type="button" ng-click="selectBtn(8)">8</button>
+                                        <button class="btn btn-white btn-lg" type="button" ng-click="selectBtn(9)">9</button>
+                                        <button class="btn btn-white btn-lg btn-70 btn-text-mutted" type="button" ng-click="resumen.paga=resumen.paga+500"><small>+</small>500</i></button>
+                                </div>
+                                <div class="row nopadding">
+                                    <button class="btn btn-white btn-lg" type="button" ng-click="resumen.paga=0">C</button>
+                                    <button class="btn btn-white btn-lg" type="button" ng-click="selectBtn(0)">0</button>
+                                    <button class="btn btn-white btn-lg" type="button" ng-click="">&nbsp;,</button>
+                                    <button class="btn btn-white btn-lg btn-70 " type="button" ng-click="borrarPaga()"><i class="fa fa-caret-square-o-left"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="barra-pago ">
+                <div class="venta-cliente">
+                    <small class="pull-left m-l-sm text-white">Cliente:</small><br>
+                    <h4 class="no-padding">
+                    {{clienteSeleccionado.nombre}} {{clienteSeleccionado.apellido}}</h4>
+                </div>
+                <div class="venta-debe">
+                    <small class="pull-left m-l-sm text-inspinia">Total:</small><br>
+                    <h2 class="nopadding" >{{resumen.total|currency:"$ "}}</h2>
+                </div>
+                <div class="venta-paga">
+                    <small class="pull-left m-l-sm text-white">Paga:</small><br>
+                    <h2 class="nopadding" >{{resumen.paga|currency:"$ "}}</h2>
+                </div>
+                <div class="venta-cambio">
+                    <small class="pull-left m-l-sm text-inspinia">Cambio:</small><br>
+                    <h2 class="nopadding" >{{ -1*(resumen.total-resumen.paga) |currency:"$ "}}</h2>
+                </div>
+            </div> 
+        </div>
+    </div>
+    <div class="row"></div>
+    <div class="modal-footer m-t-sm">
+           <div class="col-md-12">
+    <button class="pull-right btn btn-primary" ng-click="ok()">
+      Finalizar &raquo;</button>
+    </div>
+</div>
+</div>
+</div>

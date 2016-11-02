@@ -1,0 +1,120 @@
+<div class="modal-body">
+
+    <div class="tabs-container">
+
+        <uib-tabset class="tabs-container">
+            <uib-tab>
+            <uib-tab-heading>
+                <i class='fa fa-search fa-lg'></i>
+            </uib-tab-heading>
+                <div class="panel-body">
+                    <row>       
+                <fieldset>
+                    <h3 class="m-t-none m-b">Buscar Cliente</h3>
+                    <div class="col-sm-12 ">
+                        <p>Por Nombre o Apellido o DNI</p>
+                        <form role="form">
+                            <div class="form-group">
+                                <div><input type="text" ng-model="query" placeholder="Buscar" class="form-control"></div>
+                                <table class="table table-hover" >
+                                    <tbody ng-if="query.length > 3">
+                                        <tr class="cursor-pointer"  
+                                            ng-repeat="cliente in clientesFiltrados((clientes | 
+                                                       filter: query | 
+                                                       orderBy: 'nombre'),false) ">
+                                            <td> <input type="radio"
+                                                        name="clientesRadio"
+                                                        ng-model="seleccion.clienteSeleccionado" 
+                                                        ng-value="{{cliente.id}}"
+                                                        />
+                                            </td>
+                                            <!-- ng-init="$first?(seleccion.clienteSeleccionado=cliente.id):''" -->
+                                            <td ng-click="seleccionarNuevo(cliente.id)" >{{cliente.nombre}} {{cliente.apellido}}</td>
+                                            <td>{{cliente.dni}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>             
+                        </form>
+                        <!--mostrar detalles y dejar listo para editar -->
+                    </div>
+                </fieldset>
+                    </row>
+                    <div class="pull-right">
+                        <button type="button" class="btn btn-white" ng-click="cancel()">Cerrar</button>
+                        <button ng-class="{'btn-outline btn-default':!seleccion.clienteSeleccionado, 'btn-primary': seleccion.clienteSeleccionado}" type="button" class="btn  " ng-click="ok()" ng-disabled="!seleccion.clienteSeleccionado">Guardar</button>
+                    </div>
+
+                </div>
+            </uib-tab>
+        
+            <uib-tab>
+            <uib-tab-heading>
+                            <i class='fa fa-sign-in fa-lg'></i>
+            </uib-tab-heading>
+            
+                <div class="panel-body">
+                    <h3 class="m-t-none m-b">Crear Cliente</h3>
+                    <form role="form" class=""> 
+
+                        <div class="col-md-6 form-group"><label>Nombre</label>
+                            <div><input type="text" placeholder="Nombre" class="form-control"> 
+                            </div>
+                        </div>
+
+                        <div class="col-md-6  form-group"><label>Apellido</label>
+
+                            <div><input type="text" placeholder="Apellido" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 form-group"><label>DNI</label>
+
+                            <div><input type="text" placeholder="32132456" class="form-control">
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-8 form-group" id="data_1">
+                            <label class="font-normal">Fecha de Nacimiento</label>
+
+                            <div class="input-group date">
+                                <input type="datetime"  class="form-control" date-time ng-model="sampleDate" view="date" auto-close="true" min-view="date" format="DD/MM/YYYY">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 form-group"><label>Telefono</label>
+
+                            <div class=""><input type="text" placeholder="2994412345" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 form-group"><label>Celular</label>
+
+                            <div class=""><input type="text" placeholder="2995123456" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 form-group"><label>Email</label>
+
+                            <div class=""><input type="email" placeholder="email@direccion.com.ar" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 form-group"><label>Dirección</label>
+
+                            <div class=""><input type="text" placeholder="Calle 123, Neuquen" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="col-md-12"><button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit"><strong>Registrar</strong></button>                                    
+                        </div>
+                    </form>            
+
+
+                    </uib-tab>
+                </uib-tabset>
+
+
+            </div>
