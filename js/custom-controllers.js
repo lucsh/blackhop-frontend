@@ -7,94 +7,148 @@ angular
 
     var vm = this;
     vm.ubicacion={};
-    vm.ubicaciones =[
-    {
-        id:0,
-        nombre:'Local 1',
-        direccion:'illia 123'
-    },
-    {
-        id:1,
-        nombre:'Local 2',
-        direccion:'Otra Calle 343'        
-    },
-    {
-        id:2,
-        nombre:'Local 3',
-        direccion:'Otra Lugar 543'        
-    }
-    ];
 
-    vm.usuarios =[
-       {
-        id:0,
-        nombre:'Miqueas',
-        modo:'Caja'
-    },
-    {
-        id:2,
-        nombre:'Gaston',
-        modo:'Barra 1'
-    },
-    {
-        id:3,
-        nombre:'Martin',
-        modo:'Barra 2'
-    }
-    ];
+    $http.get('http://blackhop-dessin1.rhcloud.com/api/info/ubicacion').success(function(ubicaciones){    
+        console.log(ubicaciones);
+        vm.ubicaciones = ubicaciones.data;
+    }).error(function(error){
+        console.log(error);
+    });
+/*
+  vm.ubicaciones =[
+  {
+    id:0,
+    nombre:'Local 1',
+    direccion:'illia 123'
+},
+{
+    id:1,
+    nombre:'Local 2',
+    direccion:'Otra Calle 343'        
+},
+{
+    id:2,
+    nombre:'Local 3',
+    direccion:'Otra Lugar 543'        
+}
+];
 
+vm.usuarios =[
+{
+    id:0,
+    nombre:'Miqueas',
+    modo:'Caja'
+},
+{
+    id:2,
+    nombre:'Gaston',
+    modo:'Barra 1'
+},
+{
+    id:3,
+    nombre:'Martin',
+    modo:'Barra 2'
+}
+];
+*/
 
-    vm.saLoggout = function(id,nombre){ 
+vm.saLoggout = function(id,nombre){ 
 
-        SweetAlert.swal({
-            title: "¿Estas Seguro?",
-            text: "¡"+nombre+" no va a poder seguir operando!",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Si, cerra la cuenta!",
-            cancelButtonText: "No, cancelar!",
-            closeOnConfirm: false,
-            closeOnCancel: false },
-            function (isConfirm) {
-                if (isConfirm) {
-                    for(var i = 0; i < vm.usuarios.length; i++){
-                        if (vm.usuarios[i].id == id){                    
-                            vm.usuarios.splice(i, 1);
-                            break;
-                        }
+    SweetAlert.swal({
+        title: "¿Estas Seguro?",
+        text: "¡"+nombre+" no va a poder seguir operando!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Si, cerra la cuenta!",
+        cancelButtonText: "No, cancelar!",
+        closeOnConfirm: false,
+        closeOnCancel: false },
+        function (isConfirm) {
+            if (isConfirm) {
+                /*
+                for(var i = 0; i < vm.usuarios.length; i++){
+
+                    if (vm.usuarios[i].id == id){                    
+                        vm.usuarios.splice(i, 1);
+                        break;
                     }
-                    SweetAlert.swal("¡Hecho!", "La cuenta de "+ nombre + " fue cerrada", "success");
+                }
+                */
+                $http.get('http://blackhop-dessin1.rhcloud.com/api/v1/authenticate/full?sesion='+id).success(function(response){       
+                        SweetAlert.swal("¡Hecho!", "La cuenta de "+ nombre + " fue cerrada", "success");
+                        vm.login();
+                    })
+                    .error(function(){
+                        SweetAlert.swal("¡Hecho!", "La cuenta de "+ nombre + " NO fue cerrada", "error");
+                        $state.reload();    
+                    });
+                
                     //HACER POST PARA DESLOGUEAR UNA SESION E INICIAR SESION
+
+                    
                 } else {
                     SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
                     console.log('GO TO AUTH');
                     $state.reload();    
                 }
             });
-    };
+};
 
 
 
-    vm.loginError = false;
-    vm.loginErrorText;
+vm.loginError = false;
+vm.loginErrorText;
 
-    vm.full = false;
-    console.log('vm.full = ' + vm.full);
+vm.full = false;
+console.log('vm.full = ' + vm.full);
 
-    vm.login = function() {
+vm.login = function(){
+     /*
+    * VALIDACIONES AGREGAR CAMPOS EN LA VISTA A MOSTRAR DESDE ACA!
+    */
+    if(vm.modo == undefined || vm.ubicacion.selected == undefined){
+        $state.go('auth');
+        console.log('########## ERROR ############');
+        console.log('      Modo No seteado ');
+        console.log('#############################');
+    }else{
+        if(vm.modo == 'caja'){
+            SweetAlert.swal({
+              title: "Bienvenido!",
+              text: "Monto inicial en Caja:",
+              type: "input",
+              showCancelButton: true,
+              closeOnConfirm: false,
+              animation: "slide-from-top",
+              inputPlaceholder: "Monto Inicial"
+            },
+            function(inputValue){
+              if (inputValue === false){
+                console.log("CANCEL");
+                $state.reload(); 
+                return false;
+              } 
+              
+              if (inputValue === "") {
+                swal.showInputError("Debes ingresar el monto incial en Caja!");
+                return false
+              }
+              
+              vm.login2();
+            });
+        }else{
+            //ESTO ES POR LO ASYNCRONO
+            vm.login2();
+        }
+    }
+}
 
-        console.log(vm.ubicacion.selected)
-            /*
-            * Verifica que Modo este seteado
-            */
-            if(vm.modo == undefined){
-                $state.go('auth');
-                console.log('########## ERROR ############');
-                console.log('      Modo No seteado ');
-                console.log('#############################');
-            }else{
 
+vm.login2 = function() {
+
+    console.log(vm.ubicacion.selected)
+           
                 //Crea el objeto credentials desde el form Login
                 var credentials = {
                     email: vm.email,
@@ -106,7 +160,7 @@ angular
 
                     //Hace un get con el Token ya seteado para retornar el nombre del usuario, el rol y crear la sesion en
                     // caso de requerirlo (NO ADMIN)
-                    $http.get('http://blackhop-dessin1.rhcloud.com/api/v1/authenticate/user?modo='+vm.modo+'&ubicacion='+''+'').success(function(response){       
+                    $http.get('http://blackhop-dessin1.rhcloud.com/api/v1/authenticate/user?modo='+vm.modo+'&ubicacion='+vm.ubicacion.selected.id+'').success(function(response){       
 
 
                         if(response.modo != 'limite'){
@@ -136,6 +190,7 @@ angular
                             }
                         }else{
                             vm.full = true;
+                            vm.usuarios = response.datos;
                         }
                         //$rootScope.currentUser = response.usuarioName;
                         //$rootScope.currentRole = response.usuarioRole;
@@ -151,100 +206,11 @@ angular
                     }
                     console.log(err);
                 });
-            }//Fin del if vm.modo undefined
+            
         }//Fin del function login
 
     }])
-
-
-
-/*
-    .controller('AuthCtrl', ['$auth', '$scope','$state', '$http', '$rootScope', function( $auth, $scope,$state, $http, $rootScope) {
-
-        console.log("Cargue el controlador");
-          //var vm = this;
-
-            //vm.loginError = false;
-            //vm.loginErrorText;
-
-
-            $scope.ubicacion={};
-             $scope.ubicaciones =[
-                {
-                    id:0,
-                    nombre:'Local 1',
-                    direccion:'illia 123'
-                },
-                {
-                    id:1,
-                    nombre:'Local 2',
-                    direccion:'Otra Calle 343'        
-                },
-                {
-                    id:2,
-                    nombre:'Local 3',
-                    direccion:'Otra Lugar 543'        
-                }
-            ];
-            console.log("asddddd");
-
-            $scope.login = function() {
-                console.log("asd");
-                var credentials = {
-                    email: $scope.email,
-                    password: $scope.password
-                }
-                
-                $auth.login(credentials).then(function() {
-                    console.log("##################");
-                    $http.get('/api/v1/authenticate/user').success(function(response){
-                       
-                        var user = JSON.stringify(response.usuarioName);
-                        console.log(user);
-                        localStorage.setItem('user', user);
-                        localStorage.setItem('role', response.usuarioRole);
-                        // principal.authenticate({
-                        //   name: response.usuarioName,
-                        //   roles: [response.usuarioRole]
-                        // });
-                        console.log(localStorage.getItem('role'));
-                        console.log(localStorage.getItem('user'));
-                        switch(localStorage.role){
-                          case "Root":
-                            $state.go('dashboards.dashboard_2');
-                          break;
-                          case "Admin":
-                            $state.go('dashboards.dashboard_3');
-                          break;
-
-                          case "User":
-
-                          break;
-
-                          case "Anonimo":
-
-                          break;
-                        }
-                        $rootScope.currentUser = response.usuarioName;
-                        $rootScope.currentRole = response.usuarioRole;
-                    })
-                    .error(function(){
-                        //vm.loginError = true;
-                        //vm.loginErrorText = error.data.error;
-                        //console.log(vm.loginErrorText);
-                    })
-                }).catch(function(response) {
-                  // Handle errors here, such as displaying a notification
-                  // for invalid email and/or password.
-                  console.log(response);
-                  alert(response);
-                });
-                
-            };
-
-    }])
-    */
-    .controller('posCtrl', ['$scope','$log','$uibModal','$http', function($scope,$log,$uibModal,$http){
+.controller('posCtrl', ['$scope','$log','$uibModal','$http', function($scope,$log,$uibModal,$http){
 
         /*
          $scope.canillas =[            

@@ -28,6 +28,7 @@
                             <label class="btn btn-default" ng-model="auth.modo" uib-btn-radio="'admin'">Admin</label>
                         </div>
                     </div>
+
                     <div class="form-group">
                         <ui-select ng-model="auth.ubicacion.selected" theme="bootstrap">
                             <ui-select-match>{{$select.selected.nombre}}</ui-select-match>
@@ -37,6 +38,7 @@
                             </ui-select-choices>
                         </ui-select>
                     </div>
+                    
 
                     <div ng-show="false" class="alert alert-danger">
                         No tenes permiso para entrar como Administrador.
@@ -45,7 +47,7 @@
                 </form>
             </div>
             <!--                        
-                LOGIN INICIAL
+                Tabla deslogueo
             -->
             <div ng-show="auth.full">
                 <h3>Full! elegi una a desloguear</h3> 
