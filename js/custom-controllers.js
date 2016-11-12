@@ -170,6 +170,15 @@ vm.login2 = function() {
 
                             console.log(localStorage.getItem('role'));
                             console.log(localStorage.getItem('user'));
+                            console.log(response.modo);
+                            console.log('############');
+
+                            if(response.modo == "errorNoAdmin"){
+                                SweetAlert.swal("Error!", "No tienes permiso de Administrador!", "error");
+                                $state.reload(); 
+                            }
+
+                            console.log(response.mensaje);
 
                             //Elijo de adonde tengo que enviarlo dependiendo de la respuesta response.modo
                             switch(response.modo){
@@ -202,7 +211,8 @@ vm.login2 = function() {
                     })
                 },function(err){
                     if(err.status == 401){
-                        alert("PONER UN MODAL DE INVALID CREDENTIALS O ALGO");
+                        SweetAlert.swal("Error!", "Error en el nombre de usuario o la contraseña que ingresaste!", "error");
+                        $state.reload(); 
                     }
                     console.log(err);
                 });
