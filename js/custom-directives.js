@@ -1,7 +1,7 @@
 angular
-    .module('inspinia')
+.module('inspinia')
 
-    .directive('currencyInput', function($filter, $browser) {
+.directive('currencyInput', function($filter, $browser) {
     return {
         require: 'ngModel',
         link: function($scope, $element, $attrs, ngModelCtrl) {
@@ -45,11 +45,11 @@ angular
                     && String.fromCharCode(key) != separators.decimal
                     && !(48 <= key&&key <= 57)
                     && String.fromCharCode(key) != '-'
-                ) {
+                    ) {
                     event.preventDefault();
-                    return;
-                }
-                if (String.fromCharCode(key)==separators.decimal) decimalEntered=true;
+                return;
+            }
+            if (String.fromCharCode(key)==separators.decimal) decimalEntered=true;
                 $browser.defer(listener) // Have to do this or changes don't get picked up properly
             })
 
@@ -60,7 +60,7 @@ angular
     }
 })
 
-    .directive('iboxProduct', function($compile, $uibModal){
+.directive('iboxProduct', function($compile, $uibModal){
     return {
         restrict: 'A',
         scope: {
@@ -70,6 +70,15 @@ angular
         },
         templateUrl: 'views/ventas-product.html',
         controller: function ($scope, $element) {
+            $scope.selectorProducto = function(){
+
+                if($scope.producto.categoria == "Alquilables"){
+                    console.log("Puto");
+                    
+                }else {
+                    $scope.addProduct();
+                }
+            }
 
             $scope.addProduct = function () {
                 $scope.resumen.display = '';
@@ -100,7 +109,7 @@ angular
 
                         var esta = 0;
                         
-                            console.log(esta);
+                        console.log(esta);
                         //console.log("ordinal" + ordinalItem);
                         $scope.resumen.productos.forEach(function(producto) {
                             console.log('asd');
@@ -133,7 +142,7 @@ angular
                                 valorTotal: $scope.producto.valor,
                                 descuento:'',
                                 stockActual:$scope.producto.stock,
-                            productoReal:$scope.producto
+                                productoReal:$scope.producto
                             }
                             $scope.resumen.productos.push(productoAGuardar);
                         }
@@ -211,7 +220,7 @@ angular
                                 valorTotal: $scope.producto.valor,
                                 descuento:'',
                                 stockActual:$scope.producto.stock,
-                            productoReal:$scope.producto
+                                productoReal:$scope.producto
                             }
                             $scope.producto.stock--;
                             $scope.resumen.productos.push(productoAGuardar);
@@ -231,18 +240,18 @@ angular
     };
 })
 
-    .directive('ventasCalculadora', [function(){
-        return {
-            restrict: 'A',
-            scope: {
-                resumen:'=',
-                modal:'=',
-                ventaProductos:'='
-            },
-            templateUrl: 'views/ventas-calculadora.html',
-            controller: function ($scope) {
- 
-                $scope.selectedMod='Cnt'; 
+.directive('ventasCalculadora', [function(){
+    return {
+        restrict: 'A',
+        scope: {
+            resumen:'=',
+            modal:'=',
+            ventaProductos:'='
+        },
+        templateUrl: 'views/ventas-calculadora.html',
+        controller: function ($scope) {
+
+            $scope.selectedMod='Cnt'; 
                 //console.log($scope);
                 var borrar = false;
                 $scope.selectMod = function($selected) {
@@ -265,13 +274,13 @@ angular
                     switch ($scope.selectedMod){
                         case 'Cnt':
 
-                            if($scope.resumen.productos[index].cantidad == 0){
-                                $scope.resumen.productos.splice(index, 1);
-                                $scope.resumen.numeroProductos--;
-                                $scope.resumen.display='0';
-                                $scope.resumen.selected= index - 1;
-                                $scope.resumen.productos[index].productoReal.stock = $scope.resumen.productos[index].stockActual;
-                            }else{
+                        if($scope.resumen.productos[index].cantidad == 0){
+                            $scope.resumen.productos.splice(index, 1);
+                            $scope.resumen.numeroProductos--;
+                            $scope.resumen.display='0';
+                            $scope.resumen.selected= index - 1;
+                            $scope.resumen.productos[index].productoReal.stock = $scope.resumen.productos[index].stockActual;
+                        }else{
                                 //console.log($scope.resumen.productos[index]);
                                 $scope.resumen.productos[index].cantidad = $scope.resumen.display;
                                 $scope.resumen.productos[index].valorTotal = $scope.resumen.display * $scope.resumen.productos[index].valor;
@@ -281,7 +290,7 @@ angular
                                 }
                             }
                             break;
-                        case 'Desc':
+                            case 'Desc':
                             /* Lo deshabilito para la muestra
                             var aux = $scope.resumen.productos[index].valorTotal;
                             $scope.resumen.productos[index].valorTotal = aux*($scope.resumen.display/100);
@@ -308,7 +317,7 @@ angular
                             $scope.resumen.recalculando(index,true);
                             break;
                             
-                        case 'Val':
+                            case 'Val':
                             if($scope.resumen.productos[index].valorTotal == 0){
                                 $scope.resumen.productos.splice(index, 1);
                                 $scope.resumen.numeroProductos--;
@@ -320,8 +329,8 @@ angular
                             }
                             
                             break;
-                    }
-                    $scope.resumen.recalculando(index,true);
+                        }
+                        $scope.resumen.recalculando(index,true);
                     /*$scope.resumen.total=0;
                     newOrder=0;
                     $scope.resumen.productos.forEach(function(producto) {
@@ -334,11 +343,11 @@ angular
 
                 $scope.selectBtn = function ($selected) {
                     if($selected=="C"){
-                        
+
                         for(i=0;i<$scope.resumen.productos.length;i++){
                             $scope.resumen.productos[i].productoReal.stock = $scope.resumen.productos[i].stockActual;
                         }
-                            
+
                         $scope.resumen.display='';
                         $scope.resumen.numeroProductos=-1;
                         $scope.resumen.productos=[];
@@ -347,17 +356,17 @@ angular
                         $scope.resumen.selected=-1;
                     }
                     else{
-                    if ($scope.resumen.display=='0'){
-                        $scope.resumen.display='';
-                    }
-                    if($scope.resumen.productos.length!=0){
-                        var index = $scope.resumen.selected;
+                        if ($scope.resumen.display=='0'){
+                            $scope.resumen.display='';
+                        }
+                        if($scope.resumen.productos.length!=0){
+                            var index = $scope.resumen.selected;
                         //console.log($scope.resumen.selected);
                         $scope.resumen.display += $selected;
                         //console.log($scope.resumen.display);
                         switch ($scope.selectedMod){
                             case 'Cnt':
-                                
+
                                 //console.log($scope.resumen.productos[index]);
                                 console.log($scope.resumen.productos[index].productoReal);
                                 console.log($scope.resumen.productos[index].stockActual);
@@ -372,41 +381,41 @@ angular
                                     
                                     //$scope.ventaProductos[index].stock =$scope.ventaProductos[index].stock -$scope.resumen.display;
                                    // $scope.resumen.productos[index].productoReal.stock = $scope.resumen.productos[index].stockActual-$scope.resumen.productos[index].cantidad;
-                                    
-                                    
-                                }else 
-                                
-                                if($scope.resumen.productos[index].stockActual >= Number($scope.resumen.display)){
-                                    console.log('more');
-                                    $scope.resumen.productos[index].cantidad = $scope.resumen.display;
-                                    $scope.resumen.productos[index].valorTotal = $scope.resumen.display * $scope.resumen.productos[index].valor;
-                                    $scope.resumen.recalculando(index,true);
+
+
+                               }else 
+
+                               if($scope.resumen.productos[index].stockActual >= Number($scope.resumen.display)){
+                                console.log('more');
+                                $scope.resumen.productos[index].cantidad = $scope.resumen.display;
+                                $scope.resumen.productos[index].valorTotal = $scope.resumen.display * $scope.resumen.productos[index].valor;
+                                $scope.resumen.recalculando(index,true);
                                     //$scope.ventaProductos[index].stock =$scope.ventaProductos[index].stock -$scope.resumen.display;
                                     $scope.resumen.productos[index].productoReal.stock = $scope.resumen.productos[index].stockActual-$scope.resumen.productos[index].cantidad;
                                 }else{
-                                   $scope.resumen.display= $scope.resumen.display.substring(0,$scope.resumen.display.length-1);
-                                }
-                                break;
-                            case 'Desc':
-                                console.log('Descuento');
-                                console.log($scope.resumen.display);
-                                
-                                $scope.resumen.productos[index].valorTotal  = $scope.resumen.productos[index].productoReal.valor;
-                                
-                                $scope.resumen.productos[index].valorTotal = $scope.resumen.productos[index].valorTotal *(1-$scope.resumen.display/100);
-                                
-                                $scope.resumen.productos[index].descuento = $scope.resumen.display;
-                                if ($scope.resumen.productos[index].descuento == 0) {
-                                    $scope.resumen.productos[index].descuento ='';
-                                    $scope.resumen.display = '';
-                                }
-                                $scope.resumen.recalculando(index,true);
-                                break;
+                                 $scope.resumen.display= $scope.resumen.display.substring(0,$scope.resumen.display.length-1);
+                             }
+                             break;
+                             case 'Desc':
+                             console.log('Descuento');
+                             console.log($scope.resumen.display);
+
+                             $scope.resumen.productos[index].valorTotal  = $scope.resumen.productos[index].productoReal.valor;
+
+                             $scope.resumen.productos[index].valorTotal = $scope.resumen.productos[index].valorTotal *(1-$scope.resumen.display/100);
+
+                             $scope.resumen.productos[index].descuento = $scope.resumen.display;
+                             if ($scope.resumen.productos[index].descuento == 0) {
+                                $scope.resumen.productos[index].descuento ='';
+                                $scope.resumen.display = '';
+                            }
+                            $scope.resumen.recalculando(index,true);
+                            break;
                             case 'Val':
-                                $scope.resumen.productos[index].descuento = 0;
-                                $scope.resumen.productos[index].valorTotal = $scope.resumen.display;
-                                $scope.resumen.recalculando(index,false);
-                                break;
+                            $scope.resumen.productos[index].descuento = 0;
+                            $scope.resumen.productos[index].valorTotal = $scope.resumen.display;
+                            $scope.resumen.recalculando(index,false);
+                            break;
                         }
                     }    
                 }
@@ -428,17 +437,17 @@ angular
         };
     }])
 
-    .directive('ventasResumenCompra', [function(){
-        return {
-            restrict: 'A',
-            scope: {
-                resumen:'='
-            },
-            templateUrl: 'views/ventas-resumen-compra.html',
-            controller: function ($scope) {            
-                $scope.selectItem = function ($selected) {
-                    $scope.resumen.selected=$selected;
-                    $scope.resumen.display = '';
+.directive('ventasResumenCompra', [function(){
+    return {
+        restrict: 'A',
+        scope: {
+            resumen:'='
+        },
+        templateUrl: 'views/ventas-resumen-compra.html',
+        controller: function ($scope) {            
+            $scope.selectItem = function ($selected) {
+                $scope.resumen.selected=$selected;
+                $scope.resumen.display = '';
                     //console.info($scope.resumen.selected);
                     //orden=$scope.ordinalItem -1;
                     //$scope.productos[orden].valor=10;
@@ -450,7 +459,7 @@ angular
 
 // Ventas Barra
 
-    .directive('iboxProductBarra', function($compile){
+.directive('iboxProductBarra', function($compile){
     return {
         restrict: 'A',
         scope: {
@@ -463,7 +472,7 @@ angular
         controller: function ($scope, $element) {
 
             $scope.addProduct = function () {
-                
+
                 console.log($scope.$parent.cuponSeleccionado);
                 
                 if($scope.$parent.cuponSeleccionado){
@@ -519,7 +528,7 @@ angular
                                     valorTotal: $scope.producto.valor,
                                     descuento:'',
                                     stockActual:$scope.producto.stock,
-                                productoReal:$scope.producto
+                                    productoReal:$scope.producto
                                 }
                                 $scope.producto.stock--;
                                 $scope.resumen.productos.push(productoAGuardar);
@@ -537,17 +546,17 @@ angular
 })
 
 
-    .directive('ventasCalculadoraBarra', [function(){
-        return {
-            restrict: 'A',
-            scope: {
-                resumen:'=',
-                modal:'=',
-                ventaProductos:'='
-            },
-            templateUrl: 'views/ventas-calculadora-barra.html', 
-            controller: function ($scope) {
-                $scope.selectedMod='Cnt'; 
+.directive('ventasCalculadoraBarra', [function(){
+    return {
+        restrict: 'A',
+        scope: {
+            resumen:'=',
+            modal:'=',
+            ventaProductos:'='
+        },
+        templateUrl: 'views/ventas-calculadora-barra.html', 
+        controller: function ($scope) {
+            $scope.selectedMod='Cnt'; 
                 //console.log($scope);
                 var borrar = false;
                 $scope.selectMod = function($selected) {
@@ -557,7 +566,7 @@ angular
                 }
 
                 $scope.funcDelete = function() {
-                    
+
                     $scope.resumen.display = $scope.resumen.display.substring(0, $scope.resumen.display.length - 1);
                     if($scope.resumen.display == ''){
                         $scope.resumen.display = '0';
@@ -568,13 +577,13 @@ angular
                     //$scope.resumen.display += $selected;
                     console.log($scope.resumen.productos[index]);
                     
-                     if($scope.resumen.productos[index].cantidad == 0){
-                                $scope.resumen.productos.splice(index, 1);
-                                $scope.resumen.numeroProductos--;
-                                $scope.resumen.display='0';
-                                $scope.resumen.selected= index - 1;
-                                $scope.resumen.productos[index].productoReal.stock = $scope.resumen.productos[index].stockActual;
-                            }else{
+                    if($scope.resumen.productos[index].cantidad == 0){
+                        $scope.resumen.productos.splice(index, 1);
+                        $scope.resumen.numeroProductos--;
+                        $scope.resumen.display='0';
+                        $scope.resumen.selected= index - 1;
+                        $scope.resumen.productos[index].productoReal.stock = $scope.resumen.productos[index].stockActual;
+                    }else{
                                 //console.log($scope.resumen.productos[index]);
                                 $scope.resumen.productos[index].cantidad = $scope.resumen.display;
                                 $scope.resumen.productos[index].valorTotal = $scope.resumen.display * $scope.resumen.productos[index].valor;
@@ -583,34 +592,34 @@ angular
                                     $scope.resumen.productos[index].productoReal.stock = $scope.resumen.productos[index].stockActual-$scope.resumen.productos[index].cantidad;
                                 }
                             }
-                     console.info($scope.resumen);       
-                    $scope.resumen.recalculando(index,true);
-                }
-
-                $scope.selectBtn = function ($selected) {
-                    if($selected=="C"){
-                        
-                        for(i=0;i<$scope.resumen.productos.length;i++){
-                            $scope.resumen.productos[i].productoReal.stock = $scope.resumen.productos[i].stockActual;
+                            console.info($scope.resumen);       
+                            $scope.resumen.recalculando(index,true);
                         }
-                            
-                        $scope.resumen.display='';
-                        $scope.resumen.numeroProductos=-1;
-                        $scope.resumen.productos=[];
-                        $scope.resumen.total=0.00;
-                        $scope.resumen.totalLitros=0;
-                        $scope.resumen.selected=-1;
-                    }
-                    else{
-                    if ($scope.resumen.display=='0'){
-                        $scope.resumen.display='';
-                    }
-                    if($scope.resumen.productos.length!=0){
-                        var index = $scope.resumen.selected;
-                        $scope.resumen.display += $selected;
-                        switch ($scope.selectedMod){
-                            case 'Cnt':
-                                
+
+                        $scope.selectBtn = function ($selected) {
+                            if($selected=="C"){
+
+                                for(i=0;i<$scope.resumen.productos.length;i++){
+                                    $scope.resumen.productos[i].productoReal.stock = $scope.resumen.productos[i].stockActual;
+                                }
+
+                                $scope.resumen.display='';
+                                $scope.resumen.numeroProductos=-1;
+                                $scope.resumen.productos=[];
+                                $scope.resumen.total=0.00;
+                                $scope.resumen.totalLitros=0;
+                                $scope.resumen.selected=-1;
+                            }
+                            else{
+                                if ($scope.resumen.display=='0'){
+                                    $scope.resumen.display='';
+                                }
+                                if($scope.resumen.productos.length!=0){
+                                    var index = $scope.resumen.selected;
+                                    $scope.resumen.display += $selected;
+                                    switch ($scope.selectedMod){
+                                        case 'Cnt':
+
                                 //console.log($scope.resumen.productos[index]);
                                 console.log($scope.resumen.productos[index].productoReal);
                                 console.log($scope.resumen.productos[index].stockActual);
@@ -625,45 +634,45 @@ angular
                                     
                                     //$scope.ventaProductos[index].stock =$scope.ventaProductos[index].stock -$scope.resumen.display;
                                    // $scope.resumen.productos[index].productoReal.stock = $scope.resumen.productos[index].stockActual-$scope.resumen.productos[index].cantidad;
-                                    
-                                    
-                                }else 
-                                
-                                if($scope.resumen.productos[index].stockActual >= Number($scope.resumen.display)){
-                                    console.log('more');
-                                    console.log($scope.resumen);
-                                    $scope.resumen.productos[index].cantidad = $scope.resumen.display;
-                                    $scope.resumen.productos[index].valorTotal = $scope.resumen.display * $scope.resumen.productos[index].valor;
-                                    $scope.resumen.recalculando(index,true);
-                                    
+
+
+                               }else 
+
+                               if($scope.resumen.productos[index].stockActual >= Number($scope.resumen.display)){
+                                console.log('more');
+                                console.log($scope.resumen);
+                                $scope.resumen.productos[index].cantidad = $scope.resumen.display;
+                                $scope.resumen.productos[index].valorTotal = $scope.resumen.display * $scope.resumen.productos[index].valor;
+                                $scope.resumen.recalculando(index,true);
+
                                     //$scope.ventaProductos[index].stock =$scope.ventaProductos[index].stock -$scope.resumen.display;
-                                   
+
                                     $scope.resumen.productos[index].productoReal.stock = $scope.resumen.productos[index].stockActual-$scope.resumen.productos[index].cantidad;
                                 }else{
-                                   $scope.resumen.display= $scope.resumen.display.substring(0,$scope.resumen.display.length-1);
-                                }
-                                break;
-                        }
-                    }    
-                }
-            }
-            }
-        };
-    }])
+                                 $scope.resumen.display= $scope.resumen.display.substring(0,$scope.resumen.display.length-1);
+                             }
+                             break;
+                         }
+                     }    
+                 }
+             }
+         }
+     };
+ }])
 
 
-    .directive('ventasResumenCompraBarra', [function(){
-        return {
-            restrict: 'A',
-            scope: {
-                resumen:'='
-            },
-            templateUrl: 'views/ventas-barra-resumen-compra.html',
-            controller: function ($scope) {
-                console.log($scope.resumen);
-                $scope.selectItem = function ($selected) {
-                    $scope.resumen.selected=$selected;
-                    $scope.resumen.display = '';                    
+.directive('ventasResumenCompraBarra', [function(){
+    return {
+        restrict: 'A',
+        scope: {
+            resumen:'='
+        },
+        templateUrl: 'views/ventas-barra-resumen-compra.html',
+        controller: function ($scope) {
+            console.log($scope.resumen);
+            $scope.selectItem = function ($selected) {
+                $scope.resumen.selected=$selected;
+                $scope.resumen.display = '';                    
                     //console.info($scope.resumen.selected);
                     //orden=$scope.ordinalItem -1;
                     //$scope.productos[orden].valor=10;
@@ -674,17 +683,17 @@ angular
     }])
 
 
-    .directive('ventasDetalleClienteBarra', [function(){
-        return {
-            restrict: 'A',
-            scope: {
-                resumen:'='
-            },
-            templateUrl: 'views/ventas-detalle-cliente.html',
-            controller: function ($scope) {            
-                $scope.selectItem = function ($selected) {
-                    $scope.resumen.selected=$selected;
-                    $scope.resumen.display = '';
+.directive('ventasDetalleClienteBarra', [function(){
+    return {
+        restrict: 'A',
+        scope: {
+            resumen:'='
+        },
+        templateUrl: 'views/ventas-detalle-cliente.html',
+        controller: function ($scope) {            
+            $scope.selectItem = function ($selected) {
+                $scope.resumen.selected=$selected;
+                $scope.resumen.display = '';
                     //console.info($scope.resumen.selected);
                     //orden=$scope.ordinalItem -1;
                     //$scope.productos[orden].valor=10;

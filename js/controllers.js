@@ -2050,6 +2050,16 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
         
             if (totalLitrosCupones>0){
                 
+
+                /*    qz.websocket.connect().then(function() {
+                      alert("Connected!");
+                    });
+                    qz.printers.getDefault().then(function(data) {
+                        alert(data);
+                        if (set) { setPrinter(data); }
+                    });*/
+
+
                     cupon.litros=totalLitrosCupones;
                 
                     var modalInstance = $uibModal.open({
@@ -3259,8 +3269,9 @@ function imprimirCuponCtrl ($scope,$log,$uibModalInstance,cupon){
           $scope.barcodeType = 'EAN';
 
           $scope.barcodeOptions = {
-            width: 3,
-            height: 100,
+            width: 1,
+            height: 50,
+            //^ Valores POSTA! recordar en el plugin de JAVA -> SIN Rasterize y SIN Escala!!!!
             displayValue: true,
             font: 'monospace',
             textAlign: 'center',
@@ -3268,10 +3279,46 @@ function imprimirCuponCtrl ($scope,$log,$uibModalInstance,cupon){
             backgroundColor: '#fff',
             lineColor: '#000'
           };
+          $scope.imagenSRC='';
+          while($scope.imagenSRC==''){
+          $scope.imagenSRC = angular.element(document.querySelector('.codigodebarras')).attr('src');
+
+          console.log($scope.imagenSRC );
+          }
+
 
         $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
+        $scope.laconchatuya = function () {
+            $scope.imagenSRC = angular.element(document.querySelector('.codigodebarras')).attr('src');
+
+          console.log($scope.imagenSRC );
+
+        qz.websocket.connect().then(function() { 
+          return qz.printers.find("58mm Series Printer")               // Pass the printer name into the next Promise
+        }).then(function(printer) {
+          var config = qz.configs.create(printer);       // Create a default config for the found printer
+            
+        config.reconfigure({ 
+            scaleContent:false,
+            rasterize:false
+        });
+
+          var printData = [
+            {
+                type: 'html',
+                format: 'plain',
+                data: '<html>' +
+'<img src="'+$scope.imagenSRC+'">'+
+         '</html>'
+            }
+        ];
+          return qz.print(config, printData);
+        }).catch(function(e) { console.error(e); });
+
+
+        }
     
     };
 

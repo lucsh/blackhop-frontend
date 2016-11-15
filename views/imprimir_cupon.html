@@ -22,9 +22,9 @@
         </div>
         </row>
         <br>
-        <h2  class="text-center nopadding print-full-width">
+        <h3 class="text-center nopadding print-full-width">
         Cupon de Cerveza
-        </h2>
+        </h3>
         <br>
         <h1 class="text-center nopadding print-full-width font-huge">
         {{cupon.turnoNumero}}
@@ -34,7 +34,9 @@
         </h1>
         <br>
         <div  class="text-center print-full-width">
-        <io-barcode code="{{ cupon.codigo }}" type="{{ barcodeType }}" options="barcodeOptions"></io-barcode>
+        
+        <io-barcode code="{{ cupon.codigo }}" type="{{ barcodeType }}" options="barcodeOptions" class="codigodebarras"></io-barcode>
+        
         </div>
         <br>
         <h3 class="text-center print-full-width small nopadding nomargins">Valido Hasta:</h3><br>
@@ -45,8 +47,9 @@
     <!-- </Print> -->
     
     <div class="col-md-12">
-    <button class="pull-right btn btn-primary hide-in-print" ng-print print-element-id="printThisElement">
+    <button class="pull-right btn btn-primary hide-in-print" ng-click="laconchatuya()">
       <i class="fa fa-print"></i> Imprimir</button>
     </div>
+
     <hr>
 </div>

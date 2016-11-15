@@ -12,7 +12,7 @@
     #printSection, #printSection * {
         display: inline;
     }
-
+/*
     #printSection {
         position:absolute;
         left:0;
@@ -20,6 +20,7 @@
         width: 100%;
         background: url(../../../img/blackhop-isologo.png) 
     }
+ */   
     .print-full-width{
         width: 100%;
         clear:both;
