@@ -202,73 +202,73 @@
       //var a = $rootScope;
       //console.log(authorization.getRole());
       //console.log($rootScope.currentRole);
-      $rootScope.$on('$stateChangeStart',
-      function (event, next){
-        console.log("routeChangeStart");
-        console.log(next);
+      // $rootScope.$on('$stateChangeStart',
+      // function (event, next){
+      //   console.log("routeChangeStart");
+      //   console.log(next);
 
 
-        /*
-        * En Login no necesito hacer estas validaciones
-        */
-        if(next.url != "/login"){
+      //   /*
+      //   * En Login no necesito hacer estas validaciones
+      //   */
+      //   if(next.url != "/login"){
 
-            /*
-            * Chequeo si el Token es valido, en caso de que no limpio el Local Storage
-            */
-            $http.get('http://blackhop-dessin1.rhcloud.com/api/v1/authenticate/user').success(function(response){       
-                console.log('########################');
-                console.log(response.usuarioName);
-                console.log(response.usuarioRole);
-                console.log('########################');
-            })
-            .error(function(err){
-                console.log('ERROR DEL VERIFICAR TOKEN');
-                localStorage.removeItem('user');
-                localStorage.removeItem('role');
-            });
+      //       /*
+      //       * Chequeo si el Token es valido, en caso de que no limpio el Local Storage
+      //       */
+      //       $http.get('http://blackhop-dessin1.rhcloud.com/api/v1/authenticate/user').success(function(response){       
+      //           console.log('########################');
+      //           console.log(response.usuarioName);
+      //           console.log(response.usuarioRole);
+      //           console.log('########################');
+      //       })
+      //       .error(function(err){
+      //           console.log('ERROR DEL VERIFICAR TOKEN');
+      //           localStorage.removeItem('user');
+      //           localStorage.removeItem('role');
+      //       });
 
-          //console.log(next);
+      //     //console.log(next);
 
-          //console.log(next.data.autorized);
-          //console.log(localStorage);
-          //next.data.autorized.forEach(console.log(item));
+      //     //console.log(next.data.autorized);
+      //     //console.log(localStorage);
+      //     //next.data.autorized.forEach(console.log(item));
 
-          if(next.data.autorized.indexOf(localStorage.role) !== -1){
-            console.log("entra");
-          }else{
-            switch(localStorage.role){
-              case angular.undefined :
-                console.log('Case undefined');
-                event.preventDefault();
-                $state.go('auth');
-              break;
-              case "Root":
-              $state.go('dashboards.dashboard_2');
-              break;
-              case "Admin":
-              console.log("aaaaaaaa");
-              event.preventDefault();
+      //     if(next.data.autorized.indexOf(localStorage.role) !== -1){
+      //       console.log("entra");
+      //     }else{
+      //       switch(localStorage.role){
+      //         case angular.undefined :
+      //           console.log('Case undefined');
+      //           event.preventDefault();
+      //           $state.go('auth');
+      //         break;
+      //         case "Root":
+      //         $state.go('dashboards.dashboard_2');
+      //         break;
+      //         case "Admin":
+      //         console.log("aaaaaaaa");
+      //         event.preventDefault();
 
-              //$state.go('dashboards.dashboard_3');
-              break;
+      //         //$state.go('dashboards.dashboard_3');
+      //         break;
 
-              case "User":
+      //         case "User":
 
-              break;
+      //         break;
 
-              case "Anonimo":
+      //         case "Anonimo":
 
-              break;
+      //         break;
 
 
-            }
-          }
-        }else{
-            localStorage.clear();
-            localStorage.removeItem("satellizer_token");
-        }
-      });
+      //       }
+      //     }
+      //   }else{
+      //       localStorage.clear();
+      //       localStorage.removeItem("satellizer_token");
+      //   }
+      // });
 
       $rootScope.logout = function() {
         $auth.logout().then(function() {

@@ -100,8 +100,11 @@ vm.saLoggout = function(id,nombre){
 vm.loginError = false;
 vm.loginErrorText;
 
+
 vm.full = false;
 console.log('vm.full = ' + vm.full);
+
+vm.valorInicial = 0;
 
 vm.login = function(){
      /*
@@ -115,28 +118,29 @@ vm.login = function(){
     }else{
         if(vm.modo == 'caja'){
             SweetAlert.swal({
-              title: "Bienvenido!",
-              text: "Monto inicial en Caja:",
-              type: "input",
-              showCancelButton: true,
-              closeOnConfirm: false,
-              animation: "slide-from-top",
-              inputPlaceholder: "Monto Inicial"
-          },
-          function(inputValue){
-              if (inputValue === false){
-                console.log("CANCEL");
-                $state.reload(); 
-                return false;
-            } 
+                title: "Bienvenido!",
+                text: "Monto inicial en Caja:",
+                type: "input",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                animation: "slide-from-top",
+                inputPlaceholder: "Monto Inicial"
+            },
+            function(inputValue){
+                if (inputValue === false){
+                    console.log("CANCEL");
+                    $state.reload(); 
+                    return false;
+                } 
 
-            if (inputValue === "") {
-                swal.showInputError("Debes ingresar el monto incial en Caja!");
-                return false
-            }
-
-            vm.login2();
-        });
+                if (inputValue === "") {
+                    swal.showInputError("Debes ingresar el monto incial en Caja!");
+                    return false
+                }
+                swal("Nice!", "You wrote: " + inputValue, "success");
+                vm.valorInicial = inputValue;
+                vm.login2();
+            });
         }else{
             //ESTO ES POR LO ASYNCRONO
             vm.login2();
@@ -160,7 +164,13 @@ vm.login2 = function() {
 
                     //Hace un get con el Token ya seteado para retornar el nombre del usuario, el rol y crear la sesion en
                     // caso de requerirlo (NO ADMIN)
-                    $http.get('http://blackhop-dessin1.rhcloud.com/api/v1/authenticate/user?modo='+vm.modo+'&ubicacion='+vm.ubicacion.selected.id+'').success(function(response){       
+                    $http.get('http://blackhop-dessin1.rhcloud.com/api/v1/authenticate/user', {
+                        params: {
+                            modo:vm.modo,
+                            ubicacion: vm.ubicacion.selected.id,
+                            valorInicial: vm.valorInicial
+                        }
+                    }).success(function(response){       
 
 
                         if(response.modo != 'limite'){
@@ -176,7 +186,9 @@ vm.login2 = function() {
                             }
 
                             console.log(response.mensaje);
-
+                            if(response.mensaje == 'openSesion'){
+                                swal("Ups!", "Usted tiene una sesion abierta en "+response.modo+", sera redirigido!", "error");
+                            }
 
                             console.log(localStorage.getItem('role'));
                             console.log(localStorage.getItem('user'));

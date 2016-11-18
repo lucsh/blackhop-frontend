@@ -2016,15 +2016,20 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
         $uibModalInstance.close();
         
         var totalLitrosCupones=0;
-        var item={};
-        var itemsVenta=[];
         
+        var itemsVenta=[];
+        console.log('############@@@@@@@@@@@@@@@@@@#############');
+        //console.log(JSON.stringify($scope.resumen));
         for (var i=0;i<$scope.resumen.productos.length;i++){
-            
+            var item={};
             item.idProducto = $scope.resumen.productos[i].productoReal.id;
+            console.log(item.idProducto);
             item.cantidad = $scope.resumen.productos[i].cantidad;
+            console.log(item.cantidad);
             item.costo = $scope.resumen.productos[i].productoReal.valor;
+            console.log(item.costo);
             itemsVenta.push(item);
+          
             
             if ($scope.resumen.productos[i].productoReal.categoria=="Cupones"){            
                 totalLitrosCupones+=$scope.resumen.productos[i].cantidad;
@@ -2032,7 +2037,8 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
         }
         
         var cupon={};
-        
+        console.log(itemsVenta);
+        console.log(JSON.stringify(itemsVenta));
         $http.post('http://blackhop-dessin1.rhcloud.com/api/pos/caja/venta', {
             
             idCliente:$scope.clienteSeleccionado.id,
