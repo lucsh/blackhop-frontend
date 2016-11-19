@@ -1,0 +1,29 @@
+<div class="inmodal">
+    <div class="modal-body finalizar-venta">
+
+        <h2> Cerrar Sesion </h2>
+        <hr>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="barra-sesion ">
+                    <div class="sesion-usuario">
+                        <small class="pull-left m-l-sm text-white">Usuario:</small><br>
+                        <h4 class="no-padding">
+                            {{sesion.usuario}}</h4>
+                        </div>
+                        <div class="sesion-encaja">
+                        <small class="pull-left m-l-sm text-inspinia">Litros Vendidos:</small><br>
+                            <h2 class="nopadding" >{{ (sesion.litrosVendidos) }} lts.</h2>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+            <div class="row"></div>
+            <div class="modal-footer m-t-sm">
+               <div class="col-md-12">
+                <button class="pull-right btn btn-primary" ng-click="cerrarSesion()">
+                  <i class="fa fa-sign-out"></i> Cerrar Sesion </button>
+              </div>
+          </div>
+      </div>
+  </div>

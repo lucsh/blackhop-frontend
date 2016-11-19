@@ -8488,6 +8488,67 @@ body.md-skin {
     padding: 14px 0;
 }
 
+
+
+.barra-sesion{
+    text-align:center;
+}
+.barra-sesion div{
+    height: 60px;
+    margin: 0 5px;
+}
+
+.barra-sesion h4{
+    font-weight: 100;
+    line-height: 20px;
+}
+
+.barra-sesion h2{
+    line-height: 25px;
+}
+.barra-sesion small{
+    margin-top: 3px;
+}
+
+.barra-sesion .sesion-usuario{
+    height: 45px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background-color: #2f4050;
+    color: #ffffff;
+}
+
+.barra-sesion .sesion-montoini,
+.barra-sesion .sesion-encaja{
+    margin: 0 3px;
+}
+
+.barra-sesion .sesion-montoini{
+    color:#2f4050;
+    background-color: white;
+    border: 3px solid #2f4050;    
+}
+
+
+.barra-sesion .sesion-montoini h2,
+.barra-sesion .sesion-encaja h2{
+    font-weight: 400;
+}
+
+.barra-sesion .sesion-ventatotal{
+    background-color: #2f4050;
+    color: #ffffff;
+}
+
+.barra-sesion .sesion-encaja{
+    border: 3px solid #2f4050;    
+    background-color: white;
+    color: #2f4050;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+
 /* Canillas POS */
 
 .canillas-right-container{
@@ -8954,10 +9015,18 @@ Tabla
         display:none;
     }
 
+    .font-huge{
+    font-size: 55px!important;
+    font-weight: 600;
+}
+
     #printSection, #printSection * {
         display: inline;
     }
-
+    .nopadding{
+        padding: 0;
+        margin: 0;
+    }
 
     #printSection {
         position:absolute;
@@ -8988,6 +9057,12 @@ Tabla
     }
     .hide-in-print{
         visibility:hidden;
+    }
+    .print-titulo{
+        font-size: 37px
+    }
+    .small{
+        font-size: 80%
     }
 }
 

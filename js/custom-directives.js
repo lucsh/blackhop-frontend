@@ -478,8 +478,8 @@ angular
                 if($scope.$parent.cuponSeleccionado){
                     console.log($scope.resumen);
                     $scope.resumen.display = '';
-                    if($scope.producto.stock>0){
-
+                    if($scope.producto.stock>0 && $scope.$parent.cuponSeleccionado.litros>$scope.resumen.totalLitros){//agregar verificar cantidad de litros cupon
+                        console.log("agreganbdo")
                         if($scope.resumen.productos.length==0){
                             $scope.resumen.total+=Number($scope.valorProducto);                        
                             $scope.resumen.numeroProductos=0;
@@ -636,14 +636,46 @@ angular
                                    // $scope.resumen.productos[index].productoReal.stock = $scope.resumen.productos[index].stockActual-$scope.resumen.productos[index].cantidad;
 
 
-                               }else 
+                               }else if($scope.resumen.productos[index].stockActual >= Number($scope.resumen.display )){
+                                console.log("$scope.$parent.cuponSeleccionado.litros");
+                                console.log($scope.$parent.cuponSeleccionado.litros);
+                                console.log("$scope.resumen.totalLitros");
+                                console.log($scope.resumen.totalLitros);
 
-                               if($scope.resumen.productos[index].stockActual >= Number($scope.resumen.display)){
                                 console.log('more');
                                 console.log($scope.resumen);
+
+                                var valorTotalOld; //lo guardo para recalcular la cantidad de litros
+                                var cantidadOld; // ^^^
+                                
+                                valorTotalOld = $scope.resumen.productos[index].cantidad;
+                                cantidadOld = $scope.resumen.productos[index].valorTotal;
+
+
                                 $scope.resumen.productos[index].cantidad = $scope.resumen.display;
                                 $scope.resumen.productos[index].valorTotal = $scope.resumen.display * $scope.resumen.productos[index].valor;
+
+                              
+
                                 $scope.resumen.recalculando(index,true);
+
+
+
+                                console.log("$scope.$parent.cuponSeleccionado.litros");
+                                console.log($scope.$parent.cuponSeleccionado.litros);
+                                console.log("$scope.resumen.totalLitros");
+                                console.log($scope.resumen.totalLitros);
+                                
+                                if ($scope.$parent.cuponSeleccionado.litros<$scope.resumen.totalLitros){
+
+                                    console.log("oasdk")
+
+                                    $scope.resumen.productos[index].cantidad = valorTotalOld;
+                                    $scope.resumen.productos[index].valorTotal = cantidadOld;
+                                    $scope.resumen.display ='';
+                                    $scope.resumen.recalculando(index,true);
+                                }
+
 
                                     //$scope.ventaProductos[index].stock =$scope.ventaProductos[index].stock -$scope.resumen.display;
 

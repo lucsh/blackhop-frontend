@@ -202,6 +202,9 @@
       //var a = $rootScope;
       //console.log(authorization.getRole());
       //console.log($rootScope.currentRole);
+     
+      
+
       // $rootScope.$on('$stateChangeStart',
       // function (event, next){
       //   console.log("routeChangeStart");
@@ -270,14 +273,14 @@
       //   }
       // });
 
-      $rootScope.logout = function() {
-        $auth.logout().then(function() {
-          localStorage.removeItem('user');
-          localStorage.removeItem('role');
-          $rootScope.currentUser = null;
-          $state.go('login');
-        });
-      };
+      // $rootScope.logout = function() {
+      //   $auth.logout().then(function() {
+      //     localStorage.removeItem('user');
+      //     localStorage.removeItem('role');
+      //     $rootScope.currentUser = null;
+      //     $state.go('login');
+      //   });
+      // };
     }
 
 

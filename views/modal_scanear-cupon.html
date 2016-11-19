@@ -7,20 +7,30 @@
                 <div class="col-sm-12 ">
                     <form role="form">
                         <div class="form-group">
-                            <div><input type="text" ng-model="cupon" autofocus="true" placeholder="Buscar" class="form-control"></div>
+                            <div><input type="text" ng-model="cupon.numero" autofocus="true" placeholder="Buscar" class="form-control" ng-change="verificarCupon()"></div>
                         </div>             
                     </form>
-                    <!--mostrar detalles? -->
                     
-                    <div ng-if="error" class="alert alert-danger">
-                        Nopes
+                    <div ng-if="cupon.error" class="alert alert-danger">
+                        {{cupon.estado}}
+                    </div>
+                    <div ng-if="cupon.estado == 'OK'" class="col-sm-6">
+                        <h4>Cupon No.</h4>
+                        <h4 class="text-navy">{{cupon.numero}}</h4>
+                        <span>Cliente:</span>
+                        <address>
+                            <strong>{{clienteCupon.nombre}} {{clienteCupon.apellido}}</strong>
+                        </address>
+                        <p>
+                            <span>Fecha de Vencimiento:  {{cupon.vencimiento}}</span><br/>
+                        </p>
                     </div>
                 </div>
             </fieldset>   
         </row>
         <div class="pull-right">
             <button type="button" class="btn btn-white  " ng-click="cancel()">Cerrar</button>
-            <button ng-if="cupon" type="button" class="btn btn-primary " ng-click="ok()">Guardar</button>
+            <button ng-disabled="cupon.estado != 'OK'" type="button" class="btn btn-primary " ng-click="ok()">Guardar</button>
         </div>
 
     </div>

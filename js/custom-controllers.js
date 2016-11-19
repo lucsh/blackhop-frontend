@@ -191,7 +191,7 @@ vm.login2 = function() {
                             }
 
                             console.log(localStorage.getItem('role'));
-                            console.log(localStorage.getItem('user'));
+                            console.log(localStorage.getItem('user')); 
 
                             //Elijo de adonde tengo que enviarlo dependiendo de la respuesta response.modo
                             switch(response.modo){
@@ -234,23 +234,20 @@ vm.login2 = function() {
         }//Fin del function login
 
     }])
-.controller('posCtrl', ['$scope','$log','$uibModal','$http', function($scope,$log,$uibModal,$http){
+.controller('posCtrl', ['$scope', '$state','$log','$uibModal','$http','SweetAlert', function($scope, $state,$log,$uibModal,$http,SweetAlert){
 
 
 
-    $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/canilla').success(function(canillas){    
-        console.log(canillas);
-        $scope.canillas = canillas.data;
-    }).error(function(error){
-        console.log(error);
-    }) 
-
+            $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/canilla').success(function(canillas){    
+                console.log(canillas);
+                $scope.canillas = canillas.data;
+            }).error(function(error){
+                console.log(error);
+            }) 
 
 
     $scope.ventaProductos =[];  
     $scope.marcasCervezas =[];
-
-
 
     $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/producto').success(function(productos){    
         console.log(productos);
@@ -281,8 +278,6 @@ vm.login2 = function() {
     }).error(function(error){
         console.log(error);
     })
-
-
     $scope.resumen={
         display:'',
         numeroProductos:-1,
@@ -291,14 +286,13 @@ vm.login2 = function() {
         totalLitros:0,
         selected:-1,
         recalculando(index,modTotal){
-            console.log("recalculando");
-            $scope.resumen.total=0;
-            $scope.resumen.totalLitros=0;
-            newOrder=0;
-            $scope.resumen.productos.forEach(function(producto) {
-                $scope.resumen.total+=Number(producto.valorTotal);
-                    if(producto.unidad == 'lts.'){ //sumar solo si la unidad es litros
-                        $scope.resumen.totalLitros +=Number(producto.cantidad); 
+                $scope.resumen.total=0;
+                $scope.resumen.totalLitros=0;
+                newOrder=0;
+                $scope.resumen.productos.forEach(function(producto) {
+                    $scope.resumen.total+=Number(producto.valorTotal);
+                    if(producto.productoReal.unidad.abr == 'Lts.'){ //sumar solo si la unidad es litros
+                        $scope.resumen.totalLitros +=Number(producto.cantidad);
                     }    
                     producto.id= newOrder;
                     newOrder++;        
@@ -318,15 +312,13 @@ vm.login2 = function() {
                 });
             console.log($scope.resumen);
         }
-    }
-    $scope.asignarCanillas=function(){
-        $scope.bajar='';
+        $scope.asignarCanillas=function(){
+            $scope.bajar='';
+            
 
-
-
-        var modalInstance = $uibModal.open({
-            templateUrl: 'views/asignar_canillas.html',
-            controller: asignarCanillasCtrl, 
+            var modalInstance = $uibModal.open({
+                templateUrl: 'views/asignar_canillas.html',
+                controller: asignarCanillasCtrl, 
                     //controler en controllers.js, no termino de entender porque no lo puedo armar como el resto y si o si tengo que poner una funcion                        
                     windowClass: "animated fadeIn",
                     scope:$scope,
@@ -339,53 +331,52 @@ vm.login2 = function() {
                         }
                     }
                 });
+        }
+        $scope.cargarGasto=function(){
 
-    }
-    $scope.cargarGasto=function(){
-        $scope.bajar='';    
+            $scope.bajar='';                
+            
+            var modalInstance = $uibModal.open({
+                templateUrl: 'views/crear_gasto_caja.html',
+                controller: crearGastoCajaCtrl, 
+                    //controler en controllers.js, no termino de entender porque no lo puedo armar como el resto y si o si tengo que poner una funcion                        
+                    windowClass: "animated fadeIn",
+                    scope:$scope,
+                    SweetAlert:SweetAlert,
+                    resolve:{
+                        gastoNuevo:function () {
+                            return '';
+                        }
+                    }
+                });
+        }
+        $scope.terminarSesionCaja=function(){
 
-        $scope.gastos =[
-        {
-            identificador:1,
-            fecha:new Date("09/01/2016"),
-            descripcion:"Pago a Proveedor",
-            monto:"5500",
-            sesion:"52336"
-        },
-        {
-            identificador:2,
-            fecha:new Date("09/02/2016"),
-            descripcion:"Pago a Gonzalo",
-            monto:"500",
-            sesion:"52341"
-        },
-        {
-            identificador:3,
-            fecha:new Date("09/02/2016"),
-            descripcion:"Retiro Miqueas",
-            monto:"6000",
-            sesion:"52341"
-        },
-        {
-            identificador:4,
-            fecha:new Date("09/03/2016"),
-            descripcion:"Pago a Proveedor",
-            monto:"7000",
-            sesion:"52342"
-        },
-        {
-            identificador:5,
-            fecha:new Date("09/03/2016"),
-            descripcion:"Retiro Miqueas",
-            monto:"2000",
-            sesion:"52342"
-        },
-        {
-            identificador:6,
-            fecha:new Date("09/04/2016"),
-            descripcion:"Retiro Miqueas",
-            monto:"10000",
-            sesion:"52344"
+            $scope.bajar='';                
+            
+            var modalInstance = $uibModal.open({
+                templateUrl: 'views/modal-terminar_sesion_caja.html',
+                controller: terminarSesionCajaCtrl,                        
+                    windowClass: "animated fadeIn",
+                    scope:$scope,
+                    SweetAlert:SweetAlert,
+                    $state
+                    
+                });
+        }
+        $scope.terminarSesionBarra=function(){
+
+            $scope.bajar='';                
+            
+            var modalInstance = $uibModal.open({
+                templateUrl: 'views/modal-terminar_sesion_barra.html',
+                controller: terminarSesionBarraCtrl,                        
+                    windowClass: "animated fadeIn",
+                    scope:$scope,
+                    SweetAlert:SweetAlert,
+                    $state
+                    
+                });
         }
 
         ]
@@ -464,7 +455,7 @@ vm.login2 = function() {
                         }
                     }).closed.then(function(){
 
-
+                        //cancela el finalizar, que hago? borro todo? y si solo qeria agregar mas? o si se arrepintio?
 
                     });                   
 

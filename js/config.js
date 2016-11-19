@@ -1709,8 +1709,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
                             files: ['css/plugins/angular-wizard/angular-wizard.css','js/plugins/angular-wizard/angular-wizard.min.js']
                         },
                         {
-                            name: 'ngPrint',
-                            files: ['js/plugins/ngPrint/ngPrint.min.js','css/plugins/ngPrint/ngPrint.css']
+                            files: ['js/plugins/QZ/rsvp-3.js','js/plugins/QZ/sha-256.js','js/plugins/QZ/qz-tray.js']
                         },
                         {
                             name: 'io-barcode',
@@ -1726,6 +1725,13 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
                         {
                             name: 'datePicker',
                             files: ['css/plugins/datapicker/angular-datapicker.css','js/plugins/datapicker/angular-datepicker.js']
+                        },
+                        {
+                            files: ['js/plugins/sweetalert/sweetalert.min.js', 'css/plugins/sweetalert/sweetalert.css']
+                        },
+                        {
+                            name: 'oitozero.ngSweetAlert',
+                            files: ['js/plugins/sweetalert/angular-sweetalert.min.js']
                         }
                         
                     ]);
@@ -1752,6 +1758,13 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
                     return $ocLazyLoad.load([                        
                         {
                             files: ['js/plugins/moment/moment.min.js']
+                        },
+                        {
+                            files: ['js/plugins/sweetalert/sweetalert.min.js', 'css/plugins/sweetalert/sweetalert.css']
+                        },
+                        {
+                            name: 'oitozero.ngSweetAlert',
+                            files: ['js/plugins/sweetalert/angular-sweetalert.min.js']
                         }
                         
                     ]);
