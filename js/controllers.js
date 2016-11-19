@@ -2132,6 +2132,7 @@ function wizardProductoInvantarioCtrl ($scope,$log,$uibModalInstance,WizardHandl
 
 }
 
+
 function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,WizardHandler,clienteSeleccionado,resumen){
    
     $scope.resumen=resumen;
@@ -2175,16 +2176,16 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
         var totalLitrosCupones=0;
         
         var itemsVenta=[];
-        console.log('############@@@@@@@@@@@@@@@@@@#############');
+
         //console.log(JSON.stringify($scope.resumen));
         for (var i=0;i<$scope.resumen.productos.length;i++){
+
             var item={};
+
             item.idProducto = $scope.resumen.productos[i].productoReal.id;
-            console.log(item.idProducto);
             item.cantidad = $scope.resumen.productos[i].cantidad;
-            console.log(item.cantidad);
             item.costo = $scope.resumen.productos[i].productoReal.valor;
-            console.log(item.costo);
+
             itemsVenta.push(item);
           
             

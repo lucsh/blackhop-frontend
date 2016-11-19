@@ -304,7 +304,10 @@ vm.login2 = function() {
             });
         }
         
-        
+    
+
+
+
         $scope.modal={
 
             scanearCupon(){
@@ -316,31 +319,66 @@ vm.login2 = function() {
                     scope: $scope //paso el scope completo asi lo puedo llenar sin dar vueltas (no se hace :P )
                 });
             },
-            
             terminarVentaBarra(){
+                console.log('####Terminar Venta Barra#######');
+                
 
-                if ($scope.clienteSeleccionado){
-                    var modalInstance = $uibModal.open({
-                        templateUrl: 'views/modal-terminar_venta_barra.html',
-                        controller: terminarVentaBarraCtrl,
-                        windowTopClass:"modal-arriba",
-                        windowClass: "animated bounceInDown",
-                        size:'md',
-                        resolve: {
-                            clienteSeleccionado: function () {
-                                return $scope.clienteSeleccionado;
-                            },
-                            resumen: function () {
-                                return $scope.resumen;
-                            }
+                console.log('$scope.cuponSeleccionado.litros');
+                console.log($scope.cuponSeleccionado.litros);
+
+                console.log('$scope.resumen.totalLitros');
+                console.log($scope.resumen.totalLitros);
+                if($scope.cuponSeleccionado.litros > $scope.resumen.totalLitros){
+                    SweetAlert.swal("Error", "El cupon tiene mas litros de los cargados!", "error")
+                }else{
+                var itemsVenta=[];
+
+                for (var i=0;i<$scope.resumen.productos.length;i++){
+
+                    var item={};
+
+                    item.idProducto = $scope.resumen.productos[i].productoReal.id;
+                    item.cantidad = $scope.resumen.productos[i].cantidad;
+
+                    itemsVenta.push(item);          
+                }
+
+                    SweetAlert.swal({
+                        title: "¿Estas Seguro?",
+                        text: "Se va a inutilizar el cupon <span style='color:#F8BB86; font-weight:600'>" + $scope.cuponSeleccionado.numero +"</span>",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "¡Si, agregalo!",
+                        cancelButtonText: "¡No, cancelar!",
+                        closeOnConfirm: false,
+                        closeOnCancel: false,
+                        html: true },
+                    function (isConfirm) {
+                        if (isConfirm) {
+
+                            $http.post('http://blackhop-dessin1.rhcloud.com/api/pos/barra/venta', {
+
+                                codigo:$scope.cuponSeleccionado.numero,
+                                itemsVenta: JSON.stringify(itemsVenta),
+                            }).success(function(response) {
+                                $scope.borrarTodo();
+
+                            }).error(function(error){
+                              console.log(error);
+                            });              
+                            SweetAlert.swal("¡Realizado!", "Venta realizada", "success");
+                            
+                        } else {
+                            SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
                         }
                     });
-                } else {               
-                    //?
-                }
-            },
 
-        }
+
+                }
+            }
+
+        }//modal
     }
 
     ])     
@@ -528,258 +566,6 @@ vm.login2 = function() {
 
 //--------    END NUEVO POS CAJA CTRL--------
 
-.controller('posCtrl', ['$scope', '$state','$log','$uibModal','$http','SweetAlert', function($scope, $state,$log,$uibModal,$http,SweetAlert){
-
-
-
-            $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/canilla').success(function(canillas){    
-                console.log(canillas);
-                $scope.canillas = canillas.data;
-            }).error(function(error){
-                console.log(error);
-            }) 
-
-
-    $scope.ventaProductos =[];  
-    $scope.marcasCervezas =[];
-
-    $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/producto').success(function(productos){    
-        console.log(productos);
-        $scope.ventaProductos = productos.data;
-        for(var i = 0; i < $scope.ventaProductos.length; i++){
-
-            if($scope.ventaProductos[i].categoria=='Alquilables'){
-                $scope.ventaProductos[i].stock=-1;
-            }
-            if($scope.ventaProductos[i].ibu){
-
-                var found = jQuery.inArray($scope.ventaProductos[i].marca, $scope.marcasCervezas);
-
-                if (found == -1) {                    
-                    $scope.marcasCervezas.push($scope.ventaProductos[i].marca);
-                }
-            } 
-        };
-    }).error(function(error){
-        console.log(error);
-    }) 
-
-    
-
-    $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/cliente').success(function(clientes){    
-        console.log(clientes);
-        $scope.clientes = clientes.data;
-    }).error(function(error){
-        console.log(error);
-    })
-    $scope.resumen={
-        display:'',
-        numeroProductos:-1,
-        productos:[],
-        total:0.00,
-        totalLitros:0,
-        selected:-1,
-        recalculando(index,modTotal){
-                console.log("recalculando");
-                $scope.resumen.total=0;
-                $scope.resumen.totalLitros=0;
-                newOrder=0;
-                $scope.resumen.productos.forEach(function(producto) {
-                    $scope.resumen.total+=Number(producto.valorTotal);
-                    if(producto.productoReal.unidad.abr == 'Lts.'){ //sumar solo si la unidad es litros
-                        $scope.resumen.totalLitros +=Number(producto.cantidad);
-                    }    
-                    producto.id= newOrder;
-                    newOrder++;        
-                    console.log(index.undefined);
-                    if (index != -1 && index === undefined){
-
-                        console.log($scope.resumen.productos[index] + index + $scope);
-
-                        if(modTotal == true){
-                            $scope.resumen.productos[index].valorTotal = $scope.resumen.productos[index].cantidad * $scope.resumen.productos[index].valor;
-
-                            if($scope.resumen.productos[index].descuento != ''){
-                                $scope.resumen.productos[index].valorTotal = Number($scope.resumen.productos[index].valorTotal) * Number($scope.resumen.productos[index].descuento/100); 
-                            }
-                        }
-                    }
-                });
-            console.log($scope.resumen);
-        }
-    }
-        $scope.asignarCanillas=function(){
-            $scope.bajar='';
-            
-
-            var modalInstance = $uibModal.open({
-                templateUrl: 'views/asignar_canillas.html',
-                controller: asignarCanillasCtrl, 
-                    //controler en controllers.js, no termino de entender porque no lo puedo armar como el resto y si o si tengo que poner una funcion                        
-                    windowClass: "animated fadeIn",
-                    scope:$scope,
-                    resolve: {
-                        canillas: function () {
-                            return $scope.canillas;
-                        },
-                        gastoEdit:function () {
-                            return '';
-                        }
-                    }
-                });
-        }
-        $scope.cargarGasto=function(){
-
-            $scope.bajar='';                
-            
-            var modalInstance = $uibModal.open({
-                templateUrl: 'views/crear_gasto_caja.html',
-                controller: crearGastoCajaCtrl, 
-                    //controler en controllers.js, no termino de entender porque no lo puedo armar como el resto y si o si tengo que poner una funcion                        
-                    windowClass: "animated fadeIn",
-                    scope:$scope,
-                    SweetAlert:SweetAlert,
-                    resolve:{
-                        gastoNuevo:function () {
-                            return '';
-                        }
-                    }
-                });
-        }
-        $scope.terminarSesionCaja=function(){
-
-            $scope.bajar='';                
-            
-            var modalInstance = $uibModal.open({
-                templateUrl: 'views/modal-terminar_sesion_caja.html',
-                controller: terminarSesionCajaCtrl,                        
-                    windowClass: "animated fadeIn",
-                    scope:$scope,
-                    SweetAlert:SweetAlert,
-                    $state
-                    
-                });
-        }
-        $scope.terminarSesionBarra=function(){
-
-            $scope.bajar='';                
-            
-            var modalInstance = $uibModal.open({
-                templateUrl: 'views/modal-terminar_sesion_barra.html',
-                controller: terminarSesionBarraCtrl,                        
-                    windowClass: "animated fadeIn",
-                    scope:$scope,
-                    SweetAlert:SweetAlert,
-                    $state
-                    
-                });
-    }
-
-
-    $scope.modal={
-
-        scanearCupon(){
-            $scope.cupon='';
-            var modalInstance = $uibModal.open({
-                templateUrl: 'views/modal_scanear-cupon.html',
-                controller: scanearCuponCtrl,
-                windowClass: "animated fadeIn",
-                    scope: $scope //paso el scope completo asi lo puedo llenar sin dar vueltas (no se hace :P )
-                });
-        },
-
-        terminarVentaBarra(){
-
-            if ($scope.clienteSeleccionado){
-                var modalInstance = $uibModal.open({
-                    templateUrl: 'views/modal-terminar_venta_barra.html',
-                    controller: terminarVentaBarraCtrl,
-                    windowTopClass:"modal-arriba",
-                    windowClass: "animated bounceInDown",
-                    size:'md',
-                    resolve: {
-                        clienteSeleccionado: function () {
-                            return $scope.clienteSeleccionado;
-                        },
-                        resumen: function () {
-                            return $scope.resumen;
-                        }
-                    }
-                });
-            } else {               
-                    //?
-                }
-            },
-            
-            terminarVenta(){
-
-                console.log('$scope.clienteSeleccionado');
-                console.log($scope.clienteSeleccionado);
-                if ($scope.clienteSeleccionado){
-                    var modalInstance = $uibModal.open({
-                        templateUrl: 'views/modal-terminar_venta.html',
-                        controller: terminarVentaCtrl,
-                        windowTopClass:"modal-arriba",
-                        windowClass: "animated bounceInDown",
-                        size:'md',
-                        resolve: {
-                            clienteSeleccionado: function () {
-                                return $scope.clienteSeleccionado;
-                            },
-                            resumen: function () {
-                                return $scope.resumen;
-                            }
-                        }
-                    }).closed.then(function(){
-
-                        //cancela el finalizar, que hago? borro todo? y si solo qeria agregar mas? o si se arrepintio?
-
-                    });                   
-
-                    
-                } else {                    
-                    $scope.modal.abrir(true);
-                }
-            },
-
-            abrir(flag){
-                var modalInstance = $uibModal.open({
-                    templateUrl: 'views/modal_abrir_cliente.html',
-                    controller: modalControler,
-                    windowClass: "animated fadeIn",
-                    resolve: {
-                        clientes: function () {
-                            return $scope.clientes;
-                        }
-                    }
-                }).closed.then(function(){
-                    if(flag){
-                      $scope.modal.terminarVenta();
-                  }
-              });
-
-            },
-
-            imprimir(){
-
-                if ($scope.resumen.numeroProductos<0){ 
-
-                    //No hay articulos y solo quiere imprimir el turno
-
-                    var modalInstance = $uibModal.open({
-                        templateUrl: 'views/imprimir_turno.html',
-                        controller: imprimirTurnoCtrl, 
-                        windowClass: "animated flipInY"
-                    });
-                } else {
-                    $scope.modal.terminarVenta();
-                }
-            }
-
-        }
-    }
-
-    ])     
 
 .controller('clientesCtrl', ['$scope','$log','$uibModal','$filter','DTOptionsBuilder','DTColumnDefBuilder','SweetAlert', function($scope,$log,$uibModal,$filter,DTOptionsBuilder,DTColumnDefBuilder,SweetAlert){
 
