@@ -1,31 +1,68 @@
-<div class="wrapper wrapper-content animated fadeInRight" ng-controller="posCtrl">
-    <div class="col-centered " >
-        <div class="col-lg-4 col-md-5 col-sm-5">
-            <div class="ibox nopadding float-e-margins">
-                <div ventas-resumen-compra resumen="resumen"></div>
-                <div ventas-calculadora resumen="resumen" modal="modal" venta-productos="ventaProductos"></div>
-            </div>
-        </div> 
-        <div class="col-lg-8 col-sm-7 col-md-7">
+<div ng-controller="posCtrlCaja">
+    <div id="go-top" class="go-top in-page-scroll go-top-out">
+        <div class="circle1"></div>
+        <a ng-click="bajar = bajar == 'bajar' ? '' : 'bajar'" class="square {{bajar}}"><span></span></a>
+        <div class="rectangle"></div>
+        <div class="circle2"></div>
+    </div>
+    <div class="row pos-nav border-bottom">
 
-            <div productos-slim-scroll>
-                <div ng-repeat="producto in ventaProductos | filter:'!Cerveza Tirada' | filter:'!No vendible'">
-                    <div ibox-product resumen="resumen" producto="producto"></div>
+        <nav class="navbar navbar-fixed-top {{bajar}}" role="navigation" style="margin-bottom: 0">
+            <ul  class="nav navbar-top-links navbar-left">
+                <li ng-if="$parent.$state.current.name=='pos.point_of_sale'">
+                    <a class="text-warning" ng-click="cargarGasto()">
+                        <i class="fa fa-plus"></i> Cargar Gasto
+                    </a>
+                </li>
+            </ul>
+            <ul class="nav navbar-top-links navbar-left">
+                <li>                 
+                    <!-- Ver el tema del menú (cargar otro para los que estan en sesion)-->
+                    <a ui-sref="app.canillas"><i class="fa fa-beer"></i><span class="nav-label">Canillas</span> </a>
+                </li>
+
+            </ul>
+            <ul class="nav navbar-top-links navbar-right">
+                <li ng-if="$parent.$state.current.name=='pos.point_of_sale'">
+                    <a class="text-warning" ng-click="terminarSesionCaja()">
+                        <i class="fa fa-sign-out"></i> Terminar sesión
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+    </div>
+
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="col-centered " >
+            <div class="col-lg-4 col-md-5 col-sm-5">
+                <div class="ibox nopadding float-e-margins">
+                    <div ventas-resumen-compra resumen="resumen"></div>
+                    <div ventas-calculadora resumen="resumen" modal="modal" venta-productos="ventaProductos"></div>
                 </div>
+            </div> 
+            <div class="col-lg-8 col-sm-7 col-md-7">
+
+                <div productos-slim-scroll>
+                    <div ng-repeat="producto in ventaProductos | filter:'!Cerveza Tirada' | filter:'!No vendible'">
+                        <div ibox-product resumen="resumen" producto="producto"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="canillas-right-container">
+            <div class="canillas-right-left">
+                <div ng-repeat="canilla in canillas">
+                    <span class="canilla-pos"><div class="canilla-color" style="background-color:{{canilla.productoColor || '#aaa'}};"><div class="canilla-numero">{{canilla.numero|number}}</div></div><div class="canilla-nombre">{{canilla.productoNombre}} - {{canilla.productoMarca}}
+                        <br><uib-progressbar class="barra-birra" value="(canilla.productoStock/300*100)" type="{{canilla.productoStock<10 && 'danger' || canilla.productoStock<50 && 'warning' || ''}}"></uib-progressbar>    
+                    </div></span>
+                </div>    
+
+
             </div>
 
         </div>
-    </div>
 
-        <div class="canillas-right-container">
-        <div class="canillas-right-left">
-        <div ng-repeat="canilla in canillas">
-        <span class="canilla-pos"><div class="canilla-color" style="background-color:{{canilla.productoColor || '#aaa'}};"><div class="canilla-numero">{{canilla.numero|number}}</div></div><div class="canilla-nombre">{{canilla.productoNombre}} - {{canilla.productoMarca}}
-        <br><uib-progressbar class="barra-birra" value="(canilla.productoStock/300*100)" type="{{canilla.productoStock<10 && 'danger' || canilla.productoStock<50 && 'warning' || ''}}"></uib-progressbar>    
-        </div></span>
-        </div>    
-        
-        
     </div>
-
-</div>

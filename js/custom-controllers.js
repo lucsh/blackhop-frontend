@@ -232,8 +232,302 @@ vm.login2 = function() {
                 });
 
         }//Fin del function login
-
+//codigo de iphone de Fede --> 619794
     }])
+
+//--------    NUEVO POS BARRA CTRL    --------
+
+.controller('posBarraCtrl', ['$scope', '$state','$log','$uibModal','$http','SweetAlert', function($scope, $state,$log,$uibModal,$http,SweetAlert){
+
+    //controller de barra
+
+    $scope.ventaProductos =[];  
+    $scope.marcasCervezas =[];
+
+    $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/producto').success(function(productos){    
+        console.log(productos);
+        $scope.ventaProductos = productos.data;
+        for(var i = 0; i < $scope.ventaProductos.length; i++){
+
+            if($scope.ventaProductos[i].categoria=='Alquilables'){
+                $scope.ventaProductos[i].stock=-1;
+            }
+            if($scope.ventaProductos[i].ibu){
+
+                var found = jQuery.inArray($scope.ventaProductos[i].marca, $scope.marcasCervezas);
+
+                if (found == -1) {                    
+                    $scope.marcasCervezas.push($scope.ventaProductos[i].marca);
+                }
+            } 
+        };
+    }).error(function(error){
+        //console.log(error);
+    });
+
+
+        $scope.resumen={//quien lo llama?
+            display:'',
+            numeroProductos:-1,
+            productos:[],
+            total:0.00,
+            totalLitros:0,
+            selected:-1,
+            recalculando(index,modTotal){
+                console.log("recalculandoBarra");
+
+                $scope.resumen.total=0;
+                $scope.resumen.totalLitros=0;
+                newOrder=0;
+                $scope.resumen.productos.forEach(function(producto) {
+
+                    $scope.resumen.totalLitros +=Number(producto.cantidad); 
+
+                    producto.id= newOrder;
+                    newOrder++;        
+                });
+            }
+        }
+
+        $scope.terminarSesionBarra=function(){
+
+            $scope.bajar='';                
+            
+            var modalInstance = $uibModal.open({
+                templateUrl: 'views/modal-terminar_sesion_barra.html',
+                controller: terminarSesionBarraCtrl,                        
+                windowClass: "animated fadeIn",
+                scope:$scope,
+                SweetAlert:SweetAlert,
+                $state
+
+            });
+        }
+        
+        
+        $scope.modal={
+
+            scanearCupon(){
+                $scope.cupon='';
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'views/modal_scanear-cupon.html',
+                    controller: scanearCuponCtrl,
+                    windowClass: "animated fadeIn",
+                    scope: $scope //paso el scope completo asi lo puedo llenar sin dar vueltas (no se hace :P )
+                });
+            },
+            
+            terminarVentaBarra(){
+
+                if ($scope.clienteSeleccionado){
+                    var modalInstance = $uibModal.open({
+                        templateUrl: 'views/modal-terminar_venta_barra.html',
+                        controller: terminarVentaBarraCtrl,
+                        windowTopClass:"modal-arriba",
+                        windowClass: "animated bounceInDown",
+                        size:'md',
+                        resolve: {
+                            clienteSeleccionado: function () {
+                                return $scope.clienteSeleccionado;
+                            },
+                            resumen: function () {
+                                return $scope.resumen;
+                            }
+                        }
+                    });
+                } else {               
+                    //?
+                }
+            },
+
+        }
+    }
+
+    ])     
+
+//--------    END NUEVO POS BARRA CTRL--------
+
+//--------    NUEVO POS CAJA CTRL    --------
+
+.controller('posCtrlCaja', ['$scope', '$state','$log','$uibModal','$http','SweetAlert', function($scope, $state,$log,$uibModal,$http,SweetAlert){
+
+            $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/canilla').success(function(canillas){    
+                console.log(canillas);
+                $scope.canillas = canillas.data;
+            }).error(function(error){
+                console.log(error);
+            }) 
+
+
+
+        $scope.ventaProductos =[];  
+
+
+        
+        $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/producto').success(function(productos){    
+            console.log(productos);
+            $scope.ventaProductos = productos.data;
+            for(var i = 0; i < $scope.ventaProductos.length; i++){
+
+                if($scope.ventaProductos[i].categoria=='Alquilables'){
+                    $scope.ventaProductos[i].stock=-1;
+                }
+            };
+        }).error(function(error){
+            console.log(error);
+        })
+        
+        $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/cliente').success(function(clientes){    
+            console.log(clientes);
+            $scope.clientes = clientes.data;
+        }).error(function(error){
+            console.log(error);
+        })
+
+       
+        $scope.resumen={
+            display:'',
+            numeroProductos:-1,
+            productos:[],
+            total:0.00,
+            totalLitros:0,
+            selected:-1,
+            recalculando(index,modTotal){
+                console.log("recalculando");
+
+                $scope.resumen.total=0;
+                $scope.resumen.totalLitros=0;
+                newOrder=0;
+                $scope.resumen.productos.forEach(function(producto) {
+
+                    $scope.resumen.total+=Number(producto.valorTotal);
+                    producto.id= newOrder;
+                    newOrder++;        
+
+                    if (index != -1 && index === undefined){
+
+                        console.log($scope.resumen.productos[index] + index + $scope);
+
+                        if(modTotal == true){
+                            $scope.resumen.productos[index].valorTotal = $scope.resumen.productos[index].cantidad * $scope.resumen.productos[index].valor;
+
+                            if($scope.resumen.productos[index].descuento != ''){
+                                $scope.resumen.productos[index].valorTotal = Number($scope.resumen.productos[index].valorTotal) * Number($scope.resumen.productos[index].descuento/100); 
+                            }
+                        }
+                    }
+                });
+
+            }
+        }
+
+        $scope.cargarGasto=function(){
+
+            $scope.bajar='';                
+            
+            var modalInstance = $uibModal.open({
+                templateUrl: 'views/crear_gasto_caja.html',
+                controller: crearGastoCajaCtrl, 
+                    //controler en controllers.js, no termino de entender porque no lo puedo armar como el resto y si o si tengo que poner una funcion                        
+                    windowClass: "animated fadeIn",
+                    scope:$scope,
+                    SweetAlert:SweetAlert,
+                    resolve:{
+                        gastoNuevo:function () {
+                            return '';
+                        }
+                    }
+                });
+        }
+
+        $scope.terminarSesionCaja=function(){
+
+            $scope.bajar='';                
+            
+            var modalInstance = $uibModal.open({
+                templateUrl: 'views/modal-terminar_sesion_caja.html',
+                controller: terminarSesionCajaCtrl,                        
+                    windowClass: "animated fadeIn",
+                    scope:$scope,
+                    SweetAlert:SweetAlert,
+                    $state
+                    
+                });
+        }
+        
+        
+        $scope.modal={
+
+            terminarVenta(){
+
+                console.log('$scope.clienteSeleccionado');
+                console.log($scope.clienteSeleccionado);
+                if ($scope.clienteSeleccionado){
+                    var modalInstance = $uibModal.open({
+                        templateUrl: 'views/modal-terminar_venta.html',
+                        controller: terminarVentaCtrl,
+                        windowTopClass:"modal-arriba",
+                        windowClass: "animated bounceInDown",
+                        size:'md',
+                        resolve: {
+                            clienteSeleccionado: function () {
+                                return $scope.clienteSeleccionado;
+                            },
+                            resumen: function () {
+                                return $scope.resumen;
+                            }
+                        }
+                    }).closed.then(function(){
+
+                    });                   
+
+                    
+                } else {                    
+                    $scope.modal.abrir(true);
+                }
+            },
+
+            abrir(flag){
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'views/modal_abrir_cliente.html',
+                    controller: modalControler,
+                    windowClass: "animated fadeIn",
+                    resolve: {
+                        clientes: function () {
+                            return $scope.clientes;
+                        }
+                    }
+                }).closed.then(function(){
+                    if(flag){
+                      $scope.modal.terminarVenta();
+                  }
+              });
+
+            },
+
+            imprimir(){
+
+                if ($scope.resumen.numeroProductos<0){ 
+
+                    //No hay articulos y solo quiere imprimir el turno
+
+                    var modalInstance = $uibModal.open({
+                        templateUrl: 'views/imprimir_turno.html',
+                        controller: imprimirTurnoCtrl, 
+                        windowClass: "animated flipInY"
+                    });
+                } else {
+                    $scope.modal.terminarVenta();
+                }
+            }
+
+        }
+    }
+
+    ])     
+
+//--------    END NUEVO POS CAJA CTRL--------
+
 .controller('posCtrl', ['$scope', '$state','$log','$uibModal','$http','SweetAlert', function($scope, $state,$log,$uibModal,$http,SweetAlert){
 
 
