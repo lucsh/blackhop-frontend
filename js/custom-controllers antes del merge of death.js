@@ -76,13 +76,13 @@ vm.saLoggout = function(id,nombre){
                 }
                 */
                 $http.get('http://blackhop-dessin1.rhcloud.com/api/v1/authenticate/full?sesion='+id).success(function(response){       
-                    SweetAlert.swal("¡Hecho!", "La cuenta de "+ nombre + " fue cerrada", "success");
-                    vm.login();
-                })
-                .error(function(){
-                    SweetAlert.swal("¡Hecho!", "La cuenta de "+ nombre + " NO fue cerrada", "error");
-                    $state.reload();    
-                });
+                        SweetAlert.swal("¡Hecho!", "La cuenta de "+ nombre + " fue cerrada", "success");
+                        vm.login();
+                    })
+                    .error(function(){
+                        SweetAlert.swal("¡Hecho!", "La cuenta de "+ nombre + " NO fue cerrada", "error");
+                        $state.reload();    
+                    });
                 
                     //HACER POST PARA DESLOGUEAR UNA SESION E INICIAR SESION
 
@@ -100,11 +100,8 @@ vm.saLoggout = function(id,nombre){
 vm.loginError = false;
 vm.loginErrorText;
 
-
 vm.full = false;
 console.log('vm.full = ' + vm.full);
-
-vm.valorInicial = 0;
 
 vm.login = function(){
      /*
@@ -118,28 +115,27 @@ vm.login = function(){
     }else{
         if(vm.modo == 'caja'){
             SweetAlert.swal({
-                title: "Bienvenido!",
-                text: "Monto inicial en Caja:",
-                type: "input",
-                showCancelButton: true,
-                closeOnConfirm: false,
-                animation: "slide-from-top",
-                inputPlaceholder: "Monto Inicial"
+              title: "Bienvenido!",
+              text: "Monto inicial en Caja:",
+              type: "input",
+              showCancelButton: true,
+              closeOnConfirm: false,
+              animation: "slide-from-top",
+              inputPlaceholder: "Monto Inicial"
             },
             function(inputValue){
-                if (inputValue === false){
-                    console.log("CANCEL");
-                    $state.reload(); 
-                    return false;
-                } 
-
-                if (inputValue === "") {
-                    swal.showInputError("Debes ingresar el monto incial en Caja!");
-                    return false
-                }
-                swal("Nice!", "You wrote: " + inputValue, "success");
-                vm.valorInicial = inputValue;
-                vm.login2();
+              if (inputValue === false){
+                console.log("CANCEL");
+                $state.reload(); 
+                return false;
+              } 
+              
+              if (inputValue === "") {
+                swal.showInputError("Debes ingresar el monto incial en Caja!");
+                return false
+              }
+              
+              vm.login2();
             });
         }else{
             //ESTO ES POR LO ASYNCRONO
@@ -152,7 +148,7 @@ vm.login = function(){
 vm.login2 = function() {
 
     console.log(vm.ubicacion.selected)
-
+           
                 //Crea el objeto credentials desde el form Login
                 var credentials = {
                     email: vm.email,
@@ -164,31 +160,13 @@ vm.login2 = function() {
 
                     //Hace un get con el Token ya seteado para retornar el nombre del usuario, el rol y crear la sesion en
                     // caso de requerirlo (NO ADMIN)
-                    $http.get('http://blackhop-dessin1.rhcloud.com/api/v1/authenticate/user', {
-                        params: {
-                            modo:vm.modo,
-                            ubicacion: vm.ubicacion.selected.id,
-                            valorInicial: vm.valorInicial
-                        }
-                    }).success(function(response){       
+                    $http.get('http://blackhop-dessin1.rhcloud.com/api/v1/authenticate/user?modo='+vm.modo+'&ubicacion='+vm.ubicacion.selected.id+'').success(function(response){       
 
 
                         if(response.modo != 'limite'){
                             //Seteo de Variables en Local Storage
                             localStorage.setItem('user', response.usuarioName);
                             localStorage.setItem('role', response.usuarioRole);
-                            console.log(response.modo);
-                            console.log('############');
-
-                            if(response.modo == "errorNoAdmin"){
-                                SweetAlert.swal("Error!", "No tienes permiso de Administrador!", "error");
-                                $state.reload(); 
-                            }
-
-                            console.log(response.mensaje);
-                            if(response.mensaje == 'openSesion'){
-                                swal("Ups!", "Usted tiene una sesion abierta en "+response.modo+", sera redirigido!", "error");
-                            }
 
                             console.log(localStorage.getItem('role'));
                             console.log(localStorage.getItem('user')); 
@@ -224,13 +202,11 @@ vm.login2 = function() {
                     })
                 },function(err){
                     if(err.status == 401){
-                        SweetAlert.swal("Error!", "Error en el nombre de usuario o la contraseña que ingresaste!", "error");
-                        $state.reload(); 
-
+                        alert("PONER UN MODAL DE INVALID CREDENTIALS O ALGO");
                     }
                     console.log(err);
                 });
-
+            
         }//Fin del function login
 
     }])
@@ -246,54 +222,71 @@ vm.login2 = function() {
             }) 
 
 
-    $scope.ventaProductos =[];  
-    $scope.marcasCervezas =[];
 
-    $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/producto').success(function(productos){    
-        console.log(productos);
-        $scope.ventaProductos = productos.data;
-        for(var i = 0; i < $scope.ventaProductos.length; i++){
+        $scope.ventaProductos =[];  
+        $scope.marcasCervezas =[];
 
-            if($scope.ventaProductos[i].categoria=='Alquilables'){
-                $scope.ventaProductos[i].stock=-1;
-            }
-            if($scope.ventaProductos[i].ibu){
 
-                var found = jQuery.inArray($scope.ventaProductos[i].marca, $scope.marcasCervezas);
+        
+        $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/producto').success(function(productos){    
+            console.log(productos);
+            $scope.ventaProductos = productos.data;
+            for(var i = 0; i < $scope.ventaProductos.length; i++){
 
-                if (found == -1) {                    
-                    $scope.marcasCervezas.push($scope.ventaProductos[i].marca);
+                if($scope.ventaProductos[i].categoria=='Alquilables'){
+                    $scope.ventaProductos[i].stock=-1;
                 }
-            } 
-        };
-    }).error(function(error){
-        console.log(error);
-    }) 
+                if($scope.ventaProductos[i].ibu){
 
+                    var found = jQuery.inArray($scope.ventaProductos[i].marca, $scope.marcasCervezas);
+
+                    if (found == -1) {                    
+                        $scope.marcasCervezas.push($scope.ventaProductos[i].marca);
+                    }
+                } 
+            };
+        }).error(function(error){
+            console.log(error);
+        }) 
+        
     
+        
+        $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/cliente').success(function(clientes){    
+            console.log(clientes);
+            $scope.clientes = clientes.data;
+        }).error(function(error){
+            console.log(error);
+        })
 
-    $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/cliente').success(function(clientes){    
-        console.log(clientes);
-        $scope.clientes = clientes.data;
-    }).error(function(error){
-        console.log(error);
-    })
-    $scope.resumen={
-        display:'',
-        numeroProductos:-1,
-        productos:[],
-        total:0.00,
-        totalLitros:0,
-        selected:-1,
-        recalculando(index,modTotal){
+       
+        $scope.resumen={
+            display:'',
+            numeroProductos:-1,
+            productos:[],
+            total:0.00,
+            totalLitros:0,
+            selected:-1,
+            recalculando(index,modTotal){
                 console.log("recalculando");
+
+                console.log('$scope.resumen.productos')
+                console.log($scope.resumen.productos)
+
+
                 $scope.resumen.total=0;
                 $scope.resumen.totalLitros=0;
                 newOrder=0;
                 $scope.resumen.productos.forEach(function(producto) {
+
+                    console.log('producto')
+                    console.log(producto) 
+                    console.log('producto.productoReal.unidad.abr ')
+                    console.log(producto.productoReal.unidad.abr )
+
                     $scope.resumen.total+=Number(producto.valorTotal);
                     if(producto.productoReal.unidad.abr == 'Lts.'){ //sumar solo si la unidad es litros
                         $scope.resumen.totalLitros +=Number(producto.cantidad);
+
                     }    
                     producto.id= newOrder;
                     newOrder++;        
@@ -311,12 +304,13 @@ vm.login2 = function() {
                         }
                     }
                 });
-            console.log($scope.resumen);
+                console.log($scope.resumen);
+            }
         }
-    }
         $scope.asignarCanillas=function(){
             $scope.bajar='';
             
+
 
             var modalInstance = $uibModal.open({
                 templateUrl: 'views/asignar_canillas.html',
@@ -333,6 +327,7 @@ vm.login2 = function() {
                         }
                     }
                 });
+
         }
         $scope.cargarGasto=function(){
 
@@ -379,40 +374,40 @@ vm.login2 = function() {
                     $state
                     
                 });
-    }
+        }
+        
+        
+        $scope.modal={
 
-
-    $scope.modal={
-
-        scanearCupon(){
-            $scope.cupon='';
-            var modalInstance = $uibModal.open({
-                templateUrl: 'views/modal_scanear-cupon.html',
-                controller: scanearCuponCtrl,
-                windowClass: "animated fadeIn",
+            scanearCupon(){
+                $scope.cupon='';
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'views/modal_scanear-cupon.html',
+                    controller: scanearCuponCtrl,
+                    windowClass: "animated fadeIn",
                     scope: $scope //paso el scope completo asi lo puedo llenar sin dar vueltas (no se hace :P )
                 });
-        },
+            },
+            
+            terminarVentaBarra(){
 
-        terminarVentaBarra(){
-
-            if ($scope.clienteSeleccionado){
-                var modalInstance = $uibModal.open({
-                    templateUrl: 'views/modal-terminar_venta_barra.html',
-                    controller: terminarVentaBarraCtrl,
-                    windowTopClass:"modal-arriba",
-                    windowClass: "animated bounceInDown",
-                    size:'md',
-                    resolve: {
-                        clienteSeleccionado: function () {
-                            return $scope.clienteSeleccionado;
-                        },
-                        resumen: function () {
-                            return $scope.resumen;
+                if ($scope.clienteSeleccionado){
+                    var modalInstance = $uibModal.open({
+                        templateUrl: 'views/modal-terminar_venta_barra.html',
+                        controller: terminarVentaBarraCtrl,
+                        windowTopClass:"modal-arriba",
+                        windowClass: "animated bounceInDown",
+                        size:'md',
+                        resolve: {
+                            clienteSeleccionado: function () {
+                                return $scope.clienteSeleccionado;
+                            },
+                            resumen: function () {
+                                return $scope.resumen;
+                            }
                         }
-                    }
-                });
-            } else {               
+                    });
+                } else {               
                     //?
                 }
             },
@@ -489,7 +484,7 @@ vm.login2 = function() {
 
 .controller('clientesCtrl', ['$scope','$log','$uibModal','$filter','DTOptionsBuilder','DTColumnDefBuilder','SweetAlert', function($scope,$log,$uibModal,$filter,DTOptionsBuilder,DTColumnDefBuilder,SweetAlert){
 
- $scope.clientes =[
+   $scope.clientes =[
             /*
               estado =
               Activo : si compro algo en el utlimo mes
@@ -731,16 +726,16 @@ vm.login2 = function() {
 
             {extend: 'print',
             customize: function (win){
-             $(win.document.body).addClass('white-bg');
-             $(win.document.body).css('font-size', '10px');
+               $(win.document.body).addClass('white-bg');
+               $(win.document.body).css('font-size', '10px');
 
-             $(win.document.body).find('table')
-             .addClass('compact')
-             .css('font-size', 'inherit');
-         }, 
-         text: 'Imprimir'
-     }
-     ]);   
+               $(win.document.body).find('table')
+               .addClass('compact')
+               .css('font-size', 'inherit');
+           }, 
+           text: 'Imprimir'
+       }
+       ]);   
 
             $scope.dtColumnDefs = [
             DTColumnDefBuilder.newColumnDef(0).notVisible(),
@@ -992,16 +987,16 @@ vm.login2 = function() {
 
             {extend: 'print',
             customize: function (win){
-             $(win.document.body).addClass('white-bg');
-             $(win.document.body).css('font-size', '10px');
+               $(win.document.body).addClass('white-bg');
+               $(win.document.body).css('font-size', '10px');
 
-             $(win.document.body).find('table')
-             .addClass('compact')
-             .css('font-size', 'inherit');
-         }
-         , text: 'Imprimir'
-     }
-     ])
+               $(win.document.body).find('table')
+               .addClass('compact')
+               .css('font-size', 'inherit');
+           }
+           , text: 'Imprimir'
+       }
+       ])
 
         $scope.dtColumnDefs = [
         DTColumnDefBuilder.newColumnDef(0).notVisible(),
@@ -1035,16 +1030,16 @@ vm.login2 = function() {
 
         {extend: 'print',
         customize: function (win){
-         $(win.document.body).addClass('white-bg');
-         $(win.document.body).css('font-size', '10px');
+           $(win.document.body).addClass('white-bg');
+           $(win.document.body).css('font-size', '10px');
 
-         $(win.document.body).find('table')
-         .addClass('compact')
-         .css('font-size', 'inherit');
-     }
-     , text: 'Imprimir'
- }
- ])
+           $(win.document.body).find('table')
+           .addClass('compact')
+           .css('font-size', 'inherit');
+       }
+       , text: 'Imprimir'
+   }
+   ])
     .withOption('order', [0, 'desc']);
     $scope.dtColumnDefs = [
     DTColumnDefBuilder.newColumnDef(0).withOption('sWidth', '25px'),
@@ -1338,16 +1333,16 @@ vm.login2 = function() {
 
         {extend: 'print',
         customize: function (win){
-         $(win.document.body).addClass('white-bg');
-         $(win.document.body).css('font-size', '10px');
+           $(win.document.body).addClass('white-bg');
+           $(win.document.body).css('font-size', '10px');
 
-         $(win.document.body).find('table')
-         .addClass('compact')
-         .css('font-size', 'inherit');
-     }
-     , text: 'Imprimir'
- }
- ])
+           $(win.document.body).find('table')
+           .addClass('compact')
+           .css('font-size', 'inherit');
+       }
+       , text: 'Imprimir'
+   }
+   ])
     .withOption('order', [0, 'desc']);
     $scope.dtColumnDefs = [
     DTColumnDefBuilder.newColumnDef(0).withOption('sWidth', '25px'),
@@ -1632,16 +1627,16 @@ vm.login2 = function() {
 
         {extend: 'print',
         customize: function (win){
-         $(win.document.body).addClass('white-bg');
-         $(win.document.body).css('font-size', '10px');
+           $(win.document.body).addClass('white-bg');
+           $(win.document.body).css('font-size', '10px');
 
-         $(win.document.body).find('table')
-         .addClass('compact')
-         .css('font-size', 'inherit');
-     }
-     , text: 'Imprimir'
- }
- ])
+           $(win.document.body).find('table')
+           .addClass('compact')
+           .css('font-size', 'inherit');
+       }
+       , text: 'Imprimir'
+   }
+   ])
     .withOption('order', [0, 'desc']);
 
     $scope.dtColumnDefs = [
@@ -1790,8 +1785,8 @@ vm.login2 = function() {
 
 .controller('productosCtrl', ['$scope','$log','$uibModal','$filter','DTOptionsBuilder','DTColumnDefBuilder','SweetAlert', function($scope,$log,$uibModal,$filter,DTOptionsBuilder,DTColumnDefBuilder,SweetAlert){
 
- $scope.productos =[
- {
+   $scope.productos =[
+   {
     identificador:1,
     proveedor:"Crafter",
     marca:"Crafter",
@@ -2248,16 +2243,16 @@ vm.login2 = function() {
 
             {extend: 'print',
             customize: function (win){
-             $(win.document.body).addClass('white-bg');
-             $(win.document.body).css('font-size', '10px');
+               $(win.document.body).addClass('white-bg');
+               $(win.document.body).css('font-size', '10px');
 
-             $(win.document.body).find('table')
-             .addClass('compact')
-             .css('font-size', 'inherit');
-         }, 
-         text: 'Imprimir'
-     }
-     ]);   
+               $(win.document.body).find('table')
+               .addClass('compact')
+               .css('font-size', 'inherit');
+           }, 
+           text: 'Imprimir'
+       }
+       ]);   
 
             $scope.dtColumnDefs = [
             DTColumnDefBuilder.newColumnDef(0).notVisible(),
@@ -2334,16 +2329,16 @@ vm.login2 = function() {
 
         {extend: 'print',
         customize: function (win){
-         $(win.document.body).addClass('white-bg');
-         $(win.document.body).css('font-size', '10px');
+           $(win.document.body).addClass('white-bg');
+           $(win.document.body).css('font-size', '10px');
 
-         $(win.document.body).find('table')
-         .addClass('compact')
-         .css('font-size', 'inherit');
-     }
-     , text: 'Imprimir'
- }
- ])
+           $(win.document.body).find('table')
+           .addClass('compact')
+           .css('font-size', 'inherit');
+       }
+       , text: 'Imprimir'
+   }
+   ])
     .withOption('order', [0, 'desc']);
 
     $scope.dtColumnDefs = [
@@ -2567,8 +2562,8 @@ vm.login2 = function() {
 
 .controller('productosInventarioCtrl', ['$scope','$log','$uibModal','$filter','DTOptionsBuilder','DTColumnDefBuilder', function($scope,$log,$uibModal,$filter,DTOptionsBuilder,DTColumnDefBuilder){
 
- $scope.productosInventario =[
- {
+   $scope.productosInventario =[
+   {
     identificador:1,
     proveedor:"Crafter",
     marca:"Crafter",
@@ -2897,16 +2892,16 @@ vm.login2 = function() {
 
             {extend: 'print',
             customize: function (win){
-             $(win.document.body).addClass('white-bg');
-             $(win.document.body).css('font-size', '10px');
+               $(win.document.body).addClass('white-bg');
+               $(win.document.body).css('font-size', '10px');
 
-             $(win.document.body).find('table')
-             .addClass('compact')
-             .css('font-size', 'inherit');
-         }, 
-         text: 'Imprimir'
-     }
-     ]);   
+               $(win.document.body).find('table')
+               .addClass('compact')
+               .css('font-size', 'inherit');
+           }, 
+           text: 'Imprimir'
+       }
+       ]);   
 
             $scope.dtColumnDefs = [
             DTColumnDefBuilder.newColumnDef(0).notVisible(),
@@ -3045,16 +3040,16 @@ vm.login2 = function() {
 
             {extend: 'print',
             customize: function (win){
-             $(win.document.body).addClass('white-bg');
-             $(win.document.body).css('font-size', '10px');
+               $(win.document.body).addClass('white-bg');
+               $(win.document.body).css('font-size', '10px');
 
-             $(win.document.body).find('table')
-             .addClass('compact')
-             .css('font-size', 'inherit');
-         }, 
-         text: 'Imprimir'
-     }
-     ]);   
+               $(win.document.body).find('table')
+               .addClass('compact')
+               .css('font-size', 'inherit');
+           }, 
+           text: 'Imprimir'
+       }
+       ]);   
 
         $scope.dtColumnDefs = [
         DTColumnDefBuilder.newColumnDef(0).notVisible(),
@@ -3137,8 +3132,8 @@ vm.login2 = function() {
 
 .controller('gastosCtrl', ['$scope','$log','$uibModal','$filter','DTOptionsBuilder','DTColumnDefBuilder','SweetAlert', function($scope,$log,$uibModal,$filter,DTOptionsBuilder,DTColumnDefBuilder,SweetAlert){
 
- $scope.gastos =[
- {
+   $scope.gastos =[
+   {
     identificador:1,
     fecha:new Date("09/01/2016"),
     descripcion:"Pago a Proveedor",
@@ -3197,16 +3192,16 @@ $scope.dtOptions = DTOptionsBuilder.newOptions()
 
             {extend: 'print',
             customize: function (win){
-             $(win.document.body).addClass('white-bg');
-             $(win.document.body).css('font-size', '10px');
+               $(win.document.body).addClass('white-bg');
+               $(win.document.body).css('font-size', '10px');
 
-             $(win.document.body).find('table')
-             .addClass('compact')
-             .css('font-size', 'inherit');
-         }, 
-         text: 'Imprimir'
-     }
-     ]);   
+               $(win.document.body).find('table')
+               .addClass('compact')
+               .css('font-size', 'inherit');
+           }, 
+           text: 'Imprimir'
+       }
+       ]);   
 
 $scope.dtColumnDefs = [
 DTColumnDefBuilder.newColumnDef(0).notVisible(),
@@ -3289,561 +3284,561 @@ $scope.modal={
 
 .controller('historialCtrl', ['$scope','$log','$uibModal','$filter','DTOptionsBuilder','DTColumnDefBuilder', function($scope,$log,$uibModal,$filter,DTOptionsBuilder,DTColumnDefBuilder){
 
- $scope.historial =[
- {
-  identificador: 1,
-  fecha: "2016-03-30 08:05:56",
-  ubicacion: "Local Illia",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Entrada",
-  anterior: 32,
-  cantidad: 67,
-  posterior: 99,
-  unidad: "lts."
-},
-{
-  identificador: 2,
-  fecha: "2016-07-25 13:32:43",
-  ubicacion: "Local 3",
-  producto: "Blest - Pilsen",
-  tipoHistorial: "Ajuste",
-  anterior: 15,
-  cantidad: 66,
-  posterior: 81,
-  unidad: "lts."
-},
-{
-  identificador: 3,
-  fecha: "2016-05-31 05:18:26",
-  ubicacion: "Local 2",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Ajuste",
-  anterior: 22,
-  cantidad: 32,
-  posterior: 54,
-  unidad: "lts."
-},
-{
-  identificador: 4,
-  fecha: "2015-10-06 13:33:28",
-  ubicacion: "Local Illia",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Venta",
-  anterior: 31,
-  cantidad: 42,
-  posterior: 73,
-  unidad: "lts."
-},
+   $scope.historial =[
+   {
+      identificador: 1,
+      fecha: "2016-03-30 08:05:56",
+      ubicacion: "Local Illia",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Entrada",
+      anterior: 32,
+      cantidad: 67,
+      posterior: 99,
+      unidad: "lts."
+  },
+  {
+      identificador: 2,
+      fecha: "2016-07-25 13:32:43",
+      ubicacion: "Local 3",
+      producto: "Blest - Pilsen",
+      tipoHistorial: "Ajuste",
+      anterior: 15,
+      cantidad: 66,
+      posterior: 81,
+      unidad: "lts."
+  },
+  {
+      identificador: 3,
+      fecha: "2016-05-31 05:18:26",
+      ubicacion: "Local 2",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Ajuste",
+      anterior: 22,
+      cantidad: 32,
+      posterior: 54,
+      unidad: "lts."
+  },
+  {
+      identificador: 4,
+      fecha: "2015-10-06 13:33:28",
+      ubicacion: "Local Illia",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Venta",
+      anterior: 31,
+      cantidad: 42,
+      posterior: 73,
+      unidad: "lts."
+  },
 
-{
-  identificador: 5,
-  fecha: "2016-05-15 09:00:59",
-  ubicacion: "Local 2",
-  producto: "Blest - Pilsen",
-  tipoHistorial: "Venta",
-  anterior: 99,
-  cantidad: 29,
-  posterior: 128,
-  unidad: "lts."
-},
-{
-  identificador: 6,
-  fecha: "2016-05-29 18:28:27",
-  ubicacion: "Local 2",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Venta",
-  anterior: 18,
-  cantidad: 80,
-  posterior: 98,
-  unidad: "lts."
-},
-{
-  identificador: 7,
-  fecha: "2016-04-09 16:04:51",
-  ubicacion: "Local 3",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Ajuste",
-  anterior: 75,
-  cantidad: 58,
-  posterior: 133,
-  unidad: "lts."
-},
-{
-  identificador: 8,
-  fecha: "2016-05-12 13:18:18",
-  ubicacion: "Local 3",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Movimiento",
-  anterior: 20,
-  cantidad: 87,
-  posterior: 107,
-  unidad: "lts."
-},
-{
-  identificador: 9,
-  fecha: "2016-02-16 03:54:39",
-  ubicacion: "Local 3",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Entrada",
-  anterior: 72,
-  cantidad: 17,
-  posterior: 89,
-  unidad: "lts."
-},
-{
-  identificador: 10,
-  fecha: "2015-12-04 12:14:42",
-  ubicacion: "Local Illia",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Entrada",
-  anterior: 52,
-  cantidad: 17,
-  posterior: 69,
-  unidad: "lts."
-},
-{
-  identificador: 11,
-  fecha: "2016-05-24 12:42:59",
-  ubicacion: "Local 3",
-  producto: "Blest - Pilsen",
-  tipoHistorial: "Movimiento",
-  anterior: 14,
-  cantidad: 90,
-  posterior: 104,
-  unidad: "lts."
-},
-{
-  identificador: 12,
-  fecha: "2015-11-20 18:46:46",
-  ubicacion: "Local 3",
-  producto: "Blest - Pilsen",
-  tipoHistorial: "Ajuste",
-  anterior: 23,
-  cantidad: 17,
-  posterior: 40,
-  unidad: "lts."
-},
-{
-  identificador: 13,
-  fecha: "2015-11-16 19:56:02",
-  ubicacion: "Local 2",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Entrada",
-  anterior: 35,
-  cantidad: 35,
-  posterior: 70,
-  unidad: "lts."
-},
-{
-  identificador: 14,
-  fecha: "2016-03-05 03:59:49",
-  ubicacion: "Local Illia",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Entrada",
-  anterior: 17,
-  cantidad: 18,
-  posterior: 35,
-  unidad: "lts."
-},
-{
-  identificador: 15,
-  fecha: "2016-06-06 13:38:41",
-  ubicacion: "Local 2",
-  producto: "Blest - Pilsen",
-  tipoHistorial: "Ajuste",
-  anterior: 21,
-  cantidad: 28,
-  posterior: 49,
-  unidad: "lts."
-},
-{
-  identificador: 16,
-  fecha: "2016-01-19 11:12:22",
-  ubicacion: "Local 3",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Venta",
-  anterior: 17,
-  cantidad: 56,
-  posterior: 73,
-  unidad: "lts."
-},
-{
-  identificador: 17,
-  fecha: "2015-12-19 14:28:31",
-  ubicacion: "Local 2",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Entrada",
-  anterior: 57,
-  cantidad: 93,
-  posterior: 150,
-  unidad: "lts."
-},
-{
-  identificador: 18,
-  fecha: "2016-07-28 09:03:54",
-  ubicacion: "Local Illia",
-  producto: "Blest - Pilsen",
-  tipoHistorial: "Venta",
-  anterior: 7,
-  cantidad: 22,
-  posterior: 29,
-  unidad: "lts."
-},
-{
-  identificador: 19,
-  fecha: "2016-07-06 23:32:15",
-  ubicacion: "Local Illia",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Entrada",
-  anterior: 57,
-  cantidad: 27,
-  posterior: 84,
-  unidad: "lts."
-},
-{
-  identificador: 20,
-  fecha: "2016-06-22 08:52:57",
-  ubicacion: "Local 2",
-  producto: "Crafter - Porter",
-  tipoHistorial: "Ajuste",
-  anterior: 56,
-  cantidad: 1,
-  posterior: 57,
-  unidad: "lts."
-},
-{
-  identificador: 21,
-  fecha: "2016-06-10 03:43:50",
-  ubicacion: "Local 3",
-  producto: "Crafter - Porter",
-  tipoHistorial: "Venta",
-  anterior: 72,
-  cantidad: 68,
-  posterior: 140,
-  unidad: "lts."
-},
-{
-  identificador: 22,
-  fecha: "2015-10-04 04:56:57",
-  ubicacion: "Local Illia",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Venta",
-  anterior: 39,
-  cantidad: 5,
-  posterior: 44,
-  unidad: "lts."
-},
-{
-  identificador: 23,
-  fecha: "2016-05-01 06:04:17",
-  ubicacion: "Local 2",
-  producto: "Blest - Pilsen",
-  tipoHistorial: "Entrada",
-  anterior: 83,
-  cantidad: 49,
-  posterior: 132,
-  unidad: "lts."
-},
-{
-  identificador: 24,
-  fecha: "2016-07-21 23:37:41",
-  ubicacion: "Local 3",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Entrada",
-  anterior: 73,
-  cantidad: 70,
-  posterior: 143,
-  unidad: "lts."
-},
-{
-  identificador: 25,
-  fecha: "2015-11-30 22:31:45",
-  ubicacion: "Local 3",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Venta",
-  anterior: 57,
-  cantidad: 96,
-  posterior: 153,
-  unidad: "lts."
-},
-{
-  identificador: 26,
-  fecha: "2015-11-11 11:06:41",
-  ubicacion: "Local 3",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Entrada",
-  anterior: 82,
-  cantidad: 6,
-  posterior: 88,
-  unidad: "lts."
-},
-{
-  identificador: 27,
-  fecha: "2015-09-23 13:21:41",
-  ubicacion: "Local 2",
-  producto: "Blest - Pilsen",
-  tipoHistorial: "Entrada",
-  anterior: 41,
-  cantidad: 50,
-  posterior: 91,
-  unidad: "lts."
-},
-{
-  identificador: 28,
-  fecha: "2015-12-29 01:47:52",
-  ubicacion: "Local 3",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Entrada",
-  anterior: 64,
-  cantidad: 69,
-  posterior: 133,
-  unidad: "lts."
-},
-{
-  identificador: 29,
-  fecha: "2016-01-19 13:22:20",
-  ubicacion: "Local 3",
-  producto: "Crafter - Porter",
-  tipoHistorial: "Movimiento",
-  anterior: 39,
-  cantidad: 63,
-  posterior: 102,
-  unidad: "lts."
-},
-{
-  identificador: 30,
-  fecha: "2015-09-14 18:06:50",
-  ubicacion: "Local Illia",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Entrada",
-  anterior: 29,
-  cantidad: 6,
-  posterior: 35,
-  unidad: "lts."
-},
-{
-  identificador: 31,
-  fecha: "2016-03-13 02:05:45",
-  ubicacion: "Local 3",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Movimiento",
-  anterior: 93,
-  cantidad: 42,
-  posterior: 135,
-  unidad: "lts."
-},
-{
-  identificador: 32,
-  fecha: "2016-06-01 03:33:47",
-  ubicacion: "Local 2",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Movimiento",
-  anterior: 56,
-  cantidad: 31,
-  posterior: 87,
-  unidad: "lts."
-},
-{
-  identificador: 33,
-  fecha: "2016-02-24 03:28:50",
-  ubicacion: "Local 2",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Venta",
-  anterior: 77,
-  cantidad: 52,
-  posterior: 129,
-  unidad: "lts."
-},
-{
-  identificador: 34,
-  fecha: "2016-03-22 23:42:37",
-  ubicacion: "Local 3",
-  producto: "Crafter - Porter",
-  tipoHistorial: "Venta",
-  anterior: 20,
-  cantidad: 96,
-  posterior: 116,
-  unidad: "lts."
-},
-{
-  identificador: 35,
-  fecha: "2016-06-19 11:13:07",
-  ubicacion: "Local 2",
-  producto: "Blest - Pilsen",
-  tipoHistorial: "Ajuste",
-  anterior: 95,
-  cantidad: 66,
-  posterior: 161,
-  unidad: "lts."
-},
-{
-  identificador: 36,
-  fecha: "2016-02-15 01:38:31",
-  ubicacion: "Local 2",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Movimiento",
-  anterior: 34,
-  cantidad: 88,
-  posterior: 122,
-  unidad: "lts."
-},
-{
-  identificador: 37,
-  fecha: "2016-08-10 14:59:08",
-  ubicacion: "Local 2",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Entrada",
-  anterior: 50,
-  cantidad: 77,
-  posterior: 127,
-  unidad: "lts."
-},
-{
-  identificador: 38,
-  fecha: "2015-10-01 09:20:41",
-  ubicacion: "Local 3",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Movimiento",
-  anterior: 82,
-  cantidad: 97,
-  posterior: 179,
-  unidad: "lts."
-},
-{
-  identificador: 39,
-  fecha: "2016-05-11 20:39:07",
-  ubicacion: "Local Illia",
-  producto: "Blest - Pilsen",
-  tipoHistorial: "Movimiento",
-  anterior: 44,
-  cantidad: 23,
-  posterior: 67,
-  unidad: "lts."
-},
-{
-  identificador: 40,
-  fecha: "2016-02-27 00:54:22",
-  ubicacion: "Local 3",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Venta",
-  anterior: 19,
-  cantidad: 41,
-  posterior: 60,
-  unidad: "lts."
-},
-{
-  identificador: 41,
-  fecha: "2015-09-05 00:15:34",
-  ubicacion: "Local 2",
-  producto: "Blest - Pilsen",
-  tipoHistorial: "Venta",
-  anterior: 43,
-  cantidad: 62,
-  posterior: 105,
-  unidad: "lts."
-},
-{
-  identificador: 42,
-  fecha: "2016-04-17 08:11:41",
-  ubicacion: "Local 2",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Venta",
-  anterior: 1,
-  cantidad: 34,
-  posterior: 35,
-  unidad: "lts."
-},
-{
-  identificador: 43,
-  fecha: "2016-06-25 05:38:03",
-  ubicacion: "Local Illia",
-  producto: "Crafter - Porter",
-  tipoHistorial: "Ajuste",
-  anterior: 97,
-  cantidad: 57,
-  posterior: 154,
-  unidad: "lts."
-},
-{
-  identificador: 44,
-  fecha: "2015-11-13 01:20:34",
-  ubicacion: "Local 3",
-  producto: "Blest - Pilsen",
-  tipoHistorial: "Movimiento",
-  anterior: 5,
-  cantidad: 32,
-  posterior: 37,
-  unidad: "lts."
-},
-{
-  identificador: 45,
-  fecha: "2015-12-20 16:37:43",
-  ubicacion: "Local Illia",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Ajuste",
-  anterior: 30,
-  cantidad: 37,
-  posterior: 67,
-  unidad: "lts."
-},
-{
-  identificador: 46,
-  fecha: "2015-12-19 09:19:38",
-  ubicacion: "Local 2",
-  producto: "Crafter - Porter",
-  tipoHistorial: "Ajuste",
-  anterior: 63,
-  cantidad: 14,
-  posterior: 77,
-  unidad: "lts."
-},
-{
-  identificador: 47,
-  fecha: "2015-12-25 18:45:48",
-  ubicacion: "Local 3",
-  producto: "Blest - Pilsen",
-  tipoHistorial: "Venta",
-  anterior: 89,
-  cantidad: 68,
-  posterior: 157,
-  unidad: "lts."
-},
-{
-  identificador: 48,
-  fecha: "2015-10-19 12:10:31",
-  ubicacion: "Local 2",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Venta",
-  anterior: 77,
-  cantidad: 88,
-  posterior: 165,
-  unidad: "lts."
-},
-{
-  identificador: 49,
-  fecha: "2015-12-24 21:32:10",
-  ubicacion: "Local 3",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Venta",
-  anterior: 16,
-  cantidad: 90,
-  posterior: 106,
-  unidad: "lts."
-},
-{
-  identificador: 50,
-  fecha: "2015-12-13 11:32:34",
-  ubicacion: "Local 2",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Venta",
-  anterior: 27,
-  cantidad: 79,
-  posterior: 106,
-  unidad: "lts."
-}
-]
+  {
+      identificador: 5,
+      fecha: "2016-05-15 09:00:59",
+      ubicacion: "Local 2",
+      producto: "Blest - Pilsen",
+      tipoHistorial: "Venta",
+      anterior: 99,
+      cantidad: 29,
+      posterior: 128,
+      unidad: "lts."
+  },
+  {
+      identificador: 6,
+      fecha: "2016-05-29 18:28:27",
+      ubicacion: "Local 2",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Venta",
+      anterior: 18,
+      cantidad: 80,
+      posterior: 98,
+      unidad: "lts."
+  },
+  {
+      identificador: 7,
+      fecha: "2016-04-09 16:04:51",
+      ubicacion: "Local 3",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Ajuste",
+      anterior: 75,
+      cantidad: 58,
+      posterior: 133,
+      unidad: "lts."
+  },
+  {
+      identificador: 8,
+      fecha: "2016-05-12 13:18:18",
+      ubicacion: "Local 3",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Movimiento",
+      anterior: 20,
+      cantidad: 87,
+      posterior: 107,
+      unidad: "lts."
+  },
+  {
+      identificador: 9,
+      fecha: "2016-02-16 03:54:39",
+      ubicacion: "Local 3",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Entrada",
+      anterior: 72,
+      cantidad: 17,
+      posterior: 89,
+      unidad: "lts."
+  },
+  {
+      identificador: 10,
+      fecha: "2015-12-04 12:14:42",
+      ubicacion: "Local Illia",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Entrada",
+      anterior: 52,
+      cantidad: 17,
+      posterior: 69,
+      unidad: "lts."
+  },
+  {
+      identificador: 11,
+      fecha: "2016-05-24 12:42:59",
+      ubicacion: "Local 3",
+      producto: "Blest - Pilsen",
+      tipoHistorial: "Movimiento",
+      anterior: 14,
+      cantidad: 90,
+      posterior: 104,
+      unidad: "lts."
+  },
+  {
+      identificador: 12,
+      fecha: "2015-11-20 18:46:46",
+      ubicacion: "Local 3",
+      producto: "Blest - Pilsen",
+      tipoHistorial: "Ajuste",
+      anterior: 23,
+      cantidad: 17,
+      posterior: 40,
+      unidad: "lts."
+  },
+  {
+      identificador: 13,
+      fecha: "2015-11-16 19:56:02",
+      ubicacion: "Local 2",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Entrada",
+      anterior: 35,
+      cantidad: 35,
+      posterior: 70,
+      unidad: "lts."
+  },
+  {
+      identificador: 14,
+      fecha: "2016-03-05 03:59:49",
+      ubicacion: "Local Illia",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Entrada",
+      anterior: 17,
+      cantidad: 18,
+      posterior: 35,
+      unidad: "lts."
+  },
+  {
+      identificador: 15,
+      fecha: "2016-06-06 13:38:41",
+      ubicacion: "Local 2",
+      producto: "Blest - Pilsen",
+      tipoHistorial: "Ajuste",
+      anterior: 21,
+      cantidad: 28,
+      posterior: 49,
+      unidad: "lts."
+  },
+  {
+      identificador: 16,
+      fecha: "2016-01-19 11:12:22",
+      ubicacion: "Local 3",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Venta",
+      anterior: 17,
+      cantidad: 56,
+      posterior: 73,
+      unidad: "lts."
+  },
+  {
+      identificador: 17,
+      fecha: "2015-12-19 14:28:31",
+      ubicacion: "Local 2",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Entrada",
+      anterior: 57,
+      cantidad: 93,
+      posterior: 150,
+      unidad: "lts."
+  },
+  {
+      identificador: 18,
+      fecha: "2016-07-28 09:03:54",
+      ubicacion: "Local Illia",
+      producto: "Blest - Pilsen",
+      tipoHistorial: "Venta",
+      anterior: 7,
+      cantidad: 22,
+      posterior: 29,
+      unidad: "lts."
+  },
+  {
+      identificador: 19,
+      fecha: "2016-07-06 23:32:15",
+      ubicacion: "Local Illia",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Entrada",
+      anterior: 57,
+      cantidad: 27,
+      posterior: 84,
+      unidad: "lts."
+  },
+  {
+      identificador: 20,
+      fecha: "2016-06-22 08:52:57",
+      ubicacion: "Local 2",
+      producto: "Crafter - Porter",
+      tipoHistorial: "Ajuste",
+      anterior: 56,
+      cantidad: 1,
+      posterior: 57,
+      unidad: "lts."
+  },
+  {
+      identificador: 21,
+      fecha: "2016-06-10 03:43:50",
+      ubicacion: "Local 3",
+      producto: "Crafter - Porter",
+      tipoHistorial: "Venta",
+      anterior: 72,
+      cantidad: 68,
+      posterior: 140,
+      unidad: "lts."
+  },
+  {
+      identificador: 22,
+      fecha: "2015-10-04 04:56:57",
+      ubicacion: "Local Illia",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Venta",
+      anterior: 39,
+      cantidad: 5,
+      posterior: 44,
+      unidad: "lts."
+  },
+  {
+      identificador: 23,
+      fecha: "2016-05-01 06:04:17",
+      ubicacion: "Local 2",
+      producto: "Blest - Pilsen",
+      tipoHistorial: "Entrada",
+      anterior: 83,
+      cantidad: 49,
+      posterior: 132,
+      unidad: "lts."
+  },
+  {
+      identificador: 24,
+      fecha: "2016-07-21 23:37:41",
+      ubicacion: "Local 3",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Entrada",
+      anterior: 73,
+      cantidad: 70,
+      posterior: 143,
+      unidad: "lts."
+  },
+  {
+      identificador: 25,
+      fecha: "2015-11-30 22:31:45",
+      ubicacion: "Local 3",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Venta",
+      anterior: 57,
+      cantidad: 96,
+      posterior: 153,
+      unidad: "lts."
+  },
+  {
+      identificador: 26,
+      fecha: "2015-11-11 11:06:41",
+      ubicacion: "Local 3",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Entrada",
+      anterior: 82,
+      cantidad: 6,
+      posterior: 88,
+      unidad: "lts."
+  },
+  {
+      identificador: 27,
+      fecha: "2015-09-23 13:21:41",
+      ubicacion: "Local 2",
+      producto: "Blest - Pilsen",
+      tipoHistorial: "Entrada",
+      anterior: 41,
+      cantidad: 50,
+      posterior: 91,
+      unidad: "lts."
+  },
+  {
+      identificador: 28,
+      fecha: "2015-12-29 01:47:52",
+      ubicacion: "Local 3",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Entrada",
+      anterior: 64,
+      cantidad: 69,
+      posterior: 133,
+      unidad: "lts."
+  },
+  {
+      identificador: 29,
+      fecha: "2016-01-19 13:22:20",
+      ubicacion: "Local 3",
+      producto: "Crafter - Porter",
+      tipoHistorial: "Movimiento",
+      anterior: 39,
+      cantidad: 63,
+      posterior: 102,
+      unidad: "lts."
+  },
+  {
+      identificador: 30,
+      fecha: "2015-09-14 18:06:50",
+      ubicacion: "Local Illia",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Entrada",
+      anterior: 29,
+      cantidad: 6,
+      posterior: 35,
+      unidad: "lts."
+  },
+  {
+      identificador: 31,
+      fecha: "2016-03-13 02:05:45",
+      ubicacion: "Local 3",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Movimiento",
+      anterior: 93,
+      cantidad: 42,
+      posterior: 135,
+      unidad: "lts."
+  },
+  {
+      identificador: 32,
+      fecha: "2016-06-01 03:33:47",
+      ubicacion: "Local 2",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Movimiento",
+      anterior: 56,
+      cantidad: 31,
+      posterior: 87,
+      unidad: "lts."
+  },
+  {
+      identificador: 33,
+      fecha: "2016-02-24 03:28:50",
+      ubicacion: "Local 2",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Venta",
+      anterior: 77,
+      cantidad: 52,
+      posterior: 129,
+      unidad: "lts."
+  },
+  {
+      identificador: 34,
+      fecha: "2016-03-22 23:42:37",
+      ubicacion: "Local 3",
+      producto: "Crafter - Porter",
+      tipoHistorial: "Venta",
+      anterior: 20,
+      cantidad: 96,
+      posterior: 116,
+      unidad: "lts."
+  },
+  {
+      identificador: 35,
+      fecha: "2016-06-19 11:13:07",
+      ubicacion: "Local 2",
+      producto: "Blest - Pilsen",
+      tipoHistorial: "Ajuste",
+      anterior: 95,
+      cantidad: 66,
+      posterior: 161,
+      unidad: "lts."
+  },
+  {
+      identificador: 36,
+      fecha: "2016-02-15 01:38:31",
+      ubicacion: "Local 2",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Movimiento",
+      anterior: 34,
+      cantidad: 88,
+      posterior: 122,
+      unidad: "lts."
+  },
+  {
+      identificador: 37,
+      fecha: "2016-08-10 14:59:08",
+      ubicacion: "Local 2",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Entrada",
+      anterior: 50,
+      cantidad: 77,
+      posterior: 127,
+      unidad: "lts."
+  },
+  {
+      identificador: 38,
+      fecha: "2015-10-01 09:20:41",
+      ubicacion: "Local 3",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Movimiento",
+      anterior: 82,
+      cantidad: 97,
+      posterior: 179,
+      unidad: "lts."
+  },
+  {
+      identificador: 39,
+      fecha: "2016-05-11 20:39:07",
+      ubicacion: "Local Illia",
+      producto: "Blest - Pilsen",
+      tipoHistorial: "Movimiento",
+      anterior: 44,
+      cantidad: 23,
+      posterior: 67,
+      unidad: "lts."
+  },
+  {
+      identificador: 40,
+      fecha: "2016-02-27 00:54:22",
+      ubicacion: "Local 3",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Venta",
+      anterior: 19,
+      cantidad: 41,
+      posterior: 60,
+      unidad: "lts."
+  },
+  {
+      identificador: 41,
+      fecha: "2015-09-05 00:15:34",
+      ubicacion: "Local 2",
+      producto: "Blest - Pilsen",
+      tipoHistorial: "Venta",
+      anterior: 43,
+      cantidad: 62,
+      posterior: 105,
+      unidad: "lts."
+  },
+  {
+      identificador: 42,
+      fecha: "2016-04-17 08:11:41",
+      ubicacion: "Local 2",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Venta",
+      anterior: 1,
+      cantidad: 34,
+      posterior: 35,
+      unidad: "lts."
+  },
+  {
+      identificador: 43,
+      fecha: "2016-06-25 05:38:03",
+      ubicacion: "Local Illia",
+      producto: "Crafter - Porter",
+      tipoHistorial: "Ajuste",
+      anterior: 97,
+      cantidad: 57,
+      posterior: 154,
+      unidad: "lts."
+  },
+  {
+      identificador: 44,
+      fecha: "2015-11-13 01:20:34",
+      ubicacion: "Local 3",
+      producto: "Blest - Pilsen",
+      tipoHistorial: "Movimiento",
+      anterior: 5,
+      cantidad: 32,
+      posterior: 37,
+      unidad: "lts."
+  },
+  {
+      identificador: 45,
+      fecha: "2015-12-20 16:37:43",
+      ubicacion: "Local Illia",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Ajuste",
+      anterior: 30,
+      cantidad: 37,
+      posterior: 67,
+      unidad: "lts."
+  },
+  {
+      identificador: 46,
+      fecha: "2015-12-19 09:19:38",
+      ubicacion: "Local 2",
+      producto: "Crafter - Porter",
+      tipoHistorial: "Ajuste",
+      anterior: 63,
+      cantidad: 14,
+      posterior: 77,
+      unidad: "lts."
+  },
+  {
+      identificador: 47,
+      fecha: "2015-12-25 18:45:48",
+      ubicacion: "Local 3",
+      producto: "Blest - Pilsen",
+      tipoHistorial: "Venta",
+      anterior: 89,
+      cantidad: 68,
+      posterior: 157,
+      unidad: "lts."
+  },
+  {
+      identificador: 48,
+      fecha: "2015-10-19 12:10:31",
+      ubicacion: "Local 2",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Venta",
+      anterior: 77,
+      cantidad: 88,
+      posterior: 165,
+      unidad: "lts."
+  },
+  {
+      identificador: 49,
+      fecha: "2015-12-24 21:32:10",
+      ubicacion: "Local 3",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Venta",
+      anterior: 16,
+      cantidad: 90,
+      posterior: 106,
+      unidad: "lts."
+  },
+  {
+      identificador: 50,
+      fecha: "2015-12-13 11:32:34",
+      ubicacion: "Local 2",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Venta",
+      anterior: 27,
+      cantidad: 79,
+      posterior: 106,
+      unidad: "lts."
+  }
+  ]
 
-for(var i = 0; i < $scope.historial.length; i++){
+  for(var i = 0; i < $scope.historial.length; i++){
     $scope.historial[i].fecha=moment($scope.historial[i].fecha).locale('es').format('DD/MMM/YYYY');
 
     switch ($scope.historial[i].tipoHistorial){
@@ -3872,16 +3867,16 @@ $scope.dtOptions = DTOptionsBuilder.newOptions()
 
             {extend: 'print',
             customize: function (win){
-             $(win.document.body).addClass('white-bg');
-             $(win.document.body).css('font-size', '10px');
+               $(win.document.body).addClass('white-bg');
+               $(win.document.body).css('font-size', '10px');
 
-             $(win.document.body).find('table')
-             .addClass('compact')
-             .css('font-size', 'inherit');
-         }, 
-         text: 'Imprimir'
-     }
-     ]);   
+               $(win.document.body).find('table')
+               .addClass('compact')
+               .css('font-size', 'inherit');
+           }, 
+           text: 'Imprimir'
+       }
+       ]);   
 
         /*
         <th>ID</th>
@@ -3903,8 +3898,8 @@ $scope.dtOptions = DTOptionsBuilder.newOptions()
 
 .controller('historialBarraCtrl', ['$scope','$log','$uibModal','$filter','DTOptionsBuilder','DTColumnDefBuilder', function($scope,$log,$uibModal,$filter,DTOptionsBuilder,DTColumnDefBuilder){
 
- $scope.historialBarra =[
- {
+   $scope.historialBarra =[
+   {
     identificador: 1,
     caja: "Barra 1",
     usuario: "Agustin",
@@ -4274,16 +4269,16 @@ $scope.dtOptions = DTOptionsBuilder.newOptions()
 
             {extend: 'print',
             customize: function (win){
-             $(win.document.body).addClass('white-bg');
-             $(win.document.body).css('font-size', '10px');
+               $(win.document.body).addClass('white-bg');
+               $(win.document.body).css('font-size', '10px');
 
-             $(win.document.body).find('table')
-             .addClass('compact')
-             .css('font-size', 'inherit');
-         }, 
-         text: 'Imprimir'
-     }
-     ]);   
+               $(win.document.body).find('table')
+               .addClass('compact')
+               .css('font-size', 'inherit');
+           }, 
+           text: 'Imprimir'
+       }
+       ]);   
 
 
 $scope.dtColumnDefs = [
@@ -4665,16 +4660,16 @@ $scope.dtOptions = DTOptionsBuilder.newOptions()
 
             {extend: 'print',
             customize: function (win){
-             $(win.document.body).addClass('white-bg');
-             $(win.document.body).css('font-size', '10px');
+               $(win.document.body).addClass('white-bg');
+               $(win.document.body).css('font-size', '10px');
 
-             $(win.document.body).find('table')
-             .addClass('compact')
-             .css('font-size', 'inherit');
-         }, 
-         text: 'Imprimir'
-     }
-     ]);   
+               $(win.document.body).find('table')
+               .addClass('compact')
+               .css('font-size', 'inherit');
+           }, 
+           text: 'Imprimir'
+       }
+       ]);   
 
 
 $scope.dtColumnDefs = [
@@ -4684,8 +4679,8 @@ DTColumnDefBuilder.newColumnDef(0)
 
 .controller('canillasCtrl', ['$scope','$log','$uibModal','$filter','SweetAlert', function($scope,$log,$uibModal,$filter,SweetAlert){
 
- $scope.ubicaciones =[
- {
+   $scope.ubicaciones =[
+   {
     id:0,
     nombre:'Local 1'
 },
@@ -4697,304 +4692,304 @@ DTColumnDefBuilder.newColumnDef(0)
 
 $scope.canillas =[            
 {
-   id:0,
-   numero:1,
-   ubicacion:'Local 1',
-   idInventario:'0',
-   productoMarca:'Crafter',
-   productoNombre:'American IPA',
-   productoColor:'#E8692E ',
-   productoStock:130,
-   productoIbu:40,
-   productoAlcohol:6
+ id:0,
+ numero:1,
+ ubicacion:'Local 1',
+ idInventario:'0',
+ productoMarca:'Crafter',
+ productoNombre:'American IPA',
+ productoColor:'#E8692E ',
+ productoStock:130,
+ productoIbu:40,
+ productoAlcohol:6
 },            
 {
-   id:1,
-   numero:2,
-   ubicacion:'Local 1',
-   idInventario:'1',
-   productoMarca:'Blest',
-   productoNombre:'Pilsen',
-   productoColor:'#F6AC3F ',
-   productoStock:141,
-   productoIbu:40,
-   productoAlcohol:6
+ id:1,
+ numero:2,
+ ubicacion:'Local 1',
+ idInventario:'1',
+ productoMarca:'Blest',
+ productoNombre:'Pilsen',
+ productoColor:'#F6AC3F ',
+ productoStock:141,
+ productoIbu:40,
+ productoAlcohol:6
 },            
 {
-   id:2,
-   numero:3,
-   ubicacion:'Local 1',
-   idInventario:'2',
-   productoMarca:'Lowther',
-   productoNombre:'Ambar',
-   productoColor:'#E08D3B ',
-   productoStock:93,
-   productoIbu:40,
-   productoAlcohol:6
+ id:2,
+ numero:3,
+ ubicacion:'Local 1',
+ idInventario:'2',
+ productoMarca:'Lowther',
+ productoNombre:'Ambar',
+ productoColor:'#E08D3B ',
+ productoStock:93,
+ productoIbu:40,
+ productoAlcohol:6
 },            
 {
-   id:3,
-   numero:4,
-   ubicacion:'Local 1',
-   idInventario:'3',
-   productoMarca:'Crafter',
-   productoNombre:'Blueberry',
-   productoColor:'#82171A',
-   productoStock:245,
-   productoIbu:40,
-   productoAlcohol:6
+ id:3,
+ numero:4,
+ ubicacion:'Local 1',
+ idInventario:'3',
+ productoMarca:'Crafter',
+ productoNombre:'Blueberry',
+ productoColor:'#82171A',
+ productoStock:245,
+ productoIbu:40,
+ productoAlcohol:6
 },            
 {
-   id:4,
-   numero:5,
-   ubicacion:'Local 1',
-   idInventario:'4',
-   productoMarca:'Nuevo Origen',
-   productoNombre:'Firenze',
-   productoColor:'#E08D3B',
-   productoStock:57,
-   productoIbu:40,
-   productoAlcohol:6
+ id:4,
+ numero:5,
+ ubicacion:'Local 1',
+ idInventario:'4',
+ productoMarca:'Nuevo Origen',
+ productoNombre:'Firenze',
+ productoColor:'#E08D3B',
+ productoStock:57,
+ productoIbu:40,
+ productoAlcohol:6
 },            
 {
-   id:5,
-   numero:6,
-   ubicacion:'Local 1',
-   idInventario:'5',
-   productoMarca:'Crafter',
-   productoNombre:'Honey',
-   productoColor:'#E8692E',
-   productoStock:293,
-   productoIbu:40,
-   productoAlcohol:6
+ id:5,
+ numero:6,
+ ubicacion:'Local 1',
+ idInventario:'5',
+ productoMarca:'Crafter',
+ productoNombre:'Honey',
+ productoColor:'#E8692E',
+ productoStock:293,
+ productoIbu:40,
+ productoAlcohol:6
 },            
 {
-   id:6,
-   numero:7,
-   ubicacion:'Local 1',
-   idInventario:'6',
-   productoMarca:'Nuevo Origen',
-   productoNombre:'Little Wing',
-   productoColor:'#E08D3B',
-   productoStock:118,
-   productoIbu:40,
-   productoAlcohol:6
+ id:6,
+ numero:7,
+ ubicacion:'Local 1',
+ idInventario:'6',
+ productoMarca:'Nuevo Origen',
+ productoNombre:'Little Wing',
+ productoColor:'#E08D3B',
+ productoStock:118,
+ productoIbu:40,
+ productoAlcohol:6
 },            
 {
-   id:7,
-   numero:8,
-   ubicacion:'Local 1',
-   idInventario:'7',
-   productoMarca:'Nuevo Origen',
-   productoNombre:'Dorada Pampeana',
-   productoColor:'#E8692E',
-   productoStock:159,
-   productoIbu:40,
-   productoAlcohol:6
+ id:7,
+ numero:8,
+ ubicacion:'Local 1',
+ idInventario:'7',
+ productoMarca:'Nuevo Origen',
+ productoNombre:'Dorada Pampeana',
+ productoColor:'#E8692E',
+ productoStock:159,
+ productoIbu:40,
+ productoAlcohol:6
 },            
 {
-   id:8,
-   numero:9,
-   ubicacion:'Local 1',
-   idInventario:'8',
-   productoMarca:'Crafter',
-   productoNombre:'Scottish"',
-   productoColor:'#82171A',
-   productoStock:273,
-   productoIbu:40,
-   productoAlcohol:6
+ id:8,
+ numero:9,
+ ubicacion:'Local 1',
+ idInventario:'8',
+ productoMarca:'Crafter',
+ productoNombre:'Scottish"',
+ productoColor:'#82171A',
+ productoStock:273,
+ productoIbu:40,
+ productoAlcohol:6
 },            
 {
-   id:9,
-   numero:10,
-   ubicacion:'Local 1',
-   idInventario:'9',
-   productoMarca:'Lowther',
-   productoNombre:'Brown Ale',
-   productoColor:'#E8692E',
-   productoStock:172,
-   productoIbu:40,
-   productoAlcohol:6
+ id:9,
+ numero:10,
+ ubicacion:'Local 1',
+ idInventario:'9',
+ productoMarca:'Lowther',
+ productoNombre:'Brown Ale',
+ productoColor:'#E8692E',
+ productoStock:172,
+ productoIbu:40,
+ productoAlcohol:6
 },            
 {
-   id:10,
-   numero:11,
-   ubicacion:'Local 1',
-   idInventario:'10',
-   productoMarca:'Crafter',
-   productoNombre:'Hazenut',
-   productoColor:'#E8692E',
-   productoStock:128,
-   productoIbu:40,
-   productoAlcohol:6
+ id:10,
+ numero:11,
+ ubicacion:'Local 1',
+ idInventario:'10',
+ productoMarca:'Crafter',
+ productoNombre:'Hazenut',
+ productoColor:'#E8692E',
+ productoStock:128,
+ productoIbu:40,
+ productoAlcohol:6
 },            
 {
-   id:11,
-   numero:12,
-   ubicacion:'Local 1',
-   idInventario:'11',
-   productoMarca:'Kalevala',
-   productoNombre:'Irish Red Ale',
-   productoColor:'#E8692E',
-   productoStock:98,
-   productoIbu:40,
-   productoAlcohol:6
+ id:11,
+ numero:12,
+ ubicacion:'Local 1',
+ idInventario:'11',
+ productoMarca:'Kalevala',
+ productoNombre:'Irish Red Ale',
+ productoColor:'#E8692E',
+ productoStock:98,
+ productoIbu:40,
+ productoAlcohol:6
 },            
 {
-   id:12,
-   numero:13,
-   ubicacion:'Local 1',
-   idInventario:'12',
-   productoMarca:'Lowther',
-   productoNombre:'IPA',
-   productoColor:'#E8692E ',
-   productoStock:167,
-   productoIbu:40,
-   productoAlcohol:6
+ id:12,
+ numero:13,
+ ubicacion:'Local 1',
+ idInventario:'12',
+ productoMarca:'Lowther',
+ productoNombre:'IPA',
+ productoColor:'#E8692E ',
+ productoStock:167,
+ productoIbu:40,
+ productoAlcohol:6
 },            
 {
-   id:13,
-   numero:14,
-   ubicacion:'Local 1',
-   idInventario:'13',
-   productoMarca:'Blest',
-   productoNombre:'Scotch',
-   productoColor:'#E8692E ',
-   productoStock:243,
-   productoIbu:40,
-   productoAlcohol:6
+ id:13,
+ numero:14,
+ ubicacion:'Local 1',
+ idInventario:'13',
+ productoMarca:'Blest',
+ productoNombre:'Scotch',
+ productoColor:'#E8692E ',
+ productoStock:243,
+ productoIbu:40,
+ productoAlcohol:6
 },            
 {
-   id:14,
-   numero:15,
-   ubicacion:'Local 1',
-   idInventario:'14',
-   productoMarca:'Nuevo Origen',
-   productoNombre:'Rocky',
-   productoColor:'#E8692E ',
-   productoStock:237,
-   productoIbu:40,
-   productoAlcohol:6
+ id:14,
+ numero:15,
+ ubicacion:'Local 1',
+ idInventario:'14',
+ productoMarca:'Nuevo Origen',
+ productoNombre:'Rocky',
+ productoColor:'#E8692E ',
+ productoStock:237,
+ productoIbu:40,
+ productoAlcohol:6
 },            
 {
-   id:15,
-   numero:16,
-   ubicacion:'Local 1',
-   idInventario:'15',
-   productoMarca:'Nuevo Origen',
-   productoNombre:'Boreal',
-   productoColor:'#E8692E ',
-   productoStock:60,
-   productoIbu:40,
-   productoAlcohol:6
+ id:15,
+ numero:16,
+ ubicacion:'Local 1',
+ idInventario:'15',
+ productoMarca:'Nuevo Origen',
+ productoNombre:'Boreal',
+ productoColor:'#E8692E ',
+ productoStock:60,
+ productoIbu:40,
+ productoAlcohol:6
 },            
 {
-   id:16,
-   numero:17,
-   ubicacion:'Local 1',
-   idInventario:'16',
-   productoMarca:'Crafter',
-   productoNombre:'Porter',
-   productoColor:'#6B190F ',
-   productoStock:229,
-   productoIbu:40,
-   productoAlcohol:6
+ id:16,
+ numero:17,
+ ubicacion:'Local 1',
+ idInventario:'16',
+ productoMarca:'Crafter',
+ productoNombre:'Porter',
+ productoColor:'#6B190F ',
+ productoStock:229,
+ productoIbu:40,
+ productoAlcohol:6
 },            
 {
-   id:17,
-   numero:18,
-   ubicacion:'Local 1',
-   idInventario:'17',
-   productoMarca:'Blest',
-   productoNombre:'Bock',
-   productoColor:'#6B190F ',
-   productoStock:276,
-   productoIbu:40,
-   productoAlcohol:6
+ id:17,
+ numero:18,
+ ubicacion:'Local 1',
+ idInventario:'17',
+ productoMarca:'Blest',
+ productoNombre:'Bock',
+ productoColor:'#6B190F ',
+ productoStock:276,
+ productoIbu:40,
+ productoAlcohol:6
 },            
 {
-   id:18,
-   numero:19,
-   ubicacion:'Local 1',
-   idInventario:'',
-   productoMarca:'',
-   productoNombre:'',
-   productoColor:'',
-   productoStock:'',
-   productoIbu:'',
-   productoAlcohol:''
+ id:18,
+ numero:19,
+ ubicacion:'Local 1',
+ idInventario:'',
+ productoMarca:'',
+ productoNombre:'',
+ productoColor:'',
+ productoStock:'',
+ productoIbu:'',
+ productoAlcohol:''
 },            
 {
-   id:19,
-   numero:20,
-   ubicacion:'Local 1',
-   idInventario:'',
-   productoMarca:'',
-   productoNombre:'',
-   productoColor:'',
-   productoStock:'',
-   productoIbu:'',
-   productoAlcohol:''
+ id:19,
+ numero:20,
+ ubicacion:'Local 1',
+ idInventario:'',
+ productoMarca:'',
+ productoNombre:'',
+ productoColor:'',
+ productoStock:'',
+ productoIbu:'',
+ productoAlcohol:''
 },            
 {
-   id:20,
-   numero:1,
-   ubicacion:'Local 2',
-   idInventario:'20',
-   productoMarca:'Kalevala',
-   productoNombre:'Bitter',
-   productoColor:'#6B190F ',
-   productoStock:252,
-   productoIbu:40,
-   productoAlcohol:6
+ id:20,
+ numero:1,
+ ubicacion:'Local 2',
+ idInventario:'20',
+ productoMarca:'Kalevala',
+ productoNombre:'Bitter',
+ productoColor:'#6B190F ',
+ productoStock:252,
+ productoIbu:40,
+ productoAlcohol:6
 },            
 {
-   id:21,
-   numero:2,
-   ubicacion:'Local 2',
-   idInventario:'21',
-   productoMarca:'Crafter',
-   productoNombre:'Honey',
-   productoColor:'#E8692E',
-   productoStock:110,
-   productoIbu:40,
-   productoAlcohol:6
+ id:21,
+ numero:2,
+ ubicacion:'Local 2',
+ idInventario:'21',
+ productoMarca:'Crafter',
+ productoNombre:'Honey',
+ productoColor:'#E8692E',
+ productoStock:110,
+ productoIbu:40,
+ productoAlcohol:6
 },            
 {
-   id:22,
-   numero:3,
-   ubicacion:'Local 2',
-   idInventario:'22',
-   productoMarca:'Nuevo Origen',
-   productoNombre:'Firenze',
-   productoColor:'#E08D3B',
-   productoStock:239,
-   productoIbu:40,
-   productoAlcohol:6
+ id:22,
+ numero:3,
+ ubicacion:'Local 2',
+ idInventario:'22',
+ productoMarca:'Nuevo Origen',
+ productoNombre:'Firenze',
+ productoColor:'#E08D3B',
+ productoStock:239,
+ productoIbu:40,
+ productoAlcohol:6
 },            
 {
-   id:23,
-   numero:4,
-   ubicacion:'Local 2',
-   idInventario:'23',
-   productoMarca:'Lowther',
-   productoNombre:'Brown Ale',
-   productoColor:'#E8692E ',
-   productoStock:194,
-   productoIbu:40,
-   productoAlcohol:6
+ id:23,
+ numero:4,
+ ubicacion:'Local 2',
+ idInventario:'23',
+ productoMarca:'Lowther',
+ productoNombre:'Brown Ale',
+ productoColor:'#E8692E ',
+ productoStock:194,
+ productoIbu:40,
+ productoAlcohol:6
 },            
 {
-   id:24,
-   numero:5,
-   ubicacion:'Local 2',
-   idInventario:'24',
-   productoMarca:'Blest',
-   productoNombre:'Pilsen',
-   productoColor:'#F6AC3F ',
-   productoStock:145,
-   productoIbu:40,
-   productoAlcohol:6
+ id:24,
+ numero:5,
+ ubicacion:'Local 2',
+ idInventario:'24',
+ productoMarca:'Blest',
+ productoNombre:'Pilsen',
+ productoColor:'#F6AC3F ',
+ productoStock:145,
+ productoIbu:40,
+ productoAlcohol:6
 },
 
 ]
@@ -5042,8 +5037,8 @@ $scope.cambiarProducto = function(idCanilla){
     */
     .controller('loginLista',['$scope','SweetAlert',function($scope,SweetAlert){ 
 
-     $scope.usuarios =[
-     {
+       $scope.usuarios =[
+       {
         id:0,
         nombre:'Miqueas',
         modo:'Caja'
