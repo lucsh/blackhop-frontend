@@ -7,7 +7,7 @@
                 <div class="col-sm-12 ">
                     <form role="form">
                         <div class="form-group">
-                            <div><input type="text" ng-model="cupon.numero" autofocus="true" placeholder="Buscar" class="form-control" ng-change="verificarCupon()"></div>
+                            <div><input type="text" ng-model="cupon.numero" autofocus="true" placeholder="Buscar" class="form-control" ng-change="onTextChange()"></div>
                         </div>             
                     </form>
                     
@@ -19,7 +19,7 @@
                         <h4 class="text-navy">{{cupon.numero}}</h4>
                         <span>Cliente:</span>
                         <address>
-                            <strong>{{clienteCupon.nombre}} {{clienteCupon.apellido}}</strong>
+                            <strong>{{cupon.nombre}} {{cupon.apellido}}</strong>
                         </address>
                         <p>
                             <span>Fecha de Vencimiento:  {{cupon.vencimiento}}</span><br/>

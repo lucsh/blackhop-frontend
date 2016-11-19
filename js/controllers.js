@@ -1577,65 +1577,73 @@ function ModalInstanceCtrl ($scope, $uibModalInstance) {
 
 };
 
-function scanearCuponCtrl ($scope,$log,$uibModalInstance){
+function scanearCuponCtrl ($scope,$log,$uibModalInstance,$http){
         
-        // + verificar si existe el cupon
-        $scope.cupon.numero = "1657345590995";
-        console.log($scope.cupon.numero);
-        $scope.cupon.error = false
+        $scope.cupon.error = false;
 
         $scope.verificarCupon = function () {
 
-                if($scope.cupon.numero !=""){
-
-                    if ($scope.cupon.numero != "1657345590995"){
-                        $scope.cupon.estado = "No existe";
-                        console.log("Cupon "+ $scope.cupon.numero +" inexistente");
-                        $scope.cupon.error = true
-                } else {
-                    $scope.cupon.error = false
-                    $scope.cupon.estado = "OK";
-                    console.log("Cupon "+ $scope.cupon.numero +" OK");
-                    $scope.clienteCupon ={
-                        nombre:"Luciano",
-                        apellido:"Marquez"
-                    }
-                    $scope.cupon.vencimiento="15/Dic/2016"
+            $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/barra/cupon',{
+                params : {
+                    codigo:$scope.cupon.numero
                 }
-            } else {
-                $scope.cupon.error = false
-            }
+            }).success(function(response){    
+                if(response.validacion=="Vigente"){
+                    $scope.cupon.error = false;
+                    $scope.cupon.estado = "OK";
+                    $scope.cupon.vencimiento=moment(response.fecha).add(response.vigencia,'days').locale('es').format('DD-MMM-YYYY');
+
+                    $scope.cupon.nombre=response.nombre;
+                    $scope.cupon.apellido=response.apellido;
+
+                    if(response.cumple == "Hoy"){
+                        response.cumple='<i class="fa fa-birthday-cake" aria-hidden="true"></i> ¡¡¡Hoy!!!'
+
+                    }
+
+                    $scope.$parent.clienteSeleccionado ={
+                        nombre:response.nombre + ' ' + response.apellido,
+                        telefono:response.telefono,
+                        fNac:response.cumple,
+                        direccion:response.direccion,
+                        ultimaCompra:response.UltCompraProducto + " - " + response.UltCompraCantidad,
+                        fechaUltimaCompra:response.UltCompraFecha
+                    }
+                    
+                    $scope.$parent.cuponSeleccionado={
+                        numero:$scope.cupon.numero,
+                        litros:response.litros
+                    }
+
+                }else {
+                    $scope.cupon.error=true;
+                    $scope.cupon.estado=response.validacion;
+                }
+            }).error(function(error){
+                console.log(error);
+            });
+
         }
 
-        $scope.verificarCupon();
+        $scope.onTextChange = function (){
+            
+            if ($scope.cupon.numero.length == 13){
+                $scope.verificarCupon();// A LOS 13 DIGITOS 
+            } else if ($scope.cupon.numero.length > 13){
+                $scope.cupon.numero = $scope.cupon.numero.substring(0, 13);
+            }
+
+        }
 
         $scope.ok = function () {
-            $uibModalInstance.close(); 
-            $scope.$parent.clienteSeleccionado ={
-                identificador:1,
-                nombre:"Luciano",
-                apellido:"Marquez",
-                dni:"32523681",
-                telefono:4412007,
-                celular:2996041216,
-                email:"correo@direccion.com.ar",
-                fNac: moment('25/oct/1986').locale('es').format('DD/MMM/YYYY'),
-                direccion:"San Martin 546",
-                GIS:null,
-                estado:'Con Alquiler',
-                ultimaCompra:'Crafter - American IPA. 4 lts',
-                fechaUltimaCompra:'25/Ago/2016',
-                numero:"1657345590995",
-                litros:4
-            }
-            $scope.$parent.cuponSeleccionado={
-                numero:"1657345590995",
-                litros:4
-            }           
+            $uibModalInstance.close();            
             
         };
 
-        $scope.cancel = function () {
+        $scope.cancel = function () {            
+            $scope.cupon=null;
+            $scope.$parent.cuponSeleccionado=null;
+            $scope.$parent.clienteSeleccionado=null;
             $uibModalInstance.dismiss('cancel');
         };
         

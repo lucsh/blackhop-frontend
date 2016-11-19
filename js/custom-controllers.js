@@ -244,7 +244,7 @@ vm.login2 = function() {
     $scope.ventaProductos =[];  
     $scope.marcasCervezas =[];
 
-    $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/producto').success(function(productos){    
+    $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/barra/producto').success(function(productos){    
         console.log(productos);
         $scope.ventaProductos = productos.data;
         for(var i = 0; i < $scope.ventaProductos.length; i++){
