@@ -4775,14 +4775,14 @@ DTColumnDefBuilder.newColumnDef(0)
 .controller('canillasCtrl', ['$http','$scope','$log','$uibModal','$filter','SweetAlert', function($http,$scope,$log,$uibModal,$filter,SweetAlert){
 
    $scope.ubicaciones =[
-   {
-    id:0,
-    nombre:'Local 1'
-    },
-    {
-        id:1,
-        nombre:'Local 2'
-    }
+        {
+            id:0,
+            nombre:'Local 1'
+        },
+        {
+            id:1,
+            nombre:'Local 2'
+        }
     ]
 
     $scope.canillas =[];

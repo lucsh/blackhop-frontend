@@ -3619,10 +3619,8 @@ function canillaCambiarProductoCtrl ($http,$scope,$log,$uibModalInstance,idCanil
     }
     
     $scope.getCanillas(); 
-       
-        //$scope.canillaEdit = $scope.$parent.canillas[idCanilla];
-        // 9console.log($scope.canillaEdit);
-    
+
+        //start Gilada
         //si esta la opcion de no permitir el mismo producto en distintas canillas, filtro los productos que no tengo ya asignados
         if (true === false){
             for(var idC = 0; idC < $scope.$parent.canillas.length; idC++){
@@ -3637,43 +3635,15 @@ function canillaCambiarProductoCtrl ($http,$scope,$log,$uibModalInstance,idCanil
                 };  
             };
         }
-        //end gilada
+        //end Gilada
 
-        /*
-        
-        $scope.$parent.canillas[idCanilla].idInventario=idPS;
-                $scope.$parent.canillas[idCanilla].productoMarca=$scope.productosDisponibles[index].marca;
-                $scope.$parent.canillas[idCanilla].productoNombre=$scope.productosDisponibles[index].nombre;
-                $scope.$parent.canillas[idCanilla].productoColor=$scope.productosDisponibles[index].color;
-                $scope.$parent.canillas[idCanilla].productoStock=$scope.productosDisponibles[index].stock;
-                $scope.$parent.canillas[idCanilla].productoIbu=$scope.productosDisponibles[index].ibu;
-                $scope.$parent.canillas[idCanilla].productoAlcohol=$scope.productosDisponibles[index].alcohol;
-
-        */
-    
-        //$scope.productoSeleccionado = Number($scope.canillaEdit.idInventario);
     
         $scope.guardar = function (idPS){
            $uibModalInstance.close(idPS);  
 
         }
 
-    /*
-        $scope.guardar = function (idPS){
-
-            $http.put('http://blackhop-dessin1.rhcloud.com/api/admin/canilla/'+idCanilla,{
-                    idInventario:idPS
-                }).success(function(canillaInventario){    
-                    //$scope.$parent.canillas[idCanilla] = canillaInventario.data;
-                    //$scope.getCanillas(); 
-                }).error(function(error){
-                    console.log(error);
-                });
-
-            $uibModalInstance.close(idPS);  
-
-        }
-       */ 
+    
         $scope.vaciar = function (){
                 $scope.$parent.canillas[idCanilla].idInventario='';
                 $scope.$parent.canillas[idCanilla].productoMarca='';
