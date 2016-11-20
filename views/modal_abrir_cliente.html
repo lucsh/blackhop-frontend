@@ -15,7 +15,7 @@
                         <p>Por Nombre o Apellido o DNI</p>
                         <form role="form">
                             <div class="form-group">
-                                <div><input type="text" ng-model="query" placeholder="Buscar" class="form-control"></div>
+                                <div><input type="text" ng-model="query"  placeholder="Buscar" class="form-control"></div>
                                 <table class="table table-hover" >
                                     <tbody ng-if="query.length > 3">
                                         <tr class="cursor-pointer"  
@@ -58,57 +58,67 @@
                     <form role="form" class=""> 
 
                         <div class="col-md-6 form-group"><label>Nombre</label>
-                            <div><input type="text" placeholder="Nombre" class="form-control"> 
+                            <div><input ng-model="newCliNombre" type="text" placeholder="Nombre" class="form-control"> 
                             </div>
                         </div>
 
                         <div class="col-md-6  form-group"><label>Apellido</label>
 
-                            <div><input type="text" placeholder="Apellido" class="form-control">
+                            <div><input ng-model="newCliApellido" type="text" placeholder="Apellido" class="form-control">
                             </div>
                         </div>
 
                         <div class="col-md-4 form-group"><label>DNI</label>
 
-                            <div><input type="text" placeholder="32132456" class="form-control">
+                            <div><input ng-model="newCliDni" type="text" placeholder="32132456" class="form-control">
                             </div>
                         </div>
 
 
-                        <div class="col-md-8 form-group" id="data_1">
+                        <div class="col-md-8 form-group">
                             <label class="font-normal">Fecha de Nacimiento</label>
 
                             <div class="input-group date">
-                                <input type="datetime"  class="form-control" date-time ng-model="sampleDate" view="date" auto-close="true" min-view="date" format="DD/MM/YYYY">
+                                <input id="fechaNacimiento" ng-model="asd" type="datetime"  class="form-control" date-time view="year" auto-close="true" min-view="date" format="DD/MM/YYYY">
                                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                             </div>
                         </div>
 
                         <div class="col-md-6 form-group"><label>Telefono</label>
 
-                            <div class=""><input type="text" placeholder="2994412345" class="form-control">
+                            <div class=""><input ng-model="newCliTelefono" type="text" placeholder="2994412345" class="form-control">
                             </div>
                         </div>
 
                         <div class="col-md-6 form-group"><label>Celular</label>
 
-                            <div class=""><input type="text" placeholder="2995123456" class="form-control">
+                            <div class=""><input ng-model="newCliCelular" type="text" placeholder="2995123456" class="form-control">
                             </div>
                         </div>
 
                         <div class="col-md-12 form-group"><label>Email</label>
 
-                            <div class=""><input type="email" placeholder="email@direccion.com.ar" class="form-control">
+                            <div class=""><input ng-model="newCliEmail" type="email" placeholder="email@direccion.com.ar" class="form-control">
                             </div>
                         </div>
 
                         <div class="col-md-12 form-group"><label>Dirección</label>
 
-                            <div class=""><input type="text" placeholder="Calle 123, Neuquen" class="form-control">
+                            <div class=""><input ng-model="newCliDireccion" type="text" placeholder="Calle 123" class="form-control">
+                            </div>
+                        </div><div class="col-md-12 form-group"><label>Localidad</label>
+
+                            <div class=""><input ng-model="newCliLocalidad" type="text" placeholder="Neuquen" class="form-control">
                             </div>
                         </div>
 
-                        <div class="col-md-12"><button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit"><strong>Registrar</strong></button>                                    
+                        <div class="col-md-12">
+                        <button 
+                        type="button" 
+                        class="btn btn-sm btn-primary pull-right m-t-n-xs" 
+                        ng-click="cargarNuevo(newCliNombre,newCliApellido,newCliDni,newCliTelefono,newCliCelular,newCliEmail,newCliDireccion,newCliLocalidad)" 
+                        ng-disabled="!newCliNombre || !newCliApellido || !newCliDni">
+                        Guardar</button>
                         </div>
                     </form>            
 

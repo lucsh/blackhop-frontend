@@ -17,7 +17,7 @@
     </div>
     <div  class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
-
+        <!-- Si + de un local
             <div  class="form-horizontal">
                 <div class="form-group"><label class="col-sm-2 control-label">Seleccionar Local</label>
 
@@ -28,11 +28,14 @@
             </div>
 
         </div>
+        -->
         <div class="row">
             <div class="col-sm-12">
+                <div ng-repeat="canilla in canillas">
+                <!--  Si + de un local
                 <div ng-repeat="canilla in canillas |  
-                                                     filter:filtros.queryLocal">
-
+                    filter:filtros.queryLocal">
+                -->
                     <div class="canilla cursor-pointer col-md-2 col-lg-2" ng-click="cambiarProducto(canilla.id)">
                         <div class="ibox noselect">
                             <div ng-if="canilla.productoNombre">

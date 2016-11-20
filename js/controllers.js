@@ -1653,24 +1653,15 @@ function scanearCuponCtrl ($scope,$log,$uibModalInstance,$http){
 function modalControler ($scope,$http,$log,$uibModalInstance,clientes){
     
         $scope.clientes = clientes;       
-    
-        console.log(clientes);
+        $scope.asd = moment('01/01/1985');
         
         $scope.seleccion={}
     
         $scope.ok = function () {
             $uibModalInstance.close();
             $scope.$parent.clienteSeleccionado={};
-            var idCS = $scope.seleccion.clienteSeleccionado;
-            
-            
-        for(var index = 0; index < $scope.clientes.length; index++){
-                if ($scope.clientes[index].id == idCS){ 
-                    $scope.$parent.clienteSeleccionado=$scope.clientes[index];                    
-                    $uibModalInstance.close();
-                    break;    
-                }
-            }
+            $scope.$parent.clienteSeleccionado = $scope.datosCliente;
+
         };
 
         $scope.cancel = function () {
@@ -1680,8 +1671,13 @@ function modalControler ($scope,$http,$log,$uibModalInstance,clientes){
         $scope.clientesFiltrados = function (filteredData) {          
             
             if (filteredData.length == 1) {
-                $scope.seleccion.clienteSeleccionado=filteredData[0].id;
+
+                if ($scope.seleccion.clienteSeleccionado!=filteredData[0].id){
+                    $scope.seleccionarNuevo(filteredData[0].id);
+                }
+
                 return filteredData;
+
             } else{
                 return filteredData;
             }
@@ -1691,13 +1687,46 @@ function modalControler ($scope,$http,$log,$uibModalInstance,clientes){
         $scope.seleccionarNuevo= function(id){
             $scope.seleccion.clienteSeleccionado=id;
             
-            $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/cliente/' + id).success(function(datosCliente){    
-                console.log(datosCliente.data);
+            $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/cliente/' + id).success(function(datosCliente){
                   $scope.datosCliente = datosCliente.data;
                 }).error(function(error){
                     console.log(error);
-                })
-        
+                });        
+            
+        }
+
+        $scope.cargarNuevo= function(newCliNombre,newCliApellido,newCliDni,newCliTelefono,newCliCelular,newCliEmail,newCliDireccion,newCliLocalidad){
+
+            var newCliFechaNacimiento=angular.element(document.querySelector('#fechaNacimiento')).val();
+
+            newCliFechaNacimiento=moment().format("YYYY-MM-DD");
+
+            $http.post('http://blackhop-dessin1.rhcloud.com/api/pos/caja/cliente',{
+                nombre:newCliNombre,
+                apellido:newCliApellido,
+                dni:newCliDni,
+                telefono:newCliTelefono,
+                celular:newCliCelular,
+                email:newCliEmail,
+                fechaNacimiento:newCliFechaNacimiento,
+                direccion:newCliDireccion,
+                localidad:newCliLocalidad
+            }).success(function(datosCliente){    
+                var newCli = {};
+                newCli.nombre = datosCliente.data.nombre;
+                newCli.apellido = datosCliente.data.apellido;
+                newCli.dni = datosCliente.data.dni;
+                newCli.id = datosCliente.data.id;
+                $scope.clientes.push(newCli);
+                $scope.datosCliente = datosCliente.data;
+                $scope.$parent.clienteSeleccionado = $scope.datosCliente;
+                $uibModalInstance.close();
+
+            }).error(function(error){
+                console.log(error);
+                $uibModalInstance.close();
+            });
+
             
         }
     };
@@ -2138,6 +2167,8 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
     $scope.resumen=resumen;
     $scope.clienteSeleccionado=clienteSeleccionado;
     
+    console.log($scope);
+
     $scope.borrarPaga= function(){
 
         $scope.resumen.paga=String($scope.resumen.paga);
@@ -2156,6 +2187,7 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
         $scope.resumen.total=0.00;
         $scope.resumen.totalLitros=0;
         $scope.resumen.selected=-1;
+        $scope.clienteSeleccionado={};
     }
     
     $scope.selectBtn = function(num){
@@ -3575,286 +3607,21 @@ function imprimirCuponCtrl ($scope,$log,$uibModalInstance,cupon){
 
 };
 
-function canillaCambiarProductoCtrl ($scope,$log,$uibModalInstance,idCanilla){
-        
-        
-    //traer todos los productos en la categoria 'Cerveza por Litro' en el inventario
-    $scope.productosDisponibles=[            
-            {
-               id:0,
-               ubicacion:'Local 1',
-               marca:'Crafter',
-               nombre:'American IPA',
-               color:'#E8692E',
-               stock:50,
-               ibu:40,
-               alcohol:6
-           },            
-            {
-               id:1,
-               ubicacion:'Local 1',
-               marca:'Blest',
-               nombre:'Pilsen',
-               color:'#F6AC3F',
-               stock:141,
-               ibu:40,
-               alcohol:6
-           },            
-            {
-               id:2,
-               ubicacion:'Local 1',
-               marca:'Lowther',
-               nombre:'Ambar',
-               color:'#E08D3B',
-               stock:93,
-               ibu:40,
-               alcohol:6
-           },            
-            {
-               id:3,
-               ubicacion:'Local 1',
-               marca:'Crafter',
-               nombre:'Blueberry',
-               color:'#82171A',
-               stock:245,
-               ibu:40,
-               alcohol:6
-           },            
-            {
-               id:4,
-               ubicacion:'Local 1',
-               marca:'Nuevo Origen',
-               nombre:'Firenze',
-               color:'#E08D3B',
-               stock:57,
-               ibu:40,
-               alcohol:6
-           },            
-            {
-               id:5,
-               ubicacion:'Local 1',
-               marca:'Crafter',
-               nombre:'Honey',
-               color:'#E8692E',
-               stock:293,
-               ibu:40,
-               alcohol:6
-           },            
-            {
-               id:6,
-               ubicacion:'Local 1',
-               marca:'Nuevo Origen',
-               nombre:'Little Wing',
-               color:'#E08D3B',
-               stock:118,
-               ibu:40,
-               alcohol:6
-           },            
-            {
-               id:7,
-               ubicacion:'Local 1',
-               marca:'Nuevo Origen',
-               nombre:'Dorada Pampeana',
-               color:'#E8692E',
-               stock:159,
-               ibu:40,
-               alcohol:6
-           },            
-            {
-               id:8,
-               ubicacion:'Local 1',
-               marca:'Crafter',
-               nombre:'Scottish"',
-               color:'#82171A',
-               stock:273,
-               ibu:40,
-               alcohol:6
-           },            
-            {
-               id:9,
-               ubicacion:'Local 1',
-               marca:'Lowther',
-               nombre:'Brown Ale',
-               color:'#E8692E',
-               stock:172,
-               ibu:40,
-               alcohol:6
-           },            
-            {
-               id:10,
-               ubicacion:'Local 1',
-               marca:'Crafter',
-               nombre:'Hazenut',
-               color:'#E8692E',
-               stock:98,
-               ibu:40,
-               alcohol:6
-           },            
-            {
-               id:11,
-               ubicacion:'Local 1',
-               marca:'Kalevala',
-               nombre:'Irish Red Ale',
-               color:'#E8692E',
-               stock:167,
-               ibu:40,
-               alcohol:6
-           },            
-            {
-               id:12,
-               ubicacion:'Local 1',
-               marca:'Lowther',
-               nombre:'IPA',
-               color:'#E8692E',
-               stock:237,
-               ibu:40,
-               alcohol:6
-           },            
-            {
-               id:13,
-               ubicacion:'Local 1',
-               marca:'Blest',
-               nombre:'Scotch',
-               color:'#E8692E',
-               stock:237,
-               ibu:40,
-               alcohol:6
-           },            
-            {
-               id:14,
-               ubicacion:'Local 1',
-               marca:'Nuevo Origen',
-               nombre:'Rocky',
-               color:'#E8692E',
-               stock:60,
-               ibu:40,
-               alcohol:6
-           },            
-            {
-               id:15,
-               ubicacion:'Local 1',
-               marca:'Nuevo Origen',
-               nombre:'Boreal',
-               color:'#E8692E',
-               stock:229,
-               ibu:40,
-               alcohol:6
-           },            
-            {
-               id:16,
-               ubicacion:'Local 1',
-               marca:'Crafter',
-               nombre:'Porter',
-               color:'#6B190F',
-               stock:276,
-               ibu:40,
-               alcohol:6
-           },            
-            {
-               id:17,
-               ubicacion:'Local 1',
-               marca:'Blest',
-               nombre:'Bock',
-               color:'#6B190F',
-               stock:108,
-               ibu:40,
-               alcohol:6
-           },            
-            {
-               id:18,
-               ubicacion:'Local 1',
-               marca:'Nuevo Origen',
-               nombre:'Dry Stout',
-               color:'#5C1F0C',
-               stock:135,
-               ibu:40,
-               alcohol:6
-           },            
-            {
-               id:19,
-               ubicacion:'Local 1',
-               marca:'Nuevo Origen',
-               nombre:'Seasonal',
-               color:'#E8692E',
-               stock:166,
-               ibu:40,
-               alcohol:6
-           },            
-            {
-               id:20,
-               ubicacion:'Local 2',
-               marca:'Kalevala',
-               nombre:'Bitter',
-               color:'#6B190F',
-               stock:252,
-               ibu:40,
-               alcohol:6
-           },            
-            {
-               id:21,
-               ubicacion:'Local 2',
-               marca:'Crafter',
-               nombre:'Honey',
-               color:'#E8692E',
-               stock:110,
-               ibu:40,
-               alcohol:6
-           },            
-            {
-               id:22,
-               ubicacion:'Local 2',
-               marca:'Nuevo Origen',
-               nombre:'Firenze',
-               color:'#E08D3B',
-               stock:239,
-               ibu:40,
-               alcohol:6
-           },            
-            {
-               id:23,
-               ubicacion:'Local 2',
-               marca:'Lowther',
-               nombre:'Brown Ale',
-               color:'#E8692E',
-               stock:194,
-               ibu:40,
-               alcohol:6
-           },            
-            {
-               id:24,
-               ubicacion:'Local 2',
-               marca:'Blest',
-               nombre:'Pilsen',
-               color:'#F6AC3F',
-               stock:145,
-               ibu:40,
-               alcohol:6
-           },            
-            {
-               id:25,
-               ubicacion:'Local 1',
-               marca:'Crafter',
-               nombre:'Golden',
-               color:'#F6AC3F',
-               stock:50,
-               ibu:40,
-               alcohol:6
-           },            
-            {
-               id:26,
-               ubicacion:'Local 2',
-               marca:'Crafter',
-               nombre:'Caballo loco',
-               color:'#6B190F',
-               stock:150,
-               ibu:40,
-               alcohol:6
-           },
+function canillaCambiarProductoCtrl ($http,$scope,$log,$uibModalInstance,idCanilla){
 
-        ]   
+    $scope.getCanillas = function (){
+        $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/canillainventario').success(function(canillaInventario){    
+            console.log(canillaInventario);
+            $scope.productosDisponibles = canillaInventario.data;
+        }).error(function(error){
+            console.log(error);
+        });
+    }
     
-        $scope.canillaEdit = $scope.$parent.canillas[idCanilla];
-        console.log($scope.canillaEdit);
+    $scope.getCanillas(); 
+       
+        //$scope.canillaEdit = $scope.$parent.canillas[idCanilla];
+        // 9console.log($scope.canillaEdit);
     
         //si esta la opcion de no permitir el mismo producto en distintas canillas, filtro los productos que no tengo ya asignados
         if (true === false){
@@ -3870,34 +3637,43 @@ function canillaCambiarProductoCtrl ($scope,$log,$uibModalInstance,idCanilla){
                 };  
             };
         }
-        //filtro los productos que no estan el el local de esa canilla    
-        for(var idPd = 0; idPd < $scope.productosDisponibles.length; idPd++){              
-                if ($scope.$parent.canillas[idCanilla].ubicacion != $scope.productosDisponibles[idPd].ubicacion){                    
-                    var index = $scope.productosDisponibles.indexOf($scope.productosDisponibles[idPd]);                    
-                    if (index > -1) {
-                        $scope.productosDisponibles.splice(index, 1);
-                    }                    
-                }
-            };
-    
-        $scope.productoSeleccionado = Number($scope.canillaEdit.idInventario);
-    
-        $scope.guardar = function (idPS){
-            for(var index = 0; index < $scope.productosDisponibles.length; index++){
-                if ($scope.productosDisponibles[index].id == idPS){ 
-                $scope.$parent.canillas[idCanilla].idInventario=idPS;
+        //end gilada
+
+        /*
+        
+        $scope.$parent.canillas[idCanilla].idInventario=idPS;
                 $scope.$parent.canillas[idCanilla].productoMarca=$scope.productosDisponibles[index].marca;
                 $scope.$parent.canillas[idCanilla].productoNombre=$scope.productosDisponibles[index].nombre;
                 $scope.$parent.canillas[idCanilla].productoColor=$scope.productosDisponibles[index].color;
                 $scope.$parent.canillas[idCanilla].productoStock=$scope.productosDisponibles[index].stock;
                 $scope.$parent.canillas[idCanilla].productoIbu=$scope.productosDisponibles[index].ibu;
                 $scope.$parent.canillas[idCanilla].productoAlcohol=$scope.productosDisponibles[index].alcohol;
-                $uibModalInstance.close();
-                break;    
-                }
-            }
+
+        */
+    
+        //$scope.productoSeleccionado = Number($scope.canillaEdit.idInventario);
+    
+        $scope.guardar = function (idPS){
+           $uibModalInstance.close(idPS);  
+
         }
-        
+
+    /*
+        $scope.guardar = function (idPS){
+
+            $http.put('http://blackhop-dessin1.rhcloud.com/api/admin/canilla/'+idCanilla,{
+                    idInventario:idPS
+                }).success(function(canillaInventario){    
+                    //$scope.$parent.canillas[idCanilla] = canillaInventario.data;
+                    //$scope.getCanillas(); 
+                }).error(function(error){
+                    console.log(error);
+                });
+
+            $uibModalInstance.close(idPS);  
+
+        }
+       */ 
         $scope.vaciar = function (){
                 $scope.$parent.canillas[idCanilla].idInventario='';
                 $scope.$parent.canillas[idCanilla].productoMarca='';
@@ -3907,6 +3683,7 @@ function canillaCambiarProductoCtrl ($scope,$log,$uibModalInstance,idCanilla){
                 $scope.$parent.canillas[idCanilla].productoIbu='';
                 $scope.$parent.canillas[idCanilla].productoAlcohol='';
                 $uibModalInstance.close();
+                //cambiar a put
         }
         
         
