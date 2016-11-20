@@ -3273,6 +3273,8 @@ vm.login2 = function() {
 
 ]
 
+
+/// Dejalo asi Formatea lo que manda Laravel
 for(var i = 0; i < $scope.gastos.length; i++){
     $scope.gastos[i].fecha=moment($scope.gastos[i].fecha).locale('es').format('DD/MMM/YYYY');
 };
@@ -3299,10 +3301,10 @@ $scope.dtOptions = DTOptionsBuilder.newOptions()
      ]);   
 
 $scope.dtColumnDefs = [
-DTColumnDefBuilder.newColumnDef(0).notVisible(),
-DTColumnDefBuilder.newColumnDef(1),
-DTColumnDefBuilder.newColumnDef(2),
-DTColumnDefBuilder.newColumnDef(3)
+    DTColumnDefBuilder.newColumnDef(0).notVisible(),
+    DTColumnDefBuilder.newColumnDef(1),
+    DTColumnDefBuilder.newColumnDef(2),
+    DTColumnDefBuilder.newColumnDef(3)
 ]
 
 $scope.onDelete = function(ident){
@@ -3324,6 +3326,7 @@ $scope.onDelete = function(ident){
                     if ($scope.gastos[i].id == ident){                    
                         $scope.gastos.splice(i, 1);                                
                         SweetAlert.swal("¡Eliminado!", "El gasto ha sido eliminado", "success");
+                        //Put
                     } 
                 } 
 

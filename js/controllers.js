@@ -1867,29 +1867,36 @@ function crearAlquilableCtrl ($scope,$log,$uibModalInstance,alquilables,alquilab
 function crearGastoCtrl ($scope,$log,$uibModalInstance,gastos,gastoEdit){
     $scope.gastos=gastos;
     $scope.gastoEdit=gastoEdit;
-    
-    if(!$scope.gastoEdit.fecha){
-        $scope.gastoEdit.fecha= new Date();
-    }
+
+
         $scope.guardar = function (gastoEdit){
             
+
+            
             var found = jQuery.inArray(gastoEdit, $scope.$parent.gastos);
-                
+
+            //Busco la Fecha con jQuery porque no puedo leer el ng-model
+            var gastoFecha=angular.element(document.querySelector('#gastoFecha')).val();
+            //La formateo para pasarla a Laravel
+            gastoFecha=moment(gastoFecha).format("YYYY-MM-DD");
+
+
             if (found == -1) {
-                $scope.gastoEdit.fecha= new Date();
+                gastoEdit.fecha= gastoFecha;
                 gastoEdit.id=$scope.gastos.length+1;
                 gastoEdit.sesion = 1; //desde admin
                 
                 // lo guardo y despues lo muestro humanizado
                 $scope.$parent.gastos.push(gastoEdit); 
-                $scope.gastoEdit.fecha=moment($scope.gastoEdit.fecha).locale('es').format('DD/MMM/YYYY'); 
+                console.log(gastoFecha)
+                $scope.gastoEdit.fecha=moment(gastoFecha).locale('es').format('DD/MMM/YYYY'); 
                 
             } else {
                 $scope.$parent.gastos.splice(found, 1);
                 
                 // lo guardo y despues lo muestro humanizado
                 $scope.$parent.gastos.push(gastoEdit);                
-                $scope.gastoEdit.fecha=moment($scope.gastoEdit.fecha).locale('es').format('DD/MMM/YYYY'); 
+                $scope.gastoEdit.fecha=moment(gastoFecha).locale('es').format('DD/MMM/YYYY'); 
             }
 
             $uibModalInstance.dismiss('cancel');
