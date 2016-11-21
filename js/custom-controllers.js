@@ -233,7 +233,7 @@ vm.login2 = function() {
 
         }//Fin del function login
 //codigo de iphone de Fede --> 619794
-    }])
+}])
 
 //--------    NUEVO POS BARRA CTRL    --------
 
@@ -326,17 +326,17 @@ vm.login2 = function() {
                 if($scope.cuponSeleccionado.litros > $scope.resumen.totalLitros){
                     SweetAlert.swal("Error", "El cupon tiene mas litros de los cargados!", "error")
                 }else{
-                var itemsVenta=[];
+                    var itemsVenta=[];
 
-                for (var i=0;i<$scope.resumen.productos.length;i++){
+                    for (var i=0;i<$scope.resumen.productos.length;i++){
 
-                    var item={};
+                        var item={};
 
-                    item.idProducto = $scope.resumen.productos[i].productoReal.id;
-                    item.cantidad = $scope.resumen.productos[i].cantidad;
+                        item.idProducto = $scope.resumen.productos[i].productoReal.id;
+                        item.cantidad = $scope.resumen.productos[i].cantidad;
 
-                    itemsVenta.push(item);          
-                }
+                        itemsVenta.push(item);          
+                    }
 
                     SweetAlert.swal({
                         title: "¿Estas Seguro?",
@@ -349,33 +349,33 @@ vm.login2 = function() {
                         closeOnConfirm: false,
                         closeOnCancel: false,
                         html: true },
-                    function (isConfirm) {
-                        if (isConfirm) {
+                        function (isConfirm) {
+                            if (isConfirm) {
 
-                            $http.post('http://blackhop-dessin1.rhcloud.com/api/pos/barra/venta', {
+                                $http.post('http://blackhop-dessin1.rhcloud.com/api/pos/barra/venta', {
 
-                                codigo:$scope.cuponSeleccionado.numero,
-                                itemsVenta: JSON.stringify(itemsVenta),
-                            }).success(function(response) {
-                                $scope.borrarTodo();
+                                    codigo:$scope.cuponSeleccionado.numero,
+                                    itemsVenta: JSON.stringify(itemsVenta),
+                                }).success(function(response) {
+                                    $scope.borrarTodo();
 
-                            }).error(function(error){
-                              console.log(error);
-                            });              
-                            SweetAlert.swal("¡Realizado!", "Venta realizada", "success");
+                                }).error(function(error){
+                                  console.log(error);
+                              });              
+                                SweetAlert.swal("¡Realizado!", "Venta realizada", "success");
 
-                            $scope.resumen.display='';
-                            $scope.resumen.numeroProductos=-1;
-                            $scope.resumen.productos=[];
-                            $scope.resumen.total=0.00;
-                            $scope.resumen.totalLitros=0;
-                            $scope.resumen.selected=-1;
-                            $scope.clienteSeleccionado={};                                
-                            
-                        } else {
-                            SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
-                        }
-                    });
+                                $scope.resumen.display='';
+                                $scope.resumen.numeroProductos=-1;
+                                $scope.resumen.productos=[];
+                                $scope.resumen.total=0.00;
+                                $scope.resumen.totalLitros=0;
+                                $scope.resumen.selected=-1;
+                                $scope.clienteSeleccionado={};                                
+
+                            } else {
+                                SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
+                            }
+                        });
 
 
                 }
@@ -392,87 +392,87 @@ vm.login2 = function() {
 
 .controller('posCtrlCaja', ['$scope', '$state','$log','$uibModal','$http','SweetAlert', function($scope, $state,$log,$uibModal,$http,SweetAlert){
 
-            $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/canilla').success(function(canillas){    
-                console.log(canillas);
-                $scope.canillas = canillas.data;
-            }).error(function(error){
-                console.log(error);
-            }) 
+    $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/canilla').success(function(canillas){    
+        console.log(canillas);
+        $scope.canillas = canillas.data;
+    }).error(function(error){
+        console.log(error);
+    }) 
 
 
 
-        $scope.ventaProductos =[];
+    $scope.ventaProductos =[];
 
 
-        
-        $scope.getProductos = function (){
-            $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/producto').success(function(productos){    
-                console.log(productos);
-                $scope.ventaProductos = productos.data;
-                for(var i = 0; i < $scope.ventaProductos.length; i++){
 
-                    if($scope.ventaProductos[i].categoria=='Alquilables'){
-                        $scope.ventaProductos[i].stock=-1;
-                    }
-                };
-            }).error(function(error){
-                console.log(error);
-            })
-        }
+    $scope.getProductos = function (){
+        $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/producto').success(function(productos){    
+            console.log(productos);
+            $scope.ventaProductos = productos.data;
+            for(var i = 0; i < $scope.ventaProductos.length; i++){
 
-        $scope.getProductos();
-        
-        $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/cliente').success(function(clientes){    
-            console.log(clientes);
-            $scope.clientes = clientes.data;
+                if($scope.ventaProductos[i].categoria=='Alquilables'){
+                    $scope.ventaProductos[i].stock=-1;
+                }
+            };
         }).error(function(error){
             console.log(error);
         })
+    }
 
-       
-        $scope.resumen={
-            display:'',
-            numeroProductos:-1,
-            productos:[],
-            total:0.00,
-            totalLitros:0,
-            selected:-1,
-            recalculando(index,modTotal){
-                console.log("recalculando");
+    $scope.getProductos();
 
-                $scope.resumen.total=0;
-                $scope.resumen.totalLitros=0;
-                newOrder=0;
-                $scope.resumen.productos.forEach(function(producto) {
+    $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/cliente').success(function(clientes){    
+        console.log(clientes);
+        $scope.clientes = clientes.data;
+    }).error(function(error){
+        console.log(error);
+    })
 
-                    $scope.resumen.total+=Number(producto.valorTotal);
-                    producto.id= newOrder;
-                    newOrder++;        
 
-                    if (index != -1 && index === undefined){
+    $scope.resumen={
+        display:'',
+        numeroProductos:-1,
+        productos:[],
+        total:0.00,
+        totalLitros:0,
+        selected:-1,
+        recalculando(index,modTotal){
+            console.log("recalculando");
 
-                        console.log($scope.resumen.productos[index] + index + $scope);
+            $scope.resumen.total=0;
+            $scope.resumen.totalLitros=0;
+            newOrder=0;
+            $scope.resumen.productos.forEach(function(producto) {
 
-                        if(modTotal == true){
-                            $scope.resumen.productos[index].valorTotal = $scope.resumen.productos[index].cantidad * $scope.resumen.productos[index].valor;
+                $scope.resumen.total+=Number(producto.valorTotal);
+                producto.id= newOrder;
+                newOrder++;        
 
-                            if($scope.resumen.productos[index].descuento != ''){
-                                $scope.resumen.productos[index].valorTotal = Number($scope.resumen.productos[index].valorTotal) * Number($scope.resumen.productos[index].descuento/100); 
-                            }
+                if (index != -1 && index === undefined){
+
+                    console.log($scope.resumen.productos[index] + index + $scope);
+
+                    if(modTotal == true){
+                        $scope.resumen.productos[index].valorTotal = $scope.resumen.productos[index].cantidad * $scope.resumen.productos[index].valor;
+
+                        if($scope.resumen.productos[index].descuento != ''){
+                            $scope.resumen.productos[index].valorTotal = Number($scope.resumen.productos[index].valorTotal) * Number($scope.resumen.productos[index].descuento/100); 
                         }
                     }
-                });
+                }
+            });
 
-            }
         }
+    }
 
-        $scope.cargarGasto=function(){
+    $scope.cargarGasto=function(){
 
-            $scope.bajar='';                
-            
-            var modalInstance = $uibModal.open({
-                templateUrl: 'views/crear_gasto_caja.html',
-                controller: crearGastoCajaCtrl, 
+        $scope.bajar='';                
+
+        var modalInstance = $uibModal.open({
+            templateUrl: 'views/crear_gasto_caja.html',
+            controller: crearGastoCajaCtrl, 
                     //controler en controllers.js, no termino de entender porque no lo puedo armar como el resto y si o si tengo que poner una funcion                        
                     windowClass: "animated fadeIn",
                     scope:$scope,
@@ -483,75 +483,75 @@ vm.login2 = function() {
                         }
                     }
                 });
-        }
+    }
 
-        $scope.terminarSesionCaja=function(){
+    $scope.terminarSesionCaja=function(){
 
-            $scope.bajar='';                
-            
-            var modalInstance = $uibModal.open({
-                templateUrl: 'views/modal-terminar_sesion_caja.html',
-                controller: terminarSesionCajaCtrl,                        
-                    windowClass: "animated fadeIn",
-                    scope:$scope,
-                    SweetAlert:SweetAlert,
-                    $state
-                    
-                });
-        }
-        
-        
-        $scope.modal={
+        $scope.bajar='';                
 
-            terminarVenta(){
-                $scope.getProductos();
-                
-                if ($scope.clienteSeleccionado){
-                    var modalInstance = $uibModal.open({
-                        templateUrl: 'views/modal-terminar_venta.html',
-                        controller: terminarVentaCtrl,
-                        windowTopClass:"modal-arriba",
-                        windowClass: "animated bounceInDown",
-                        size:'md',
-                        resolve: {
-                            clienteSeleccionado: function () {
-                                return $scope.clienteSeleccionado;
-                            },
-                            resumen: function () {
-                                return $scope.resumen;
-                            }
-                        }
-                    }).closed.then(function(){
+        var modalInstance = $uibModal.open({
+            templateUrl: 'views/modal-terminar_sesion_caja.html',
+            controller: terminarSesionCajaCtrl,                        
+            windowClass: "animated fadeIn",
+            scope:$scope,
+            SweetAlert:SweetAlert,
+            $state
 
-                    });                   
+        });
+    }
 
-                    
-                } else {                    
-                    $scope.modal.abrir(true);
-                }
-            },
 
-            abrir(flag){
+    $scope.modal={
+
+        terminarVenta(){
+            $scope.getProductos();
+
+            if ($scope.clienteSeleccionado){
                 var modalInstance = $uibModal.open({
-                    templateUrl: 'views/modal_abrir_cliente.html',
-                    controller: modalControler,
-                    windowClass: "animated fadeIn",
+                    templateUrl: 'views/modal-terminar_venta.html',
+                    controller: terminarVentaCtrl,
+                    windowTopClass:"modal-arriba",
+                    windowClass: "animated bounceInDown",
+                    size:'md',
                     resolve: {
-                        clientes: function () {
-                            return $scope.clientes;
+                        clienteSeleccionado: function () {
+                            return $scope.clienteSeleccionado;
+                        },
+                        resumen: function () {
+                            return $scope.resumen;
                         }
                     }
                 }).closed.then(function(){
-                    if(flag){
-                      $scope.modal.terminarVenta();
-                  }
-              });
 
-            },
+                });                   
 
-            imprimir(){
 
-                if ($scope.resumen.numeroProductos<0){ 
+            } else {                    
+                $scope.modal.abrir(true);
+            }
+        },
+
+        abrir(flag){
+            var modalInstance = $uibModal.open({
+                templateUrl: 'views/modal_abrir_cliente.html',
+                controller: modalControler,
+                windowClass: "animated fadeIn",
+                resolve: {
+                    clientes: function () {
+                        return $scope.clientes;
+                    }
+                }
+            }).closed.then(function(){
+                if(flag){
+                  $scope.modal.terminarVenta();
+              }
+          });
+
+        },
+
+        imprimir(){
+
+            if ($scope.resumen.numeroProductos<0){ 
 
                     //No hay articulos y solo quiere imprimir el turno
 
@@ -603,7 +603,7 @@ vm.login2 = function() {
             }
 
             for(var i = 0; i < $scope.clientes.length; i++){
-            
+
                 switch ($scope.clientes[i].estado){
                     case 'Activo':
                     $scope.clientes[i].class= "badge-primary";
@@ -642,7 +642,7 @@ vm.login2 = function() {
 
                     $http.delete('http://blackhop-dessin1.rhcloud.com/api/admin/cliente/'+id).success(function(response){    
 
-                      
+
                         SweetAlert.swal("¡Eliminado!", "El cliente ha sido eliminado", "success");
                         $scope.getClientes();
                         var idClienteDerecha= $scope.clientes[0].id;
@@ -672,10 +672,10 @@ vm.login2 = function() {
         */
 
         formatosFecha=[
-            "dd/mm/yyyy",
-            "dd/mm/yy",
-            "dd.mm.yyyy",
-            "dd.mm.yy"
+        "dd/mm/yyyy",
+        "dd/mm/yy",
+        "dd.mm.yyyy",
+        "dd.mm.yy"
         ]
 
         var i = 0;
@@ -690,29 +690,29 @@ vm.login2 = function() {
         //console.log($scope.clienteDer.fechaNacimiento)
 
         $http.put('http://blackhop-dessin1.rhcloud.com/api/admin/cliente/'+id,{
-                telefono:$scope.clienteDer.telefono,
-                nombre:$scope.clienteDer.nombre,
-                apellido:$scope.clienteDer.apellido,
-                celular:$scope.clienteDer.celular,
-                email:$scope.clienteDer.email,
-                direccion:$scope.clienteDer.direccion,
-                fechaNacimiento:$scope.clienteDer.fechaNacimiento,
-                dni:$scope.clienteDer.dni
-            }).success(function(){
-                $scope.getClientes();    
-                $scope.getClienteDerecha(id);
+            telefono:$scope.clienteDer.telefono,
+            nombre:$scope.clienteDer.nombre,
+            apellido:$scope.clienteDer.apellido,
+            celular:$scope.clienteDer.celular,
+            email:$scope.clienteDer.email,
+            direccion:$scope.clienteDer.direccion,
+            fechaNacimiento:$scope.clienteDer.fechaNacimiento,
+            dni:$scope.clienteDer.dni
+        }).success(function(){
+            $scope.getClientes();    
+            $scope.getClienteDerecha(id);
 
-            }).error(function(error){
-                console.log(error);
-            });
+        }).error(function(error){
+            console.log(error);
+        });
 
     }
 
-            $scope.dtOptions = DTOptionsBuilder.newOptions()
+    $scope.dtOptions = DTOptionsBuilder.newOptions()
 
-            .withDOM('<"html5buttons"B>lTfgitp')
+    .withDOM('<"html5buttons"B>lTfgitp')
 
-            .withButtons([
+    .withButtons([
             /*{extend: 'copy', text: 'Copiar'},
             {extend: 'csv'},*/
             {extend: 'excel', title: 'Clientes'},
@@ -720,39 +720,39 @@ vm.login2 = function() {
 
             {extend: 'print',
             customize: function (win){
-             $(win.document.body).addClass('white-bg');
-             $(win.document.body).css('font-size', '10px');
+               $(win.document.body).addClass('white-bg');
+               $(win.document.body).css('font-size', '10px');
 
-             $(win.document.body).find('table')
-             .addClass('compact')
-             .css('font-size', 'inherit');
-         }, 
-         text: 'Imprimir'
-     }
-     ]);   
+               $(win.document.body).find('table')
+               .addClass('compact')
+               .css('font-size', 'inherit');
+           }, 
+           text: 'Imprimir'
+       }
+       ]);   
 
-            $scope.dtColumnDefs = [
-            DTColumnDefBuilder.newColumnDef(0).notVisible(),
-            DTColumnDefBuilder.newColumnDef(1),
-            DTColumnDefBuilder.newColumnDef(2).notSortable(),
-            DTColumnDefBuilder.newColumnDef(3).notSortable()
-            ]
+    $scope.dtColumnDefs = [
+    DTColumnDefBuilder.newColumnDef(0).notVisible(),
+    DTColumnDefBuilder.newColumnDef(1),
+    DTColumnDefBuilder.newColumnDef(2).notSortable(),
+    DTColumnDefBuilder.newColumnDef(3).notSortable()
+    ]
 
-            $scope.modal={
-                abrir(){
-                    var modalInstance = $uibModal.open({
-                        templateUrl: 'views/modal_crear_cliente.html',
-                        controller: modalControler,
-                        windowClass: "animated fadeIn",
-                        resolve: {
-                            clientes: function () {
-                                return $scope.clientes;
-                            }
-                        }
-                    });
+    $scope.modal={
+        abrir(){
+            var modalInstance = $uibModal.open({
+                templateUrl: 'views/modal_crear_cliente.html',
+                controller: modalControler,
+                windowClass: "animated fadeIn",
+                resolve: {
+                    clientes: function () {
+                        return $scope.clientes;
+                    }
                 }
-            }
-        }])
+            });
+        }
+    }
+}])
 
 .controller('proveedoresCtrl', ['$scope','$log','$uibModal','$filter','DTOptionsBuilder','DTColumnDefBuilder','SweetAlert','Upload', function($scope,$log,$uibModal,$filter,DTOptionsBuilder,DTColumnDefBuilder,SweetAlert,Upload){
 
@@ -981,16 +981,16 @@ vm.login2 = function() {
 
             {extend: 'print',
             customize: function (win){
-             $(win.document.body).addClass('white-bg');
-             $(win.document.body).css('font-size', '10px');
+               $(win.document.body).addClass('white-bg');
+               $(win.document.body).css('font-size', '10px');
 
-             $(win.document.body).find('table')
-             .addClass('compact')
-             .css('font-size', 'inherit');
-         }
-         , text: 'Imprimir'
-     }
-     ])
+               $(win.document.body).find('table')
+               .addClass('compact')
+               .css('font-size', 'inherit');
+           }
+           , text: 'Imprimir'
+       }
+       ])
 
         $scope.dtColumnDefs = [
         DTColumnDefBuilder.newColumnDef(0).notVisible(),
@@ -1024,16 +1024,16 @@ vm.login2 = function() {
 
         {extend: 'print',
         customize: function (win){
-         $(win.document.body).addClass('white-bg');
-         $(win.document.body).css('font-size', '10px');
+           $(win.document.body).addClass('white-bg');
+           $(win.document.body).css('font-size', '10px');
 
-         $(win.document.body).find('table')
-         .addClass('compact')
-         .css('font-size', 'inherit');
-     }
-     , text: 'Imprimir'
- }
- ])
+           $(win.document.body).find('table')
+           .addClass('compact')
+           .css('font-size', 'inherit');
+       }
+       , text: 'Imprimir'
+   }
+   ])
     .withOption('order', [0, 'desc']);
     $scope.dtColumnDefs = [
     DTColumnDefBuilder.newColumnDef(0).withOption('sWidth', '25px'),
@@ -1327,16 +1327,16 @@ vm.login2 = function() {
 
         {extend: 'print',
         customize: function (win){
-         $(win.document.body).addClass('white-bg');
-         $(win.document.body).css('font-size', '10px');
+           $(win.document.body).addClass('white-bg');
+           $(win.document.body).css('font-size', '10px');
 
-         $(win.document.body).find('table')
-         .addClass('compact')
-         .css('font-size', 'inherit');
-     }
-     , text: 'Imprimir'
- }
- ])
+           $(win.document.body).find('table')
+           .addClass('compact')
+           .css('font-size', 'inherit');
+       }
+       , text: 'Imprimir'
+   }
+   ])
     .withOption('order', [0, 'desc']);
     $scope.dtColumnDefs = [
     DTColumnDefBuilder.newColumnDef(0).withOption('sWidth', '25px'),
@@ -1621,16 +1621,16 @@ vm.login2 = function() {
 
         {extend: 'print',
         customize: function (win){
-         $(win.document.body).addClass('white-bg');
-         $(win.document.body).css('font-size', '10px');
+           $(win.document.body).addClass('white-bg');
+           $(win.document.body).css('font-size', '10px');
 
-         $(win.document.body).find('table')
-         .addClass('compact')
-         .css('font-size', 'inherit');
-     }
-     , text: 'Imprimir'
- }
- ])
+           $(win.document.body).find('table')
+           .addClass('compact')
+           .css('font-size', 'inherit');
+       }
+       , text: 'Imprimir'
+   }
+   ])
     .withOption('order', [0, 'desc']);
 
     $scope.dtColumnDefs = [
@@ -1779,15 +1779,15 @@ vm.login2 = function() {
 
 .controller('productosCtrl', ['$scope','$log','$uibModal','$filter','DTOptionsBuilder','DTColumnDefBuilder','SweetAlert', function($scope,$log,$uibModal,$filter,DTOptionsBuilder,DTColumnDefBuilder,SweetAlert){
 
-             $scope.productos =[
-             {
-                identificador:1,
-                proveedor:"Crafter",
-                marca:"Crafter",
-                nombre:"American IPA",
-                valor:75.00,
-                costo:45.00,
-                descripcion:"Una pale ale lupulada, moderadamente fuerte, con características consistentes con el uso de maltas, lúpulos y levadura inglesas.",                    
+   $scope.productos =[
+   {
+    identificador:1,
+    proveedor:"Crafter",
+    marca:"Crafter",
+    nombre:"American IPA",
+    valor:75.00,
+    costo:45.00,
+    descripcion:"Una pale ale lupulada, moderadamente fuerte, con características consistentes con el uso de maltas, lúpulos y levadura inglesas.",                    
                 stock:100,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
                 categoria:"Cervezas por Litro",//tipo
                 unidad:'lts.',
@@ -2237,16 +2237,16 @@ vm.login2 = function() {
 
             {extend: 'print',
             customize: function (win){
-             $(win.document.body).addClass('white-bg');
-             $(win.document.body).css('font-size', '10px');
+               $(win.document.body).addClass('white-bg');
+               $(win.document.body).css('font-size', '10px');
 
-             $(win.document.body).find('table')
-             .addClass('compact')
-             .css('font-size', 'inherit');
-         }, 
-         text: 'Imprimir'
-     }
-     ]);   
+               $(win.document.body).find('table')
+               .addClass('compact')
+               .css('font-size', 'inherit');
+           }, 
+           text: 'Imprimir'
+       }
+       ]);   
 
             $scope.dtColumnDefs = [
             DTColumnDefBuilder.newColumnDef(0).notVisible(),
@@ -2323,16 +2323,16 @@ vm.login2 = function() {
 
         {extend: 'print',
         customize: function (win){
-         $(win.document.body).addClass('white-bg');
-         $(win.document.body).css('font-size', '10px');
+           $(win.document.body).addClass('white-bg');
+           $(win.document.body).css('font-size', '10px');
 
-         $(win.document.body).find('table')
-         .addClass('compact')
-         .css('font-size', 'inherit');
-     }
-     , text: 'Imprimir'
- }
- ])
+           $(win.document.body).find('table')
+           .addClass('compact')
+           .css('font-size', 'inherit');
+       }
+       , text: 'Imprimir'
+   }
+   ])
     .withOption('order', [0, 'desc']);
 
     $scope.dtColumnDefs = [
@@ -2556,8 +2556,8 @@ vm.login2 = function() {
 
 .controller('productosInventarioCtrl', ['$scope','$log','$uibModal','$filter','DTOptionsBuilder','DTColumnDefBuilder', function($scope,$log,$uibModal,$filter,DTOptionsBuilder,DTColumnDefBuilder){
 
- $scope.productosInventario =[
- {
+   $scope.productosInventario =[
+   {
     identificador:1,
     proveedor:"Crafter",
     marca:"Crafter",
@@ -2886,16 +2886,16 @@ vm.login2 = function() {
 
             {extend: 'print',
             customize: function (win){
-             $(win.document.body).addClass('white-bg');
-             $(win.document.body).css('font-size', '10px');
+               $(win.document.body).addClass('white-bg');
+               $(win.document.body).css('font-size', '10px');
 
-             $(win.document.body).find('table')
-             .addClass('compact')
-             .css('font-size', 'inherit');
-         }, 
-         text: 'Imprimir'
-     }
-     ]);   
+               $(win.document.body).find('table')
+               .addClass('compact')
+               .css('font-size', 'inherit');
+           }, 
+           text: 'Imprimir'
+       }
+       ]);   
 
             $scope.dtColumnDefs = [
             DTColumnDefBuilder.newColumnDef(0).notVisible(),
@@ -3034,16 +3034,16 @@ vm.login2 = function() {
 
             {extend: 'print',
             customize: function (win){
-             $(win.document.body).addClass('white-bg');
-             $(win.document.body).css('font-size', '10px');
+               $(win.document.body).addClass('white-bg');
+               $(win.document.body).css('font-size', '10px');
 
-             $(win.document.body).find('table')
-             .addClass('compact')
-             .css('font-size', 'inherit');
-         }, 
-         text: 'Imprimir'
-     }
-     ]);   
+               $(win.document.body).find('table')
+               .addClass('compact')
+               .css('font-size', 'inherit');
+           }, 
+           text: 'Imprimir'
+       }
+       ]);   
 
         $scope.dtColumnDefs = [
         DTColumnDefBuilder.newColumnDef(0).notVisible(),
@@ -3126,61 +3126,27 @@ vm.login2 = function() {
 
 .controller('gastosCtrl', ['$http','$scope','$log','$uibModal','$filter','DTOptionsBuilder','DTColumnDefBuilder','SweetAlert', function($http,$scope,$log,$uibModal,$filter,DTOptionsBuilder,DTColumnDefBuilder,SweetAlert){
 
- $scope.gastos =[
- {
-    identificador:1,
-    fecha:new Date("09/01/2016"),
-    descripcion:"Pago a Proveedor",
-    monto:"5500",
-    usuario:"Agustin"
-},
-{
-    identificador:2,
-    fecha:new Date("09/02/2016"),
-    descripcion:"Pago a Gonzalo",
-    monto:"500",
-    usuario:"Aldana"
-},
-{
-    identificador:3,
-    fecha:new Date("09/02/2016"),
-    descripcion:"Retiro Miqueas",
-    monto:"6000",
-    usuario:"Aldana"
-},
-{
-    identificador:4,
-    fecha:new Date("09/03/2016"),
-    descripcion:"Pago a Proveedor",
-    monto:"7000",
-    usuario:"Gaston"
-},
-{
-    identificador:5,
-    fecha:new Date("09/03/2016"),
-    descripcion:"Retiro Miqueas",
-    monto:"2000",
-    usuario:"Gaston"
-},
-{
-    identificador:6,
-    fecha:new Date("09/04/2016"),
-    descripcion:"Retiro Miqueas",
-    monto:"10000",
-    usuario:"Agustin"
-}
+    $scope.getGastos = function(){
+        $scope.gastos = [];
+        $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/gasto')
+        .success(function(response){    
+            $scope.gastos = response.data;
+            /// Dejalo asi Formatea lo que manda Laravel
+            for(var i = 0; i < $scope.gastos.length; i++){
+                $scope.gastos[i].fecha=moment($scope.gastos[i].fecha).locale('es').format('DD/MMM/YYYY');
+            };
+            console.log($scope.gastos);
+        }).error(function(error){
+            console.log(error);
+        });
+    }
 
-]
+    $scope.getGastos();
+    console.log($scope.gastos);
 
-
-/// Dejalo asi Formatea lo que manda Laravel
-for(var i = 0; i < $scope.gastos.length; i++){
-    $scope.gastos[i].fecha=moment($scope.gastos[i].fecha).locale('es').format('DD/MMM/YYYY');
-};
-
-$scope.dtOptions = DTOptionsBuilder.newOptions()
-.withDOM('<"html5buttons"B>lTfgitp')
-.withButtons([
+    $scope.dtOptions = DTOptionsBuilder.newOptions()
+    .withDOM('<"html5buttons"B>lTfgitp')
+    .withButtons([
             /*{extend: 'copy', text: 'Copiar'},
             {extend: 'csv'},*/
             {extend: 'excel', title: 'Gastos'},
@@ -3188,61 +3154,59 @@ $scope.dtOptions = DTOptionsBuilder.newOptions()
 
             {extend: 'print',
             customize: function (win){
-             $(win.document.body).addClass('white-bg');
-             $(win.document.body).css('font-size', '10px');
+               $(win.document.body).addClass('white-bg');
+               $(win.document.body).css('font-size', '10px');
 
-             $(win.document.body).find('table')
-             .addClass('compact')
-             .css('font-size', 'inherit');
-         }, 
-         text: 'Imprimir'
-     }
-     ]);   
+               $(win.document.body).find('table')
+               .addClass('compact')
+               .css('font-size', 'inherit');
+           }, 
+           text: 'Imprimir'
+       }
+       ]);   
 
-$scope.dtColumnDefs = [
+    $scope.dtColumnDefs = [
     DTColumnDefBuilder.newColumnDef(0).notVisible(),
     DTColumnDefBuilder.newColumnDef(1),
     DTColumnDefBuilder.newColumnDef(2),
     DTColumnDefBuilder.newColumnDef(3)
-]
+    ]
 
-$scope.onDelete = function(ident){
+    $scope.onDelete = function(ident){
 
-    SweetAlert.swal({
-        title: "¿Estas Seguro?",
-        text: "¡No vas a poder recuperar los datos!",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Si, eliminalo!",
-        cancelButtonText: "No, cancelar!",
-        closeOnConfirm: false,
-        closeOnCancel: false },
-        function (isConfirm) { 
-            if (isConfirm) {
-                for(var i = 0; i < $scope.gastos.length; i++){
-
-                    if ($scope.gastos[i].id == ident){                    
-                        $scope.gastos.splice(i, 1);                                
-                        SweetAlert.swal("¡Eliminado!", "El gasto ha sido eliminado", "success");
-                        //Put
-                    } 
-                } 
-
+        SweetAlert.swal({
+            title: "¿Estas Seguro?",
+            text: "¡No vas a poder recuperar los datos!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Si, eliminalo!",
+            cancelButtonText: "No, cancelar!",
+            closeOnConfirm: false,
+            closeOnCancel: false },
+            function (isConfirm) { 
+                if (isConfirm) {
+                                
+                    $http.delete('http://blackhop-dessin1.rhcloud.com/api/admin/gasto/'+ident)
+                    .success(function(){    
+                        SweetAlert.swal("¡Eliminado!", "El gasto fue eliminado", "success");
+                        $scope.getGastos();
+                    }).error(function(error){
+                        console.log(error);
+                    });
+                }else{
+                    SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
+                }
             }
-            else{
-                SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
-            }
-        }
         
         );
-};
+    };
 
-$scope.modal={
-    crear(){
-        var modalInstance = $uibModal.open({
-            templateUrl: 'views/crear_gasto.html',
-            controller: crearGastoCtrl, 
+    $scope.modal={
+        crear(){
+            var modalInstance = $uibModal.open({
+                templateUrl: 'views/crear_gasto.html',
+                controller: crearGastoCtrl, 
                     //controler en controllers.js, no termino de entender porque no lo puedo armar como el resto y si o si tengo que poner una funcion                        
                     windowClass: "animated fadeIn",
                     scope:$scope,
@@ -3256,17 +3220,18 @@ $scope.modal={
                     }
                 });
 
-        modalInstance.result.then(function (gasto) {
+            modalInstance.result.then(function (gasto) {
 
-            $http.post('http://blackhop-dessin1.rhcloud.com/api/admin/gasto',{
-                        descripcion:gasto.descripcion,
-                        monto:gasto.monto,
-                        fecha:gasto.fecha
-                     }).success(function(){    
-                        SweetAlert.swal("¡Agregado!", "El gasto fue agregado", "success");
-                    }).error(function(error){
-                        console.log(error);
-            });
+                $http.post('http://blackhop-dessin1.rhcloud.com/api/admin/gasto',{
+                    descripcion:gasto.descripcion,
+                    monto:gasto.monto,
+                    fecha:gasto.fecha
+                }).success(function(){    
+                    SweetAlert.swal("¡Agregado!", "El gasto fue agregado", "success");
+                    $scope.getGastos();
+                }).error(function(error){
+                    console.log(error);
+                });
 
 /*
             $http.put('http://blackhop-dessin1.rhcloud.com/api/admin/canilla/'+idCanilla,{
@@ -3276,16 +3241,16 @@ $scope.modal={
                     }).error(function(error){
                         console.log(error);
                     });
-*/
-        });
-                
-    },
+                    */
+                });
 
-    editar(gasto){       
+        },
 
-        var modalInstance = $uibModal.open({
-            templateUrl: 'views/crear_gasto.html',
-            controller: crearGastoCtrl, 
+        editar(gasto){       
+
+            var modalInstance = $uibModal.open({
+                templateUrl: 'views/editar_gasto.html',
+                controller: editarGastoCtrl, 
                     //controler en controllers.js, no termino de entender porque no lo puedo armar como el resto y si o si tengo que poner una funcion                        
                     windowClass: "animated fadeIn",
                     scope:$scope,
@@ -3299,567 +3264,581 @@ $scope.modal={
                     }
 
                 });
+
+            modalInstance.result.then(function (gasto) {
+
+                $http.put('http://blackhop-dessin1.rhcloud.com/api/admin/gasto/'+gasto.identificador,{
+                    descripcion:gasto.descripcion,
+                    monto:gasto.monto,
+                    fecha:gasto.fecha
+                }).success(function(){    
+                    SweetAlert.swal("¡Editado!", "El gasto fue editado", "success");
+                    $scope.getGastos();
+                }).error(function(error){
+                    console.log(error);
+                });
+            });
+        }
     }
-}
 }])
 
 .controller('historialCtrl', ['$scope','$log','$uibModal','$filter','DTOptionsBuilder','DTColumnDefBuilder', function($scope,$log,$uibModal,$filter,DTOptionsBuilder,DTColumnDefBuilder){
 
- $scope.historial =[
- {
-  identificador: 1,
-  fecha: "2016-03-30 08:05:56",
-  ubicacion: "Local Illia",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Entrada",
-  anterior: 32,
-  cantidad: 67,
-  posterior: 99,
-  unidad: "lts."
-},
-{
-  identificador: 2,
-  fecha: "2016-07-25 13:32:43",
-  ubicacion: "Local 3",
-  producto: "Blest - Pilsen",
-  tipoHistorial: "Ajuste",
-  anterior: 15,
-  cantidad: 66,
-  posterior: 81,
-  unidad: "lts."
-},
-{
-  identificador: 3,
-  fecha: "2016-05-31 05:18:26",
-  ubicacion: "Local 2",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Ajuste",
-  anterior: 22,
-  cantidad: 32,
-  posterior: 54,
-  unidad: "lts."
-},
-{
-  identificador: 4,
-  fecha: "2015-10-06 13:33:28",
-  ubicacion: "Local Illia",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Venta",
-  anterior: 31,
-  cantidad: 42,
-  posterior: 73,
-  unidad: "lts."
-},
+   $scope.historial =[
+   {
+      identificador: 1,
+      fecha: "2016-03-30 08:05:56",
+      ubicacion: "Local Illia",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Entrada",
+      anterior: 32,
+      cantidad: 67,
+      posterior: 99,
+      unidad: "lts."
+  },
+  {
+      identificador: 2,
+      fecha: "2016-07-25 13:32:43",
+      ubicacion: "Local 3",
+      producto: "Blest - Pilsen",
+      tipoHistorial: "Ajuste",
+      anterior: 15,
+      cantidad: 66,
+      posterior: 81,
+      unidad: "lts."
+  },
+  {
+      identificador: 3,
+      fecha: "2016-05-31 05:18:26",
+      ubicacion: "Local 2",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Ajuste",
+      anterior: 22,
+      cantidad: 32,
+      posterior: 54,
+      unidad: "lts."
+  },
+  {
+      identificador: 4,
+      fecha: "2015-10-06 13:33:28",
+      ubicacion: "Local Illia",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Venta",
+      anterior: 31,
+      cantidad: 42,
+      posterior: 73,
+      unidad: "lts."
+  },
 
-{
-  identificador: 5,
-  fecha: "2016-05-15 09:00:59",
-  ubicacion: "Local 2",
-  producto: "Blest - Pilsen",
-  tipoHistorial: "Venta",
-  anterior: 99,
-  cantidad: 29,
-  posterior: 128,
-  unidad: "lts."
-},
-{
-  identificador: 6,
-  fecha: "2016-05-29 18:28:27",
-  ubicacion: "Local 2",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Venta",
-  anterior: 18,
-  cantidad: 80,
-  posterior: 98,
-  unidad: "lts."
-},
-{
-  identificador: 7,
-  fecha: "2016-04-09 16:04:51",
-  ubicacion: "Local 3",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Ajuste",
-  anterior: 75,
-  cantidad: 58,
-  posterior: 133,
-  unidad: "lts."
-},
-{
-  identificador: 8,
-  fecha: "2016-05-12 13:18:18",
-  ubicacion: "Local 3",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Movimiento",
-  anterior: 20,
-  cantidad: 87,
-  posterior: 107,
-  unidad: "lts."
-},
-{
-  identificador: 9,
-  fecha: "2016-02-16 03:54:39",
-  ubicacion: "Local 3",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Entrada",
-  anterior: 72,
-  cantidad: 17,
-  posterior: 89,
-  unidad: "lts."
-},
-{
-  identificador: 10,
-  fecha: "2015-12-04 12:14:42",
-  ubicacion: "Local Illia",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Entrada",
-  anterior: 52,
-  cantidad: 17,
-  posterior: 69,
-  unidad: "lts."
-},
-{
-  identificador: 11,
-  fecha: "2016-05-24 12:42:59",
-  ubicacion: "Local 3",
-  producto: "Blest - Pilsen",
-  tipoHistorial: "Movimiento",
-  anterior: 14,
-  cantidad: 90,
-  posterior: 104,
-  unidad: "lts."
-},
-{
-  identificador: 12,
-  fecha: "2015-11-20 18:46:46",
-  ubicacion: "Local 3",
-  producto: "Blest - Pilsen",
-  tipoHistorial: "Ajuste",
-  anterior: 23,
-  cantidad: 17,
-  posterior: 40,
-  unidad: "lts."
-},
-{
-  identificador: 13,
-  fecha: "2015-11-16 19:56:02",
-  ubicacion: "Local 2",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Entrada",
-  anterior: 35,
-  cantidad: 35,
-  posterior: 70,
-  unidad: "lts."
-},
-{
-  identificador: 14,
-  fecha: "2016-03-05 03:59:49",
-  ubicacion: "Local Illia",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Entrada",
-  anterior: 17,
-  cantidad: 18,
-  posterior: 35,
-  unidad: "lts."
-},
-{
-  identificador: 15,
-  fecha: "2016-06-06 13:38:41",
-  ubicacion: "Local 2",
-  producto: "Blest - Pilsen",
-  tipoHistorial: "Ajuste",
-  anterior: 21,
-  cantidad: 28,
-  posterior: 49,
-  unidad: "lts."
-},
-{
-  identificador: 16,
-  fecha: "2016-01-19 11:12:22",
-  ubicacion: "Local 3",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Venta",
-  anterior: 17,
-  cantidad: 56,
-  posterior: 73,
-  unidad: "lts."
-},
-{
-  identificador: 17,
-  fecha: "2015-12-19 14:28:31",
-  ubicacion: "Local 2",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Entrada",
-  anterior: 57,
-  cantidad: 93,
-  posterior: 150,
-  unidad: "lts."
-},
-{
-  identificador: 18,
-  fecha: "2016-07-28 09:03:54",
-  ubicacion: "Local Illia",
-  producto: "Blest - Pilsen",
-  tipoHistorial: "Venta",
-  anterior: 7,
-  cantidad: 22,
-  posterior: 29,
-  unidad: "lts."
-},
-{
-  identificador: 19,
-  fecha: "2016-07-06 23:32:15",
-  ubicacion: "Local Illia",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Entrada",
-  anterior: 57,
-  cantidad: 27,
-  posterior: 84,
-  unidad: "lts."
-},
-{
-  identificador: 20,
-  fecha: "2016-06-22 08:52:57",
-  ubicacion: "Local 2",
-  producto: "Crafter - Porter",
-  tipoHistorial: "Ajuste",
-  anterior: 56,
-  cantidad: 1,
-  posterior: 57,
-  unidad: "lts."
-},
-{
-  identificador: 21,
-  fecha: "2016-06-10 03:43:50",
-  ubicacion: "Local 3",
-  producto: "Crafter - Porter",
-  tipoHistorial: "Venta",
-  anterior: 72,
-  cantidad: 68,
-  posterior: 140,
-  unidad: "lts."
-},
-{
-  identificador: 22,
-  fecha: "2015-10-04 04:56:57",
-  ubicacion: "Local Illia",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Venta",
-  anterior: 39,
-  cantidad: 5,
-  posterior: 44,
-  unidad: "lts."
-},
-{
-  identificador: 23,
-  fecha: "2016-05-01 06:04:17",
-  ubicacion: "Local 2",
-  producto: "Blest - Pilsen",
-  tipoHistorial: "Entrada",
-  anterior: 83,
-  cantidad: 49,
-  posterior: 132,
-  unidad: "lts."
-},
-{
-  identificador: 24,
-  fecha: "2016-07-21 23:37:41",
-  ubicacion: "Local 3",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Entrada",
-  anterior: 73,
-  cantidad: 70,
-  posterior: 143,
-  unidad: "lts."
-},
-{
-  identificador: 25,
-  fecha: "2015-11-30 22:31:45",
-  ubicacion: "Local 3",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Venta",
-  anterior: 57,
-  cantidad: 96,
-  posterior: 153,
-  unidad: "lts."
-},
-{
-  identificador: 26,
-  fecha: "2015-11-11 11:06:41",
-  ubicacion: "Local 3",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Entrada",
-  anterior: 82,
-  cantidad: 6,
-  posterior: 88,
-  unidad: "lts."
-},
-{
-  identificador: 27,
-  fecha: "2015-09-23 13:21:41",
-  ubicacion: "Local 2",
-  producto: "Blest - Pilsen",
-  tipoHistorial: "Entrada",
-  anterior: 41,
-  cantidad: 50,
-  posterior: 91,
-  unidad: "lts."
-},
-{
-  identificador: 28,
-  fecha: "2015-12-29 01:47:52",
-  ubicacion: "Local 3",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Entrada",
-  anterior: 64,
-  cantidad: 69,
-  posterior: 133,
-  unidad: "lts."
-},
-{
-  identificador: 29,
-  fecha: "2016-01-19 13:22:20",
-  ubicacion: "Local 3",
-  producto: "Crafter - Porter",
-  tipoHistorial: "Movimiento",
-  anterior: 39,
-  cantidad: 63,
-  posterior: 102,
-  unidad: "lts."
-},
-{
-  identificador: 30,
-  fecha: "2015-09-14 18:06:50",
-  ubicacion: "Local Illia",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Entrada",
-  anterior: 29,
-  cantidad: 6,
-  posterior: 35,
-  unidad: "lts."
-},
-{
-  identificador: 31,
-  fecha: "2016-03-13 02:05:45",
-  ubicacion: "Local 3",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Movimiento",
-  anterior: 93,
-  cantidad: 42,
-  posterior: 135,
-  unidad: "lts."
-},
-{
-  identificador: 32,
-  fecha: "2016-06-01 03:33:47",
-  ubicacion: "Local 2",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Movimiento",
-  anterior: 56,
-  cantidad: 31,
-  posterior: 87,
-  unidad: "lts."
-},
-{
-  identificador: 33,
-  fecha: "2016-02-24 03:28:50",
-  ubicacion: "Local 2",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Venta",
-  anterior: 77,
-  cantidad: 52,
-  posterior: 129,
-  unidad: "lts."
-},
-{
-  identificador: 34,
-  fecha: "2016-03-22 23:42:37",
-  ubicacion: "Local 3",
-  producto: "Crafter - Porter",
-  tipoHistorial: "Venta",
-  anterior: 20,
-  cantidad: 96,
-  posterior: 116,
-  unidad: "lts."
-},
-{
-  identificador: 35,
-  fecha: "2016-06-19 11:13:07",
-  ubicacion: "Local 2",
-  producto: "Blest - Pilsen",
-  tipoHistorial: "Ajuste",
-  anterior: 95,
-  cantidad: 66,
-  posterior: 161,
-  unidad: "lts."
-},
-{
-  identificador: 36,
-  fecha: "2016-02-15 01:38:31",
-  ubicacion: "Local 2",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Movimiento",
-  anterior: 34,
-  cantidad: 88,
-  posterior: 122,
-  unidad: "lts."
-},
-{
-  identificador: 37,
-  fecha: "2016-08-10 14:59:08",
-  ubicacion: "Local 2",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Entrada",
-  anterior: 50,
-  cantidad: 77,
-  posterior: 127,
-  unidad: "lts."
-},
-{
-  identificador: 38,
-  fecha: "2015-10-01 09:20:41",
-  ubicacion: "Local 3",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Movimiento",
-  anterior: 82,
-  cantidad: 97,
-  posterior: 179,
-  unidad: "lts."
-},
-{
-  identificador: 39,
-  fecha: "2016-05-11 20:39:07",
-  ubicacion: "Local Illia",
-  producto: "Blest - Pilsen",
-  tipoHistorial: "Movimiento",
-  anterior: 44,
-  cantidad: 23,
-  posterior: 67,
-  unidad: "lts."
-},
-{
-  identificador: 40,
-  fecha: "2016-02-27 00:54:22",
-  ubicacion: "Local 3",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Venta",
-  anterior: 19,
-  cantidad: 41,
-  posterior: 60,
-  unidad: "lts."
-},
-{
-  identificador: 41,
-  fecha: "2015-09-05 00:15:34",
-  ubicacion: "Local 2",
-  producto: "Blest - Pilsen",
-  tipoHistorial: "Venta",
-  anterior: 43,
-  cantidad: 62,
-  posterior: 105,
-  unidad: "lts."
-},
-{
-  identificador: 42,
-  fecha: "2016-04-17 08:11:41",
-  ubicacion: "Local 2",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Venta",
-  anterior: 1,
-  cantidad: 34,
-  posterior: 35,
-  unidad: "lts."
-},
-{
-  identificador: 43,
-  fecha: "2016-06-25 05:38:03",
-  ubicacion: "Local Illia",
-  producto: "Crafter - Porter",
-  tipoHistorial: "Ajuste",
-  anterior: 97,
-  cantidad: 57,
-  posterior: 154,
-  unidad: "lts."
-},
-{
-  identificador: 44,
-  fecha: "2015-11-13 01:20:34",
-  ubicacion: "Local 3",
-  producto: "Blest - Pilsen",
-  tipoHistorial: "Movimiento",
-  anterior: 5,
-  cantidad: 32,
-  posterior: 37,
-  unidad: "lts."
-},
-{
-  identificador: 45,
-  fecha: "2015-12-20 16:37:43",
-  ubicacion: "Local Illia",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Ajuste",
-  anterior: 30,
-  cantidad: 37,
-  posterior: 67,
-  unidad: "lts."
-},
-{
-  identificador: 46,
-  fecha: "2015-12-19 09:19:38",
-  ubicacion: "Local 2",
-  producto: "Crafter - Porter",
-  tipoHistorial: "Ajuste",
-  anterior: 63,
-  cantidad: 14,
-  posterior: 77,
-  unidad: "lts."
-},
-{
-  identificador: 47,
-  fecha: "2015-12-25 18:45:48",
-  ubicacion: "Local 3",
-  producto: "Blest - Pilsen",
-  tipoHistorial: "Venta",
-  anterior: 89,
-  cantidad: 68,
-  posterior: 157,
-  unidad: "lts."
-},
-{
-  identificador: 48,
-  fecha: "2015-10-19 12:10:31",
-  ubicacion: "Local 2",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Venta",
-  anterior: 77,
-  cantidad: 88,
-  posterior: 165,
-  unidad: "lts."
-},
-{
-  identificador: 49,
-  fecha: "2015-12-24 21:32:10",
-  ubicacion: "Local 3",
-  producto: "Lowther - Ambar",
-  tipoHistorial: "Venta",
-  anterior: 16,
-  cantidad: 90,
-  posterior: 106,
-  unidad: "lts."
-},
-{
-  identificador: 50,
-  fecha: "2015-12-13 11:32:34",
-  ubicacion: "Local 2",
-  producto: "Crafter - American IPA",
-  tipoHistorial: "Venta",
-  anterior: 27,
-  cantidad: 79,
-  posterior: 106,
-  unidad: "lts."
-}
-]
+  {
+      identificador: 5,
+      fecha: "2016-05-15 09:00:59",
+      ubicacion: "Local 2",
+      producto: "Blest - Pilsen",
+      tipoHistorial: "Venta",
+      anterior: 99,
+      cantidad: 29,
+      posterior: 128,
+      unidad: "lts."
+  },
+  {
+      identificador: 6,
+      fecha: "2016-05-29 18:28:27",
+      ubicacion: "Local 2",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Venta",
+      anterior: 18,
+      cantidad: 80,
+      posterior: 98,
+      unidad: "lts."
+  },
+  {
+      identificador: 7,
+      fecha: "2016-04-09 16:04:51",
+      ubicacion: "Local 3",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Ajuste",
+      anterior: 75,
+      cantidad: 58,
+      posterior: 133,
+      unidad: "lts."
+  },
+  {
+      identificador: 8,
+      fecha: "2016-05-12 13:18:18",
+      ubicacion: "Local 3",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Movimiento",
+      anterior: 20,
+      cantidad: 87,
+      posterior: 107,
+      unidad: "lts."
+  },
+  {
+      identificador: 9,
+      fecha: "2016-02-16 03:54:39",
+      ubicacion: "Local 3",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Entrada",
+      anterior: 72,
+      cantidad: 17,
+      posterior: 89,
+      unidad: "lts."
+  },
+  {
+      identificador: 10,
+      fecha: "2015-12-04 12:14:42",
+      ubicacion: "Local Illia",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Entrada",
+      anterior: 52,
+      cantidad: 17,
+      posterior: 69,
+      unidad: "lts."
+  },
+  {
+      identificador: 11,
+      fecha: "2016-05-24 12:42:59",
+      ubicacion: "Local 3",
+      producto: "Blest - Pilsen",
+      tipoHistorial: "Movimiento",
+      anterior: 14,
+      cantidad: 90,
+      posterior: 104,
+      unidad: "lts."
+  },
+  {
+      identificador: 12,
+      fecha: "2015-11-20 18:46:46",
+      ubicacion: "Local 3",
+      producto: "Blest - Pilsen",
+      tipoHistorial: "Ajuste",
+      anterior: 23,
+      cantidad: 17,
+      posterior: 40,
+      unidad: "lts."
+  },
+  {
+      identificador: 13,
+      fecha: "2015-11-16 19:56:02",
+      ubicacion: "Local 2",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Entrada",
+      anterior: 35,
+      cantidad: 35,
+      posterior: 70,
+      unidad: "lts."
+  },
+  {
+      identificador: 14,
+      fecha: "2016-03-05 03:59:49",
+      ubicacion: "Local Illia",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Entrada",
+      anterior: 17,
+      cantidad: 18,
+      posterior: 35,
+      unidad: "lts."
+  },
+  {
+      identificador: 15,
+      fecha: "2016-06-06 13:38:41",
+      ubicacion: "Local 2",
+      producto: "Blest - Pilsen",
+      tipoHistorial: "Ajuste",
+      anterior: 21,
+      cantidad: 28,
+      posterior: 49,
+      unidad: "lts."
+  },
+  {
+      identificador: 16,
+      fecha: "2016-01-19 11:12:22",
+      ubicacion: "Local 3",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Venta",
+      anterior: 17,
+      cantidad: 56,
+      posterior: 73,
+      unidad: "lts."
+  },
+  {
+      identificador: 17,
+      fecha: "2015-12-19 14:28:31",
+      ubicacion: "Local 2",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Entrada",
+      anterior: 57,
+      cantidad: 93,
+      posterior: 150,
+      unidad: "lts."
+  },
+  {
+      identificador: 18,
+      fecha: "2016-07-28 09:03:54",
+      ubicacion: "Local Illia",
+      producto: "Blest - Pilsen",
+      tipoHistorial: "Venta",
+      anterior: 7,
+      cantidad: 22,
+      posterior: 29,
+      unidad: "lts."
+  },
+  {
+      identificador: 19,
+      fecha: "2016-07-06 23:32:15",
+      ubicacion: "Local Illia",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Entrada",
+      anterior: 57,
+      cantidad: 27,
+      posterior: 84,
+      unidad: "lts."
+  },
+  {
+      identificador: 20,
+      fecha: "2016-06-22 08:52:57",
+      ubicacion: "Local 2",
+      producto: "Crafter - Porter",
+      tipoHistorial: "Ajuste",
+      anterior: 56,
+      cantidad: 1,
+      posterior: 57,
+      unidad: "lts."
+  },
+  {
+      identificador: 21,
+      fecha: "2016-06-10 03:43:50",
+      ubicacion: "Local 3",
+      producto: "Crafter - Porter",
+      tipoHistorial: "Venta",
+      anterior: 72,
+      cantidad: 68,
+      posterior: 140,
+      unidad: "lts."
+  },
+  {
+      identificador: 22,
+      fecha: "2015-10-04 04:56:57",
+      ubicacion: "Local Illia",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Venta",
+      anterior: 39,
+      cantidad: 5,
+      posterior: 44,
+      unidad: "lts."
+  },
+  {
+      identificador: 23,
+      fecha: "2016-05-01 06:04:17",
+      ubicacion: "Local 2",
+      producto: "Blest - Pilsen",
+      tipoHistorial: "Entrada",
+      anterior: 83,
+      cantidad: 49,
+      posterior: 132,
+      unidad: "lts."
+  },
+  {
+      identificador: 24,
+      fecha: "2016-07-21 23:37:41",
+      ubicacion: "Local 3",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Entrada",
+      anterior: 73,
+      cantidad: 70,
+      posterior: 143,
+      unidad: "lts."
+  },
+  {
+      identificador: 25,
+      fecha: "2015-11-30 22:31:45",
+      ubicacion: "Local 3",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Venta",
+      anterior: 57,
+      cantidad: 96,
+      posterior: 153,
+      unidad: "lts."
+  },
+  {
+      identificador: 26,
+      fecha: "2015-11-11 11:06:41",
+      ubicacion: "Local 3",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Entrada",
+      anterior: 82,
+      cantidad: 6,
+      posterior: 88,
+      unidad: "lts."
+  },
+  {
+      identificador: 27,
+      fecha: "2015-09-23 13:21:41",
+      ubicacion: "Local 2",
+      producto: "Blest - Pilsen",
+      tipoHistorial: "Entrada",
+      anterior: 41,
+      cantidad: 50,
+      posterior: 91,
+      unidad: "lts."
+  },
+  {
+      identificador: 28,
+      fecha: "2015-12-29 01:47:52",
+      ubicacion: "Local 3",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Entrada",
+      anterior: 64,
+      cantidad: 69,
+      posterior: 133,
+      unidad: "lts."
+  },
+  {
+      identificador: 29,
+      fecha: "2016-01-19 13:22:20",
+      ubicacion: "Local 3",
+      producto: "Crafter - Porter",
+      tipoHistorial: "Movimiento",
+      anterior: 39,
+      cantidad: 63,
+      posterior: 102,
+      unidad: "lts."
+  },
+  {
+      identificador: 30,
+      fecha: "2015-09-14 18:06:50",
+      ubicacion: "Local Illia",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Entrada",
+      anterior: 29,
+      cantidad: 6,
+      posterior: 35,
+      unidad: "lts."
+  },
+  {
+      identificador: 31,
+      fecha: "2016-03-13 02:05:45",
+      ubicacion: "Local 3",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Movimiento",
+      anterior: 93,
+      cantidad: 42,
+      posterior: 135,
+      unidad: "lts."
+  },
+  {
+      identificador: 32,
+      fecha: "2016-06-01 03:33:47",
+      ubicacion: "Local 2",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Movimiento",
+      anterior: 56,
+      cantidad: 31,
+      posterior: 87,
+      unidad: "lts."
+  },
+  {
+      identificador: 33,
+      fecha: "2016-02-24 03:28:50",
+      ubicacion: "Local 2",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Venta",
+      anterior: 77,
+      cantidad: 52,
+      posterior: 129,
+      unidad: "lts."
+  },
+  {
+      identificador: 34,
+      fecha: "2016-03-22 23:42:37",
+      ubicacion: "Local 3",
+      producto: "Crafter - Porter",
+      tipoHistorial: "Venta",
+      anterior: 20,
+      cantidad: 96,
+      posterior: 116,
+      unidad: "lts."
+  },
+  {
+      identificador: 35,
+      fecha: "2016-06-19 11:13:07",
+      ubicacion: "Local 2",
+      producto: "Blest - Pilsen",
+      tipoHistorial: "Ajuste",
+      anterior: 95,
+      cantidad: 66,
+      posterior: 161,
+      unidad: "lts."
+  },
+  {
+      identificador: 36,
+      fecha: "2016-02-15 01:38:31",
+      ubicacion: "Local 2",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Movimiento",
+      anterior: 34,
+      cantidad: 88,
+      posterior: 122,
+      unidad: "lts."
+  },
+  {
+      identificador: 37,
+      fecha: "2016-08-10 14:59:08",
+      ubicacion: "Local 2",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Entrada",
+      anterior: 50,
+      cantidad: 77,
+      posterior: 127,
+      unidad: "lts."
+  },
+  {
+      identificador: 38,
+      fecha: "2015-10-01 09:20:41",
+      ubicacion: "Local 3",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Movimiento",
+      anterior: 82,
+      cantidad: 97,
+      posterior: 179,
+      unidad: "lts."
+  },
+  {
+      identificador: 39,
+      fecha: "2016-05-11 20:39:07",
+      ubicacion: "Local Illia",
+      producto: "Blest - Pilsen",
+      tipoHistorial: "Movimiento",
+      anterior: 44,
+      cantidad: 23,
+      posterior: 67,
+      unidad: "lts."
+  },
+  {
+      identificador: 40,
+      fecha: "2016-02-27 00:54:22",
+      ubicacion: "Local 3",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Venta",
+      anterior: 19,
+      cantidad: 41,
+      posterior: 60,
+      unidad: "lts."
+  },
+  {
+      identificador: 41,
+      fecha: "2015-09-05 00:15:34",
+      ubicacion: "Local 2",
+      producto: "Blest - Pilsen",
+      tipoHistorial: "Venta",
+      anterior: 43,
+      cantidad: 62,
+      posterior: 105,
+      unidad: "lts."
+  },
+  {
+      identificador: 42,
+      fecha: "2016-04-17 08:11:41",
+      ubicacion: "Local 2",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Venta",
+      anterior: 1,
+      cantidad: 34,
+      posterior: 35,
+      unidad: "lts."
+  },
+  {
+      identificador: 43,
+      fecha: "2016-06-25 05:38:03",
+      ubicacion: "Local Illia",
+      producto: "Crafter - Porter",
+      tipoHistorial: "Ajuste",
+      anterior: 97,
+      cantidad: 57,
+      posterior: 154,
+      unidad: "lts."
+  },
+  {
+      identificador: 44,
+      fecha: "2015-11-13 01:20:34",
+      ubicacion: "Local 3",
+      producto: "Blest - Pilsen",
+      tipoHistorial: "Movimiento",
+      anterior: 5,
+      cantidad: 32,
+      posterior: 37,
+      unidad: "lts."
+  },
+  {
+      identificador: 45,
+      fecha: "2015-12-20 16:37:43",
+      ubicacion: "Local Illia",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Ajuste",
+      anterior: 30,
+      cantidad: 37,
+      posterior: 67,
+      unidad: "lts."
+  },
+  {
+      identificador: 46,
+      fecha: "2015-12-19 09:19:38",
+      ubicacion: "Local 2",
+      producto: "Crafter - Porter",
+      tipoHistorial: "Ajuste",
+      anterior: 63,
+      cantidad: 14,
+      posterior: 77,
+      unidad: "lts."
+  },
+  {
+      identificador: 47,
+      fecha: "2015-12-25 18:45:48",
+      ubicacion: "Local 3",
+      producto: "Blest - Pilsen",
+      tipoHistorial: "Venta",
+      anterior: 89,
+      cantidad: 68,
+      posterior: 157,
+      unidad: "lts."
+  },
+  {
+      identificador: 48,
+      fecha: "2015-10-19 12:10:31",
+      ubicacion: "Local 2",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Venta",
+      anterior: 77,
+      cantidad: 88,
+      posterior: 165,
+      unidad: "lts."
+  },
+  {
+      identificador: 49,
+      fecha: "2015-12-24 21:32:10",
+      ubicacion: "Local 3",
+      producto: "Lowther - Ambar",
+      tipoHistorial: "Venta",
+      anterior: 16,
+      cantidad: 90,
+      posterior: 106,
+      unidad: "lts."
+  },
+  {
+      identificador: 50,
+      fecha: "2015-12-13 11:32:34",
+      ubicacion: "Local 2",
+      producto: "Crafter - American IPA",
+      tipoHistorial: "Venta",
+      anterior: 27,
+      cantidad: 79,
+      posterior: 106,
+      unidad: "lts."
+  }
+  ]
 
-for(var i = 0; i < $scope.historial.length; i++){
+  for(var i = 0; i < $scope.historial.length; i++){
     $scope.historial[i].fecha=moment($scope.historial[i].fecha).locale('es').format('DD/MMM/YYYY');
 
     switch ($scope.historial[i].tipoHistorial){
@@ -3888,16 +3867,16 @@ $scope.dtOptions = DTOptionsBuilder.newOptions()
 
             {extend: 'print',
             customize: function (win){
-             $(win.document.body).addClass('white-bg');
-             $(win.document.body).css('font-size', '10px');
+               $(win.document.body).addClass('white-bg');
+               $(win.document.body).css('font-size', '10px');
 
-             $(win.document.body).find('table')
-             .addClass('compact')
-             .css('font-size', 'inherit');
-         }, 
-         text: 'Imprimir'
-     }
-     ]);   
+               $(win.document.body).find('table')
+               .addClass('compact')
+               .css('font-size', 'inherit');
+           }, 
+           text: 'Imprimir'
+       }
+       ]);   
 
         /*
         <th>ID</th>
@@ -3919,8 +3898,8 @@ $scope.dtOptions = DTOptionsBuilder.newOptions()
 
 .controller('historialBarraCtrl', ['$scope','$log','$uibModal','$filter','DTOptionsBuilder','DTColumnDefBuilder', function($scope,$log,$uibModal,$filter,DTOptionsBuilder,DTColumnDefBuilder){
 
- $scope.historialBarra =[
- {
+   $scope.historialBarra =[
+   {
     identificador: 1,
     caja: "Barra 1",
     usuario: "Agustin",
@@ -4290,16 +4269,16 @@ $scope.dtOptions = DTOptionsBuilder.newOptions()
 
             {extend: 'print',
             customize: function (win){
-             $(win.document.body).addClass('white-bg');
-             $(win.document.body).css('font-size', '10px');
+               $(win.document.body).addClass('white-bg');
+               $(win.document.body).css('font-size', '10px');
 
-             $(win.document.body).find('table')
-             .addClass('compact')
-             .css('font-size', 'inherit');
-         }, 
-         text: 'Imprimir'
-     }
-     ]);   
+               $(win.document.body).find('table')
+               .addClass('compact')
+               .css('font-size', 'inherit');
+           }, 
+           text: 'Imprimir'
+       }
+       ]);   
 
 
 $scope.dtColumnDefs = [
@@ -4681,16 +4660,16 @@ $scope.dtOptions = DTOptionsBuilder.newOptions()
 
             {extend: 'print',
             customize: function (win){
-             $(win.document.body).addClass('white-bg');
-             $(win.document.body).css('font-size', '10px');
+               $(win.document.body).addClass('white-bg');
+               $(win.document.body).css('font-size', '10px');
 
-             $(win.document.body).find('table')
-             .addClass('compact')
-             .css('font-size', 'inherit');
-         }, 
-         text: 'Imprimir'
-     }
-     ]);   
+               $(win.document.body).find('table')
+               .addClass('compact')
+               .css('font-size', 'inherit');
+           }, 
+           text: 'Imprimir'
+       }
+       ]);   
 
 
 $scope.dtColumnDefs = [
@@ -4700,35 +4679,35 @@ DTColumnDefBuilder.newColumnDef(0)
 
 .controller('canillasCtrl', ['$http','$scope','$log','$uibModal','$filter','SweetAlert', function($http,$scope,$log,$uibModal,$filter,SweetAlert){
 
-   $scope.ubicaciones =[
-        {
-            id:0,
-            nombre:'Local 1'
-        },
-        {
-            id:1,
-            nombre:'Local 2'
-        }
-    ]
+ $scope.ubicaciones =[
+ {
+    id:0,
+    nombre:'Local 1'
+},
+{
+    id:1,
+    nombre:'Local 2'
+}
+]
 
-    $scope.canillas =[];
+$scope.canillas =[];
 
 
-    $scope.getCanillas = function (){
-        $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/canilla').success(function(canillas){    
-            console.log(canillas);
-            $scope.canillas = canillas.data;
-        }).error(function(error){
-            console.log(error);
-        })
-    }
+$scope.getCanillas = function (){
+    $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/canilla').success(function(canillas){    
+        console.log(canillas);
+        $scope.canillas = canillas.data;
+    }).error(function(error){
+        console.log(error);
+    })
+}
 
-    $scope.getCanillas();
+$scope.getCanillas();
 
-    $scope.cambiarProducto = function(idCanilla){
-        var modalInstance = $uibModal.open({
-            templateUrl: 'views/canilla_cambiar_producto.html',
-            controller: canillaCambiarProductoCtrl, 
+$scope.cambiarProducto = function(idCanilla){
+    var modalInstance = $uibModal.open({
+        templateUrl: 'views/canilla_cambiar_producto.html',
+        controller: canillaCambiarProductoCtrl, 
                         //controler en controllers.js, no termino de entender porque no lo puedo armar como el resto y si o si tengo que poner una funcion                        
                         windowClass: "animated fadeIn",
                         scope:$scope,
@@ -4743,11 +4722,11 @@ DTColumnDefBuilder.newColumnDef(0)
             $http.put('http://blackhop-dessin1.rhcloud.com/api/admin/canilla/'+idCanilla,{
                 idInventario:idPS
             }).success(function(){    
-                        $scope.getCanillas(); 
-                    }).error(function(error){
-                        console.log(error);
-                    });
-                });
+                $scope.getCanillas(); 
+            }).error(function(error){
+                console.log(error);
+            });
+        });
 
     }
 }])
@@ -4777,8 +4756,8 @@ DTColumnDefBuilder.newColumnDef(0)
     */
     .controller('loginLista',['$scope','SweetAlert',function($scope,SweetAlert){ 
 
-     $scope.usuarios =[
-     {
+       $scope.usuarios =[
+       {
         id:0,
         nombre:'Miqueas',
         modo:'Caja'

@@ -1893,6 +1893,36 @@ function crearGastoCtrl ($scope,$log,$uibModalInstance,gastos,gastoEdit){
         };
     
 }
+
+function editarGastoCtrl ($scope,$log,$uibModalInstance,gastos,gastoEdit){
+    $scope.gastos=gastos;
+    $scope.gastoEdit=gastoEdit;
+
+
+        $scope.guardar = function (gastoEdit){          
+            
+            var found = jQuery.inArray(gastoEdit, $scope.$parent.gastos);
+
+            //Busco la Fecha con jQuery porque no puedo leer el ng-model
+            var gastoFecha=angular.element(document.querySelector('#gastoFecha')).val();
+
+            //La formateo para pasarla a Laravel
+            gastoFecha=moment(gastoFecha).format("YYYY-MM-DD");
+
+            gastoEdit.fecha = gastoFecha;
+
+            $uibModalInstance.close(gastoEdit);
+        }
+        
+         $scope.ok = function () {
+            $uibModalInstance.close();
+        };
+
+        $scope.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
+    
+}
 function crearGastoCajaCtrl ($http,$scope,$log,$uibModalInstance,gastoNuevo,SweetAlert){
     $scope.gastoNuevo=gastoNuevo;
 

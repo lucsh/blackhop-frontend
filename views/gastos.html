@@ -36,20 +36,20 @@
                                     <th>Fecha</th>
                                     <th>Monto</th>
                                     <th>Descripcion</th>
-                                    <th>Usuario</th>
+                                    <th>Sesion</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr class="cursor-pointer" ng-repeat="gasto in gastos"  ng-init="isHover='tresde-right-hidden'" ng-mouseover="isHover='tresde-right-left';" ng-mouseleave="isHover='tresde-right-hidden'">
-                                    <td>{{ gasto.id}}</td>                            
+                                    <td>{{ gasto.identificador}}</td>                            
                                     <td>{{ gasto.fecha}}</td>                            
                                     <td>{{ gasto.monto | currency:"$ "}}</td>
                                     <td>{{ gasto.descripcion}}</td>
-                                    <td><span ng-if="gasto.sesion!=1"><a href="">{{gasto.usuario}}</a></span><span ng-if="gasto.sesion==1" class="text-warning">Admin</span>
+                                    <td><a href="">{{gasto.sesion}}</a>
                                         <div class="tresde-right-container" > 
                                             <div class="{{isHover}}">
                                                 <button class="btn btn-success btn-xs" type="button" ng-click="modal.editar(gasto)" tooltip-placement="top" uib-tooltip="Editar"><i class="fa fa-pencil"></i></button>
-                                                <button class="btn btn-danger btn-xs" type="button" ng-click="onDelete(gasto.id)" tooltip-placement="top" uib-tooltip="Eliminar"><i class="fa fa-times"></i></button>
+                                                <button class="btn btn-danger btn-xs" type="button" ng-click="onDelete(gasto.identificador)" tooltip-placement="top" uib-tooltip="Eliminar"><i class="fa fa-times"></i></button>
                                             </div>
                                         </div>                                     
                                     </td>
