@@ -541,7 +541,7 @@ vm.login2 = function() {
                         return $scope.clientes;
                     }
                 }
-            }).closed.then(function(){
+            }).closed.then(function(datosCliente){
                 if(flag){
                   $scope.modal.terminarVenta();
               }
@@ -763,12 +763,28 @@ vm.login2 = function() {
                 templateUrl: 'views/modal_crear_cliente.html',
                 controller: modalControler,
                 windowClass: "animated fadeIn",
+                scope:$scope,
                 resolve: {
                     clientes: function () {
                         return $scope.clientes;
                     }
                 }
+            });/*
+            modalInstance.result.then(function (datosCliente) {
+                console.log(datosCliente);
+                var nuevoCliente = {};
+                nuevoCliente.id = datosCliente.id;
+                nuevoCliente.nombre = datosCliente.nombre;
+                nuevoCliente.apellido = datosCliente.apellido;
+                nuevoCliente.telefono = datosCliente.telefono;
+                nuevoCliente.direccion = datosCliente.direccion;
+                nuevoCliente.celular = datosCliente.celular;
+                nuevoCliente.id = 'Inactivo'
+                nuevoCliente.class= "badge-primary";
+                $scope.clientes.push(nuevoCliente);
             });
+            */
+
         }
     }
 }])
