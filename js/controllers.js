@@ -1869,37 +1869,19 @@ function crearGastoCtrl ($scope,$log,$uibModalInstance,gastos,gastoEdit){
     $scope.gastoEdit=gastoEdit;
 
 
-        $scope.guardar = function (gastoEdit){
-            
-
+        $scope.guardar = function (gastoEdit){          
             
             var found = jQuery.inArray(gastoEdit, $scope.$parent.gastos);
 
             //Busco la Fecha con jQuery porque no puedo leer el ng-model
             var gastoFecha=angular.element(document.querySelector('#gastoFecha')).val();
+
             //La formateo para pasarla a Laravel
             gastoFecha=moment(gastoFecha).format("YYYY-MM-DD");
 
+            gastoEdit.fecha = gastoFecha;
 
-            if (found == -1) {
-                gastoEdit.fecha= gastoFecha;
-                gastoEdit.id=$scope.gastos.length+1;
-                gastoEdit.sesion = 1; //desde admin
-                
-                // lo guardo y despues lo muestro humanizado
-                $scope.$parent.gastos.push(gastoEdit); 
-                console.log(gastoFecha)
-                $scope.gastoEdit.fecha=moment(gastoFecha).locale('es').format('DD/MMM/YYYY'); 
-                
-            } else {
-                $scope.$parent.gastos.splice(found, 1);
-                
-                // lo guardo y despues lo muestro humanizado
-                $scope.$parent.gastos.push(gastoEdit);                
-                $scope.gastoEdit.fecha=moment(gastoFecha).locale('es').format('DD/MMM/YYYY'); 
-            }
-
-            $uibModalInstance.dismiss('cancel');
+            $uibModalInstance.close(gastoEdit);
         }
         
          $scope.ok = function () {
@@ -1911,7 +1893,7 @@ function crearGastoCtrl ($scope,$log,$uibModalInstance,gastos,gastoEdit){
         };
     
 }
-function crearGastoCajaCtrl ($scope,$log,$uibModalInstance,gastoNuevo,SweetAlert){
+function crearGastoCajaCtrl ($http,$scope,$log,$uibModalInstance,gastoNuevo,SweetAlert){
     $scope.gastoNuevo=gastoNuevo;
 
         $scope.guardar = function (gastoNuevo){
@@ -1932,10 +1914,18 @@ function crearGastoCajaCtrl ($scope,$log,$uibModalInstance,gastoNuevo,SweetAlert
                 if (isConfirm) {
 
                     console.log("Guardo Gasto");
-                    console.log(gastoNuevo);                    
+                    console.log(gastoNuevo);
+
+                    $http.post('http://blackhop-dessin1.rhcloud.com/api/pos/caja/gasto',{
+                        descripcion:$scope.gastoNuevo.descripcion,
+                        monto:$scope.gastoNuevo.monto
+                     }).success(function(){    
+                        SweetAlert.swal("¡Agregado!", "El gasto fue agregado", "success");
+                    }).error(function(error){
+                        console.log(error);
+                    });
 
                     $uibModalInstance.close();
-                    SweetAlert.swal("¡Agregado!", "El gasto fue agregado", "success");
                     
                 } else {
                     SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");

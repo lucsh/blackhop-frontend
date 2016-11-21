@@ -31,7 +31,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="cliente in clientes" ng-click='onCopy(cliente.id)'>
+                                <tr class="cursor-pointer" ng-repeat="cliente in clientes" ng-click='getClienteDerecha(cliente.id)'>
                                     <td>{{ cliente.id}}</td>                            
                                     <td>{{ cliente.nombre }} {{ cliente.apellido }}</td>                            
                                     <td><i class="fa fa-home"></i> {{ cliente.direccion }}</td>
@@ -60,9 +60,10 @@
                                             <p><strong><i class="fa fa-mobile"></i> Celular:</strong> <span editable-text="clienteDer.celular">{{ clienteDer.celular || "empty" }}</span></p>
                                             <p><strong><i class="fa fa-envelope"></i> email:</strong> <span editable-text="clienteDer.email">{{ clienteDer.email || "empty" }}</span></p>
                                             <p><strong><i class="fa fa-home"></i> Direccion:</strong> <span editable-text="clienteDer.direccion">{{ clienteDer.direccion || "empty" }}</span></p>
-                                            <p><strong><i class="fa fa-birthday-cake"></i> Cumpleaños:</strong> <span editable-text="clienteDer.fNac">{{ clienteDer.fNac || "empty" }}</span></p>                          <p><strong><i class="fa fa-book"></i> DNI:</strong> <span editable-text="clienteDer.dni">{{ clienteDer.dni || "empty" }}</span></p>                                    
+                                            <p><strong><i class="fa fa-birthday-cake"></i> Cumpleaños:</strong> <span editable-text="clienteDer.fechaNacimiento">{{ clienteDer.fechaNacimiento || "empty" }}</span></p>                          <p><strong><i class="fa fa-book"></i> DNI:</strong> <span editable-text="clienteDer.dni">{{ clienteDer.dni || "empty" }}</span></p>                                    
                                         </div>
                                     </div>
+                                    <button class="btn btn-primary btn-sm" type="button" ng-click='onUpdate(clienteDer.id)'><i class="fa fa-floppy-o"></i> Guardar</button>
                                     <div class="client-detail">
                                         <div >
 

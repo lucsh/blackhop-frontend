@@ -264,7 +264,7 @@ vm.login2 = function() {
                 } 
             };
         }).error(function(error){
-            //console.log(error);
+            console.log(error);
         });        
     }
     
@@ -306,11 +306,7 @@ vm.login2 = function() {
                 $state
 
             });
-        }
-        
-    
-
-
+        }     
 
         $scope.modal={
 
@@ -385,7 +381,7 @@ vm.login2 = function() {
                 }
             }
 
-        }//modal
+        }
     }
 
     ])     
@@ -577,187 +573,37 @@ vm.login2 = function() {
 //--------    END NUEVO POS CAJA CTRL--------
 
 
-.controller('clientesCtrl', ['$scope','$log','$uibModal','$filter','DTOptionsBuilder','DTColumnDefBuilder','SweetAlert', function($scope,$log,$uibModal,$filter,DTOptionsBuilder,DTColumnDefBuilder,SweetAlert){
+.controller('clientesCtrl', ['$http','$scope','$log','$uibModal','$filter','DTOptionsBuilder','DTColumnDefBuilder','SweetAlert', function($http,$scope,$log,$uibModal,$filter,DTOptionsBuilder,DTColumnDefBuilder,SweetAlert){
 
- $scope.clientes =[
-            /*
-              estado =
-              Activo : si compro algo en el utlimo mes
-              Con Alquiler: Si tiene algo alquilado
-              Deudor : Si tiene un alquiler sin devolver
-              '' : Si ninguno de los anteriores
-              */
 
-              {
-                identificador:1,
-                nombre:"Luciano",
-                apellido:"Marquez",
-                dni:"32523681",
-                telefono:4412007,
-                celular:2996041216,
-                email:"correo@direccion.com.ar",
-                fNac:new Date("11/07/1982"),
-                direccion:"San Martin 546",
-                GIS:null,
-                estado:'Con Alquiler'
+    $scope.clientes =[];
 
-            },
-            {
-                identificador:2,
-                nombre:"Antonio",
-                apellido:"Rodriguez",
-                dni:"23598745",
-                telefono:4460286,
-                celular:2995433634,
-                email:"correo@direccion.com.ar",
-                fNac:new Date("10/05/1982"),
-                direccion:"Rosa de los Vientos 12",
-                GIS:null,
-                estado:'Activo'
+    $scope.getClienteDerecha = function(id){
 
-            },
-            {
-                identificador:3,
-                nombre:"Fiorella",
-                apellido:"Salas",
-                dni:"12369854",
-                telefono:4432504,
-                celular:2995691627,
-                email:"correo@direccion.com.ar",
-                fNac:new Date("10/06/1983"),
-                direccion:"Garganta de los Montes 455",
-                GIS:null,
-                estado:''
+        $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/cliente/'+id).success(function(clienteDer){    
+            //console.log(clienteDer);
+            $scope.clienteDer = clienteDer.data;
+            $scope.clienteDer.fechaNacimiento=moment($scope.clienteDer.fechaNacimiento).locale('es').format('DD/MMM/YYYY');
 
-            },
-            {
-                identificador:4,
-                nombre:"Mafalda",
-                apellido:"Barela",
-                dni:"35698756",
-                telefono:4416250,
-                celular:2996888259,
-                email:"correo@direccion.com.ar",
-                fNac:new Date("02/09/1983"),
-                direccion:"Constitución 26",
-                GIS:null,
-                estado:'Activo'
+        }).error(function(error){
+            console.log(error);
+        });
 
-            },
-            {
-                identificador:5,
-                nombre:"Liza",
-                apellido:"Ortega",
-                dni:"35478123",
-                telefono:4412007,
-                celular:2996440850,
-                email:"correo@direccion.com.ar",
-                fNac:new Date("04/05/1985"),
-                direccion:"Rivadavia 568",
-                GIS:null,
-                estado:''
+    }
 
-            },
-            {
-                identificador:6,
-                nombre:"Juan",
-                apellido:"Colón",
-                dni:"18721770",
-                telefono:4401698,
-                celular:2995664192,
-                email:"correo@direccion.com.ar",
-                fNac:new Date("10/05/1995"),
-                direccion:"Ant Argentina 382",
-                GIS:null,
-                estado:''
+    $scope.getClientes = function (){
 
-            },
-            {
-                identificador:7,
-                nombre:"Ruben",
-                apellido:"Pacheco",
-                dni:"28278982",
-                telefono:4420691,
-                celular:2996646540,
-                email:"correo@direccion.com.ar",
-                fNac:new Date("06/04/1995"),
-                direccion:"Juan B. Justo 452",
-                GIS:null,
-                estado:'Activo'
+        $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/cliente').success(function(cliente){    
+            //console.log(cliente);
+            $scope.clientes = cliente.data;
+            var idClienteDerecha= $scope.clientes[0].id;
 
-            },
-            {
-                identificador:8,
-                nombre:"Simon",
-                apellido:"Garcia",
-                dni:"31926283",
-                telefono:4401919,
-                celular:2995025237,
-                email:"correo@direccion.com.ar",
-                fNac:new Date("08/06/1994"),
-                direccion:"Rio Desaguadero 672",
-                GIS:null,
-                estado:''
-
-            },
-            {
-                identificador:9,
-                nombre:"Roberto",
-                apellido:"Estrada",
-                dni:"28081048",
-                telefono:4467043,
-                celular:2996950755,
-                email:"correo@direccion.com.ar",
-                fNac:new Date("09/05/1990"),
-                direccion:"Independencia 823",
-                GIS:null,
-                estado:'Deudor'
-
-            },
-            {
-                identificador:10,
-                nombre:"Lionel",
-                apellido:"Villar",
-                dni:"35933306",
-                telefono:4467043,
-                celular:2995184011,
-                email:"correo@direccion.com.ar",
-                fNac:new Date("11/04/1986"),
-                direccion:"Brown 933",
-                GIS:null,
-                estado:'Activo'
-
-            },
-            {
-                identificador:11,
-                nombre:"Esteban",
-                apellido:"Varella",
-                dni:"30993900",
-                telefono:4406768,
-                celular:2996950755,
-                email:"correo@direccion.com.ar",
-                fNac:new Date("04/01/1990"),
-                direccion:"Jujuy 856",
-                GIS:null,
-                estado:'Activo'
-
-            },
-            {
-                identificador:12,
-                nombre:"Nicolas",
-                apellido:"Franccesco",
-                dni:"31058801",
-                telefono:4434850,
-                celular:2995830889,
-                email:"correo@direccion.com.ar",
-                fNac:new Date("06/07/1989"),
-                direccion:"Alderete 596",
-                GIS:null,
-                estado:'Activo'
-            }]
+            if (!$scope.clienteDer){
+                $scope.getClienteDerecha(idClienteDerecha);
+            }
 
             for(var i = 0; i < $scope.clientes.length; i++){
-                $scope.clientes[i].fNac=moment($scope.clientes[i].fNac).locale('es').format('DD/MMM/YYYY')
+            
                 switch ($scope.clientes[i].estado){
                     case 'Activo':
                     $scope.clientes[i].class= "badge-primary";
@@ -769,50 +615,103 @@ vm.login2 = function() {
                     $scope.clientes[i].class= "badge-warning";
                     break;
                 }
-            };
 
-            var clienteDer= $filter("filter")($scope.clientes, {identificador:1});
-            $scope.clienteDer = angular.copy(clienteDer[0]);
+            }
 
+        }).error(function(error){
+            console.log(error);
+        });        
+    }
 
-            $scope.onCopy = function(ident){
-                $scope.clienteDer='';
-                var clienteDer= $filter("filter")($scope.clientes, {identificador:ident});
-                /*Dat FIX*/
-                $scope.clienteDer = angular.copy(clienteDer[0]);
-            };
+    $scope.getClientes();
 
-            $scope.onDelete = function(ident){ 
+    $scope.onDelete = function(id){ 
 
-                SweetAlert.swal({
-                    title: "¿Estas Seguro?",
-                    text: "¡No vas a poder recuperar los datos!",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Si, eliminalo!",
-                    cancelButtonText: "No, cancelar!",
-                    closeOnConfirm: false,
-                    closeOnCancel: false },
-                    function (isConfirm) {
-                        if (isConfirm) {
-                            for(var i = 0; i < $scope.clientes.length; i++){
-                                if ($scope.clientes[i].id == ident){                    
-                                    $scope.clientes.splice(i, 1);
-                                    break;
-                                }
-                            }
-                            SweetAlert.swal("¡Eliminado!", "El cliente ha sido eliminado", "success");
-                            $scope.clienteDer='';
-                            $scope.clienteDer = angular.copy($scope.clientes[0]);
-                        } else {
-                            SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
-                        }
+        SweetAlert.swal({
+            title: "¿Estas Seguro?",
+            text: "¡No vas a poder recuperar los datos!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Si, eliminalo!",
+            cancelButtonText: "No, cancelar!",
+            closeOnConfirm: false,
+            closeOnCancel: false },
+            function (isConfirm) {
+                if (isConfirm) {
+
+                    $http.delete('http://blackhop-dessin1.rhcloud.com/api/admin/cliente/'+id).success(function(response){    
+
+                      
+                        SweetAlert.swal("¡Eliminado!", "El cliente ha sido eliminado", "success");
+                        $scope.getClientes();
+                        var idClienteDerecha= $scope.clientes[0].id;
+                        $scope.getClienteDerecha(idClienteDerecha);
+
+                    }).error(function(error){
+                        console.log(error);
+                        SweetAlert.swal("¡Error!", "El cliente no puede ser eliminado", "error");
                     });
-            };
+
+                } else {
+                    SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
+                }
+            });
+    };
+
+    $scope.onUpdate= function(id){
+
+        //moment('31.10.2013', 'dd.mm.yyyy').format('YYYY/MM/DD')  >> "2013/11/06"
+
+        /*
+        dd/mm/yyyy
+        dd/mm/yy
+        dd.mm.yyyy
+        dd.mm.yy
+
+        */
+
+        formatosFecha=[
+            "dd/mm/yyyy",
+            "dd/mm/yy",
+            "dd.mm.yyyy",
+            "dd.mm.yy"
+        ]
+
+        var i = 0;
+        console.log($scope.clienteDer.fechaNacimiento);//MIERDA PUTA
+        while ($scope.clienteDer.fechaNacimiento=="Invalid date" && i>formatosFecha.lenght){
+
+            $scope.clienteDer.fechaNacimiento=moment($scope.clienteDer.fechaNacimiento, formatosFecha[i]).format("YYYY-MM-DD");
+            console.log($scope.clienteDer.fechaNacimiento);
+
+        }      
+
+        //console.log($scope.clienteDer.fechaNacimiento)
+
+        $http.put('http://blackhop-dessin1.rhcloud.com/api/admin/cliente/'+id,{
+                telefono:$scope.clienteDer.telefono,
+                nombre:$scope.clienteDer.nombre,
+                apellido:$scope.clienteDer.apellido,
+                celular:$scope.clienteDer.celular,
+                email:$scope.clienteDer.email,
+                direccion:$scope.clienteDer.direccion,
+                fechaNacimiento:$scope.clienteDer.fechaNacimiento,
+                dni:$scope.clienteDer.dni
+            }).success(function(){
+                $scope.getClientes();    
+                $scope.getClienteDerecha(id);
+
+            }).error(function(error){
+                console.log(error);
+            });
+
+    }
 
             $scope.dtOptions = DTOptionsBuilder.newOptions()
+
             .withDOM('<"html5buttons"B>lTfgitp')
+
             .withButtons([
             /*{extend: 'copy', text: 'Copiar'},
             {extend: 'csv'},*/
@@ -1880,15 +1779,15 @@ vm.login2 = function() {
 
 .controller('productosCtrl', ['$scope','$log','$uibModal','$filter','DTOptionsBuilder','DTColumnDefBuilder','SweetAlert', function($scope,$log,$uibModal,$filter,DTOptionsBuilder,DTColumnDefBuilder,SweetAlert){
 
- $scope.productos =[
- {
-    identificador:1,
-    proveedor:"Crafter",
-    marca:"Crafter",
-    nombre:"American IPA",
-    valor:75.00,
-    costo:45.00,
-    descripcion:"Una pale ale lupulada, moderadamente fuerte, con características consistentes con el uso de maltas, lúpulos y levadura inglesas.",                    
+             $scope.productos =[
+             {
+                identificador:1,
+                proveedor:"Crafter",
+                marca:"Crafter",
+                nombre:"American IPA",
+                valor:75.00,
+                costo:45.00,
+                descripcion:"Una pale ale lupulada, moderadamente fuerte, con características consistentes con el uso de maltas, lúpulos y levadura inglesas.",                    
                 stock:100,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
                 categoria:"Cervezas por Litro",//tipo
                 unidad:'lts.',
@@ -3225,7 +3124,7 @@ vm.login2 = function() {
         }
     }])
 
-.controller('gastosCtrl', ['$scope','$log','$uibModal','$filter','DTOptionsBuilder','DTColumnDefBuilder','SweetAlert', function($scope,$log,$uibModal,$filter,DTOptionsBuilder,DTColumnDefBuilder,SweetAlert){
+.controller('gastosCtrl', ['$http','$scope','$log','$uibModal','$filter','DTOptionsBuilder','DTColumnDefBuilder','SweetAlert', function($http,$scope,$log,$uibModal,$filter,DTOptionsBuilder,DTColumnDefBuilder,SweetAlert){
 
  $scope.gastos =[
  {
@@ -3356,6 +3255,30 @@ $scope.modal={
                         }
                     }
                 });
+
+        modalInstance.result.then(function (gasto) {
+
+            $http.post('http://blackhop-dessin1.rhcloud.com/api/admin/gasto',{
+                        descripcion:gasto.descripcion,
+                        monto:gasto.monto,
+                        fecha:gasto.fecha
+                     }).success(function(){    
+                        SweetAlert.swal("¡Agregado!", "El gasto fue agregado", "success");
+                    }).error(function(error){
+                        console.log(error);
+            });
+
+/*
+            $http.put('http://blackhop-dessin1.rhcloud.com/api/admin/canilla/'+idCanilla,{
+                idInventario:idPS
+            }).success(function(){    
+                        $scope.getCanillas(); 
+                    }).error(function(error){
+                        console.log(error);
+                    });
+*/
+        });
+                
     },
 
     editar(gasto){       
@@ -4815,7 +4738,7 @@ DTColumnDefBuilder.newColumnDef(0)
                             }
                         }
                     });
-        modalInstance.result.then(function (idPS) {
+        modalInstance.result.then(function (idPS) { //callback modal
 
             $http.put('http://blackhop-dessin1.rhcloud.com/api/admin/canilla/'+idCanilla,{
                 idInventario:idPS
