@@ -64,33 +64,30 @@
                                         </div>
                                     </div>
                                     <button class="btn btn-primary btn-sm" type="button" ng-click='onUpdate(clienteDer.id)'><i class="fa fa-floppy-o"></i> Guardar</button>
+                                    </br>
+                                    </br>
                                     <div class="client-detail">
                                         <div >
-
                                             <strong>Ultima Actividad</strong>
-
-                                            <ul class="list-group clear-list">
-                                                <li class="list-group-item fist-item">
-                                                    <span class="pull-right"> 30.05.2016 </span>
-                                                    Crafter - IPA 2 l.
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <span class="pull-right"> 30.05.2016 </span>
-                                                    Crafter - Porter 2 l.
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <span class="pull-right"> 22.05.2016 </span>
-                                                    Nuevo Origen - Knock Out 2l.
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <span class="pull-right"> 14.05.2016 </span>
-                                                    Crafter IPA - 2 l.
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <span class="pull-right"> 14.05.2016 </span>
-                                                    Contacto Creado
-                                                </li>
-                                            </ul>
+                                            <div ng-if="actividadDer.length > 0">
+                                                <ul class="list-group clear-list" ng-repeat='act in actividadDer'>
+                                                    <li class="list-group-item fist-item">
+                                                        <span class="pull-right"> {{act.fecha}} </span>
+                                                        {{act.producto}}
+                                                    </li>
+                                                   
+                                                </ul>
+                                            </div>
+                                            <div ng-if="actividadDer.length == 0">
+                                                <ul class="list-group clear-list">
+                                                    <li class="list-group-item fist-item">
+                                                        <span class="pull-right"> </span>
+                                                        Sin Actividad
+                                                    </li>
+                                                   
+                                                </ul>
+                                            </div>
+                                                
                                             <hr/>
                                         </div>
                                     </div>

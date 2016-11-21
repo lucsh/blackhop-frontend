@@ -577,6 +577,7 @@ vm.login2 = function() {
 
 
     $scope.clientes =[];
+    $scope.actividadDer = [];
 
     $scope.getClienteDerecha = function(id){
 
@@ -585,9 +586,21 @@ vm.login2 = function() {
             $scope.clienteDer = clienteDer.data;
             $scope.clienteDer.fechaNacimiento=moment($scope.clienteDer.fechaNacimiento).locale('es').format('DD/MMM/YYYY');
 
+            $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/clienteactividad/'+id).success(function(actividad){    
+                
+                $scope.actividadDer = actividad.data;
+                $scope.actividadDer.forEach(function(acti){
+                    acti.fecha=moment(acti.fecha).locale('es').format('DD/MMM/YYYY');
+                });
+
+            }).error(function(error){
+                console.log(error);
+            });
+
         }).error(function(error){
             console.log(error);
         });
+
 
     }
 
@@ -644,7 +657,11 @@ vm.login2 = function() {
 
 
                         SweetAlert.swal("¡Eliminado!", "El cliente ha sido eliminado", "success");
-                        $scope.getClientes();
+                        $scope.clientes.forEach(function(cliente,index,arreglo){
+                            if(cliente.id == id){
+                                arreglo.splice(index,1);
+                            }
+                        });
                         var idClienteDerecha= $scope.clientes[0].id;
                         $scope.getClienteDerecha(idClienteDerecha);
 
@@ -661,34 +678,31 @@ vm.login2 = function() {
 
     $scope.onUpdate= function(id){
 
-        //moment('31.10.2013', 'dd.mm.yyyy').format('YYYY/MM/DD')  >> "2013/11/06"
+        //BARRAS Y PUNTOS SON IGUALES PARA MOMENT!!!!
+        var fechaFinal = null;
+        if($scope.clienteDer.fechaNacimiento.length == 10){
+            //DD.MM.YYYY
+            //27.09.1992
+            fechaFinal=moment($scope.clienteDer.fechaNacimiento, 'DD.MM.YYYY').format("YYYY-MM-DD");
+        }else if($scope.clienteDer.fechaNacimiento.length == 11){
+            //DD.MMM.YYYY
+            //27.Sep.1992
+            fechaFinal=moment($scope.clienteDer.fechaNacimiento, 'DD.MMM.YYYY').format("YYYY-MM-DD");
+        }else if($scope.clienteDer.fechaNacimiento.length == 9){
+            //DD.MMM.YY
+            //27.Sep.92
+            fechaFinal=moment($scope.clienteDer.fechaNacimiento, 'DD.MMM.YY').format("YYYY-MM-DD");
+        }else if($scope.clienteDer.fechaNacimiento.length == 8){
+            //DD.MM.YY
+            //27.09.92
+            fechaFinal=moment($scope.clienteDer.fechaNacimiento, 'DD.MM.YY').format("YYYY-MM-DD");
+        }else{
+            //Fecha Invalida, la dejo como estaba
+            fechaFinal = '';
+        }
 
-        /*
-        dd/mm/yyyy
-        dd/mm/yy
-        dd.mm.yyyy
-        dd.mm.yy
-
-        */
-
-        formatosFecha=[
-        "dd/mm/yyyy",
-        "dd/mm/yy",
-        "dd.mm.yyyy",
-        "dd.mm.yy"
-        ]
-
-        var i = 0;
-        console.log($scope.clienteDer.fechaNacimiento);//MIERDA PUTA
-        while ($scope.clienteDer.fechaNacimiento=="Invalid date" && i>formatosFecha.lenght){
-
-            $scope.clienteDer.fechaNacimiento=moment($scope.clienteDer.fechaNacimiento, formatosFecha[i]).format("YYYY-MM-DD");
-            console.log($scope.clienteDer.fechaNacimiento);
-
-        }      
-
-        //console.log($scope.clienteDer.fechaNacimiento)
-
+        $scope.clienteDer.fechaNacimiento = fechaFinal;
+        
         $http.put('http://blackhop-dessin1.rhcloud.com/api/admin/cliente/'+id,{
             telefono:$scope.clienteDer.telefono,
             nombre:$scope.clienteDer.nombre,
@@ -699,12 +713,17 @@ vm.login2 = function() {
             fechaNacimiento:$scope.clienteDer.fechaNacimiento,
             dni:$scope.clienteDer.dni
         }).success(function(){
-            $scope.getClientes();    
-            $scope.getClienteDerecha(id);
+            /////////////////////////////
+            // NO ESTA VOLVIENDO A TRAER TODO PARA NO COLGAR
+            /////////////////////////////
+            //$scope.getClientes();    
+            //$scope.getClienteDerecha(id);
+            $scope.clienteDer.fechaNacimiento=moment($scope.clienteDer.fechaNacimiento).locale('es').format('DD/MMM/YYYY');
 
         }).error(function(error){
             console.log(error);
         });
+        
 
     }
 
