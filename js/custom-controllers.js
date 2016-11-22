@@ -2078,327 +2078,54 @@ vm.login2 = function() {
         }
     }])
 
-.controller('productosInventarioCtrl', ['$scope','$log','$uibModal','$filter','DTOptionsBuilder','DTColumnDefBuilder', function($scope,$log,$uibModal,$filter,DTOptionsBuilder,DTColumnDefBuilder){
+.controller('productosInventarioCtrl', ['$http','$scope','$log','$uibModal','$filter','DTOptionsBuilder','DTColumnDefBuilder', function($http,$scope,$log,$uibModal,$filter,DTOptionsBuilder,DTColumnDefBuilder){
 
-   $scope.productosInventario =[
-   {
-    identificador:1,
-    proveedor:"Crafter",
-    marca:"Crafter",
-    nombre:"American IPA",
-    ubicacion: 'Local Illia',
-    stock:98,
-                categoria:"Cervezas por Litro",//tipo
-                unidad:'lts.',
-                color:"#E8692E"
-            },
-            {
-                identificador:2,
-                proveedor:"Blest",
-                marca:"Blest",
-                nombre:"Pilsen",
-                ubicacion: 'Local Illia',
-                stock:52,
-                categoria:"Cervezas por Litro",//tipo
-                unidad:'lts.',
-                color:"#F6AC3F"
-            },
-            {
-                identificador:3,
-                proveedor:"Lowther",
-                marca:"Lowther",
-                nombre:"Ambar",
-                ubicacion: 'Local Illia',
-                stock:98,
-                categoria:"Cervezas por Litro",//tipo
-                unidad:'lts.',
-                color:"#E08D3B"
-            },
-            {
-                identificador:4,
-                proveedor:"Nuevo Origen",
-                marca:"Nuevo Origen",
-                nombre:"Firenze",
-                ubicacion: 'Local Illia',
-                stock:35,
-                categoria:"Cervezas por Litro",//tipo
-                unidad:'lts.',
-                color:"#E08D3B"
-            },
-            {
-                identificador:5,
-                proveedor:"Crafter",
-                marca:"Crafter",
-                nombre:"Honey",
-                ubicacion: 'Local Illia',
-                stock:98,
-                categoria:"Cervezas por Litro",//tipo
-                unidad:'lts.',
-                color:"#E8692E"
-            },
-            {
-                identificador:6,
-                proveedor:"Crafter",
-                marca:"Crafter",
-                nombre:"American IPA",
-                ubicacion: 'Local 3',
-                stock:97,
-                categoria:"Cervezas por Litro",//tipo
-                unidad:'lts.',
-                color:"#E8692E"
-            },
-            {
-                identificador:7,
-                proveedor:"Crafter",
-                marca:"Crafter",
-                nombre:"American IPA",
-                ubicacion: 'Local 2',
-                stock:150,
-                categoria:"Cervezas por Litro",//tipo
-                unidad:'lts.',
-                color:"#E8692E"
-            },
-            {
-                identificador:8,
-                proveedor:"Nuevo Origen",
-                marca:"Nuevo Origen",
-                nombre:"Little Wing",
-                ubicacion: 'Local Illia',
-                stock:125,
-                categoria:"Cervezas por Litro",//tipo
-                unidad:'lts.',
-                color:"#E08D3B"
-            },
-            {
-                identificador:9,
-                proveedor:"Nuevo Origen",
-                marca:"Nuevo Origen",
-                nombre:"Dorada Pampeana",
-                ubicacion: 'Local Illia',
-                stock:156,
-                categoria:"Cervezas por Litro",//tipo
-                unidad:'lts.',
-                color:"#E8692E"
-            },
-            {
-                identificador:10,
-                proveedor:"Lowther",
-                marca:"Lowther",
-                nombre:"Brown Ale",
-                ubicacion: 'Local Illia',
-                stock:198,
-                categoria:"Cervezas por Litro",//tipo
-                unidad:'lts.',
-                color:"#E8692E"
-            },
-            {
-                identificador:11,
-                proveedor:"Crafter",
-                marca:"Crafter",
-                nombre:"Scottish",
-                ubicacion: 'Local Illia',
-                stock:178,
-                categoria:"Cervezas por Litro",//tipo 
-                unidad:'lts.',
-                color:"#82171A"
-            },
-            {
-                identificador:12,
-                proveedor:"Crafter",
-                marca:"Crafter",
-                nombre:"Hazenut",
-                ubicacion: 'Local Illia',
-                stock:95,
-                categoria:"Cervezas por Litro",//tipo 
-                unidad:'lts.',
-                color:"#E8692E"
-            },
-            {
-                identificador:13,
-                proveedor:"Kalevala",
-                marca:"Kalevala",
-                nombre:"Irish Red Ale",
-                ubicacion: 'Local Illia',
-                stock:147,
-                categoria:"Cervezas por Litro",//tipo 
-                unidad:'lts.',
-                color:"#E8692E"
-            },
-            {
-                identificador:14,
-                proveedor:"Lowther",
-                marca:"Lowther",
-                nombre:"IPA",
-                ubicacion: 'Local Illia',
-                stock:169,
-                categoria:"Cervezas por Litro",//tipo 
-                unidad:'lts.',
-                color:"#E08D3B"
-            },
-            {
-                identificador:15,
-                proveedor:"Blest",
-                marca:"Blest",
-                nombre:"Scotch",
-                ubicacion: 'Local Illia',
-                stock:86,
-                categoria:"Cervezas por Litro",//tipo 
-                unidad:'lts.',
-                color:"#E8692E"
-            },
-            {
-                identificador:16,
-                proveedor:"Distribuidor de bottellas",
-                marca:"Bottles",
-                nombre:"Growler",
-                descripcion:"Modelo Clasico",                    
-                stock:356,
-                ubicacion: 'Local Illia',
-                categoria:"Envases",//tipo 
-                unidad:'un.'
-            },
-            {
-                identificador:17,
-                proveedor:"Distribuidor de bottellas",
-                marca:"Bottles",
-                nombre:"Growler Led Zeppelin",
-                descripcion:"Modelo Led Zeppelin",                    
-                stock:268,
-                ubicacion: 'Local Illia',
-                categoria:"Envases",//tipo  
-                unidad:'un.'
-            },
-            {
-                identificador:18,
-                proveedor:"Distribuidor de bottellas",
-                marca:"Bottles",
-                nombre:"Growler Jimmy Hendrix",
-                descripcion:"Modelo Jimmy Hendrix",                    
-                stock:15,
-                ubicacion: 'Local Illia',
-                categoria:"Envases",//tipo  
-                unidad:'un.'
-            },
-            {
-                identificador:19,
-                proveedor:"Tapitas SRL",
-                marca:"Tapitas",
-                nombre:"Tapa Growler",
-                descripcion:"Tapa para growler de 2 lt",                    
-                stock:257,
-                ubicacion: 'Local Illia',
-                categoria:"No vendible",//tipo 
-                unidad:'un.'
-            },
-            {
-                identificador:20,
-                proveedor:"Distribuidor de bottellas",
-                marca:"Bottles",
-                nombre:"Botella 1 lt",
-                descripcion:"Modelo Clasico",                    
-                stock:189,
-                ubicacion: 'Local Illia',
-                categoria:"Envases",//tipo 
-                unidad:'un.'
-            },
-            {
-                identificador:21,
-                proveedor:"Tapitas SRL",
-                marca:"Tapaitas",
-                nombre:"Tapa Botella",
-                descripcion:"Tapa para botella de 1 lt",                    
-                stock:145,
-                ubicacion: 'Local Illia',
-                categoria:"No vendible",//tipo 
-                unidad:'un.'
-            },
-            {
-                identificador:22,
-                proveedor:"Nuevo Origen",
-                marca:"Nuevo Origen",
-                nombre:"Rocky",
-                ubicacion: 'Local Illia',
-                stock:86,
-                categoria:"Cervezas por Litro",//tipo 
-                unidad:'lts.',
-                color:"#E8692E"
-            },
-            {
-                identificador:23,
-                proveedor:"Nuevo Origen",
-                marca:"Nuevo Origen",
-                nombre:"Boreal",
-                ubicacion: 'Local Illia',
-                stock:100,
-                categoria:"Cervezas por Litro",//tipo  
-                unidad:'lts.',
-                color:"#E8692E"
-            },
-            {
-                identificador:24,
-                proveedor:"Crafter",
-                marca:"Crafter",
-                nombre:"Porter",
-                ubicacion: 'Local Illia',
-                stock:126,
-                categoria:"Cervezas por Litro",//tipo    
-                unidad:'lts.',
-                color:"#6B190F"
-            },
-            {
-                identificador:25,
-                proveedor:"Blest",
-                marca:"Blest",
-                nombre:"Bock",
-                ubicacion: 'Local Illia',
-                stock:100,
-                categoria:"Cervezas por Litro",//tipo 
-                unidad:'lts.',
-                color:"#6B190F"
-            },
-            {
-                identificador:26,
-                proveedor:"Nuevo Origen",
-                marca:"Nuevo Origen",
-                nombre:"Dry Stout",
-                ubicacion: 'Local Illia',
-                stock:167,
-                categoria:"Cervezas por Litro",//tipo  
-                unidad:'lts.',
-                color:"#5C1F0C"
-            },
-            {
-                identificador:27,
-                proveedor:"Nuevo Origen",
-                marca:"Nuevo Origen",
-                nombre:"Seasonal",
-                ubicacion: 'Local Illia',
-                stock:178,
-                categoria:"Cervezas por Litro",//tipo 
-                unidad:'lts.',
-                color:"#E8692E"
-            }
 
-            ]
+    $scope.productosInventario =[]
 
-            $scope.ubicaciones =[
-            {
-                nombre:'Local Illia',
-                direccion:'Illia 123'
-            },
-            {
-                nombre:'Local 3',
-                direccion:'Avenida 988'
-            },
-            {
-                nombre:'Local 2',
-                direccion:'Calle 53'
-            },
-            {
-                nombre:'Ajuste',
-                direccion:''
-            }
-            ]
+    $scope.getProductosInventario = function (){
+
+        $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/inventarios').success(function(productos){    
+            
+            console.log(productos);
+            $scope.productosInventario = productos.data;
+         
+        }).error(function(error){
+            console.log(error);
+        });        
+    }
+    
+    $scope.getProductosInventario();
+
+
+        $scope.ubicaciones =[]
+    
+        $scope.getUbicaciones = function (){
+
+            $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/ubicaciones').success(function(ubicaciones){    
+                
+                console.log(ubicaciones);
+                $scope.ubicaciones = ubicaciones.data;
+                $scope.agregarAjuste();
+             
+            }).error(function(error){
+                console.log(error);
+            });        
+        }
+
+        $scope.agregarAjuste = function (){
+
+            var ajuste ={
+                            nombre:'Ajuste',
+                            direccion:''
+                        }
+
+            $scope.ubicaciones.push(ajuste);
+        }
+    
+    $scope.getUbicaciones();
+
+
 
             $scope.dtOptions = DTOptionsBuilder.newOptions()
             .withDOM('<"html5buttons"B>lTfgitp')
