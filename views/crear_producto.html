@@ -1,10 +1,11 @@
 <div class="modal-body">
 
     <div class="row">
+
         <div class="col-lg-12">
 
             <div class="tabs-container">
-
+                <form>
                 <uib-tabset>
                     <uib-tab>
                         <uib-tab-heading>
@@ -14,25 +15,27 @@
 
                             <fieldset class="form-horizontal">
                                 <div class="form-group"><label class="col-sm-2 control-label">Nombre:</label>
-                                    <div class="col-sm-10"><input value="{{productoEdit.nombre}}" type="text" class="form-control" placeholder="Nombre del producto"></div>
+                                    <div class="col-sm-10">
+                                    <input ng-model="newProvNombre" type="text" class="form-control" placeholder="Nombre del producto"
+                                    ></div>
                                 </div>
                                 <div class="form-group"><label class="col-sm-2 control-label">Categoria:</label>
                                     <div class="col-sm-10">
-                                        <select ng-model="catSel" ng-init="catSel=productoEdit.categoria" ng-options="categoria for categoria in categorias" class="form-control m-b" name="categoria" >                                            
+                                        <select ng-model="newProvCategoria" ng-init="catSel=productoEdit.categoria" ng-options="categoria.nombre for categoria in categorias" class="form-control m-b" name="categoria" >                                            
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group"><label class="col-sm-2 control-label">Precio:</label>
-                                    <div class="col-sm-10"><div class="input-group m-b"><span class="input-group-addon">$</span> <input value="{{productoEdit.valor}}" type="text" class="form-control">
+                                    <div class="col-sm-10"><div class="input-group m-b"><span class="input-group-addon">$</span> <input ng-model="newProvValor" value="{{productoEdit.valor}}" type="text" class="form-control">
                                     </div></div>
                                 </div>
                                 <div class="form-group"><label class="col-sm-2 control-label">Costo:</label>
-                                    <div class="col-sm-10"><div class="input-group m-b"><span class="input-group-addon">$</span> <input value="{{productoEdit.costo}}" type="text" class="form-control">
+                                    <div class="col-sm-10"><div class="input-group m-b"><span class="input-group-addon">$</span> <input ng-model="newProvCosto" value="{{productoEdit.costo}}" type="text" class="form-control">
                                     </div></div>
                                 </div>
                                 
                                 <div class="form-group"><label class="col-sm-2 control-label">Descripcion:</label>
-                                    <div class="col-sm-10"><textarea rows="5" class="form-control">{{productoEdit.descripcion}}</textarea></div>
+                                    <div class="col-sm-10"><textarea rows="5" ng-model="newProvDescripcion" class="form-control">{{productoEdit.descripcion}}</textarea></div>
                                 </div>
                             </fieldset>
 
@@ -46,11 +49,11 @@
                         <div class="panel-body">
                             <fieldset class="form-horizontal">                                
                                 <div class="form-group"><label class="col-sm-2 control-label">Medida:</label>
-                                    <div class="col-sm-10"><select ng-model="uniSel" ng-init="uniSel=productoEdit.unidad" ng-options="unidad.unidad as unidad.nombre for unidad in unidades" class="form-control m-b" name="uniSel" ></select></div>
+                                    <div class="col-sm-10"><select ng-model="newProvUnidad" ng-init="uniSel=productoEdit.unidad" ng-options="unidad.plural for unidad in unidades" class="form-control m-b" name="uniSel" ></select></div>
                                 </div>
                                 <div class="form-group"><label class="col-sm-2 control-label">Proveedor:</label>
                                     <div class="col-sm-10">                                        
-                                        <select ng-model="proSel" ng-init="proSel=productoEdit.proveedor" ng-options="proveedor.nombre for proveedor in proveedores" class="form-control m-b" name="proveedorsel" >                                            
+                                        <select ng-model="newProvProveedor" ng-init="proSel=productoEdit.proveedor" ng-options="proveedor.nombre for proveedor in proveedores" class="form-control m-b" name="proveedorsel" >                                            
                                         </select>
                                     </div>
                                 </div>
@@ -58,7 +61,7 @@
                                 <div class=" {{tresdeStartVisibleClass}}">
                                     <label class="col-sm-2 control-label">Marca:</label>
                                     <div class="col-sm-9">
-                                        <select ng-model="marSel" ng-init="marSel=productoEdit.marca" ng-options="marca for marca in marcas" class="form-control m-b" name="marca" >                                            
+                                        <select ng-model="newProvMarca" ng-init="marSel=productoEdit.marca" ng-options="marca.nombre for marca in marcas" class="form-control m-b" name="marca" >                                            
                                         </select>
                                     </div>
                                     <div class="col-sm-1">
@@ -68,7 +71,7 @@
                                 <div class="{{tresdeStartHiddenClass}}">
                                     <label class="col-sm-2 control-label">Marca:</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" placeholder="Nueva Marca">
+                                        <input type="text" ng-model="newProvMarcaNueva" class="form-control" placeholder="Nueva Marca">
                                     </div>
                                     <div class="col-sm-1">
                                         <button class="btn btn-primary btn-circle" type="button" ng-click="doOcultar()"><i class="fa fa-minus"></i></button>
@@ -76,29 +79,42 @@
                                 </div>
                                 </div>
                                 
-                                <div ng-show="catSel=='Cervezas por Litro'">
+                                <div ng-show="catSel.id=='1'">
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group"><label class="col-sm-2 control-label">Color:</label>
                                         <div class="col-sm-2"><a colorpicker ng-init="colorCerveza=productoEdit.color" ng-model="colorCerveza"><span class="cerveza-color-left" style="background-color:{{colorCerveza || '#000'}};"></span></a> <small>{{colorCerveza}}</small></div>
                                         <label class="col-sm-1 control-label">IBU:</label>
-                                        <div class="col-sm-2"><input value="{{productoEdit.ibu}}" type="text" class="form-control" placeholder="40"></div>
+                                        <div class="col-sm-2"><input value="{{productoEdit.ibu}}" ng-model="newProvIbu" type="text" class="form-control" placeholder="40"></div>
                                         <label class="col-sm-2 control-label">Alcohol:</label>
-                                        <div class="col-sm-3"><div class="input-group m-b"><input value="{{productoEdit.alcohol}}" type="text" placeholder="4" class="form-control"><span class="input-group-addon">%</span></div></div>
+                                        <div class="col-sm-3"><div class="input-group m-b"><input ng-model="newProvAlcohol" value="{{productoEdit.alcohol}}" type="text" placeholder="4" class="form-control"><span class="input-group-addon">%</span></div></div>
                                     </div>
                                     <div class="form-group"><label class="col-sm-2 control-label">Origen:</label>
-                                        <div class="col-sm-10"><input type="text" class="form-control" value="{{productoEdit.origen}}" placeholder="Ciudad"></div>
+                                        <div class="col-sm-10"><input type="text" class="form-control" ng-model="newProvOrigen" value="{{productoEdit.origen}}" placeholder="Ciudad"></div>
                                     </div>
                                 </div>
+
+                                
                             </fieldset>
 
-
+                            <div class="col-md-12">
+                            <button 
+                            type="button" 
+                            class="btn btn-sm btn-primary pull-right m-t-n-xs" 
+                            ng-click="cargarNuevo(newProvNombre,newProvCategoria,newProvValor,newProvCosto,newProvDescripcion,newProvUnidad,newProvMarca,newProvColor,newProvIbu,newProvAlcohol,newProvOrigen);" 
+                            >
+                            Guardar</button>
+                            </div>
                         </div>
                     </uib-tab>
                 </uib-tabset>
+                </form>
 
             </div>
 
-
         </div>
+
+
+         
     </div>
+    
     </div>

@@ -26,7 +26,6 @@
                                     <th>ID</th>
                                     <th>Nombre</th>
                                     <th>Marca</th>                            
-                                    <th>Stock</th>
                                     <th>Categoria</th>
                                     <th>Costo</th>
                                     <th>Valor</th>
@@ -37,7 +36,6 @@
                                     <td>{{ producto.id}}</td>                            
                                     <td><span class="cerveza-color-lista" style="background-color:{{producto.color}};"></span>{{ producto.nombre}}</td>                            
                                     <td>{{ producto.marca}}</td>
-                                    <td><span ng-if="producto.stock>0">{{ producto.stock}} {{producto.unidad}}</span><span ng-if="producto.stock<0">&infin;</span></td>
                                     <td>{{ producto.categoria}}</td>
                                     <td>{{ producto.costo | currency:"$ "}}</td>
                                     <td>{{ producto.valor | currency:"$ "}}

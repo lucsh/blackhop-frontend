@@ -1737,7 +1737,7 @@ function modalControler ($scope,$http,$log,$uibModalInstance,clientes){
 
 function modalProveedoresControler ($http,$scope,$log,$uibModalInstance,Upload,proveedores){
 
-        $scope.proveedores = proveedores
+        $scope.proveedores = proveedores;
         $scope.cargarNuevo= function(newProvNombre,newProvDireccion,newProvTelefono,newProvEmail,newProvMetodoPago,newProvContacto,newProvTelefonoContacto,newProvCuit){
 
 
@@ -2322,65 +2322,60 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
         };   
 }
 
-function crearProductoCtrl ($scope,$log,$uibModalInstance,productos,productoEdit){
+function crearProductoCtrl ($http,$scope,$log,$uibModalInstance,productos,productoEdit){
 
+    $scope.newProd = {};
     $scope.productos=productos;
     $scope.productoEdit=productoEdit;
+
+
+$scope.newProdNombre = '';
+$scope.newProdCategoria = '';
+$scope.newProdValor = '';
+$scope.newProdCosto = '';
+$scope.newProdDescripcion = '';
+$scope.newProdUnidad = '';
+$scope.newProdMarca = '';
+$scope.newProdColor = '';
+$scope.newProdIbu = '';
+$scope.newProdAlcohol = '';
+$scope.newProdOrigen = '';
             
     /* Nueva Marca init */
     $scope.tresdeStartVisibleClass = 'tresde-up-first-visible ';
     $scope.tresdeStartHiddenClass = 'tresde-up-second-hidden ';
     $scope.flagNuevaMarca=false;
     
-    /* JSONS */
-    $scope.categorias=[
-        'Cervezas por Litro',
-        'No vendible',
-        'Envases',
-        'Cupones'
-    ];  
+    $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/productodatos').success(function(datos){    
+        //console.log(cliente);
+        $scope.categorias = datos.categorias;
+        $scope.unidades = datos.unidades;
+        $scope.marcas = datos.marcas;
+        $scope.proveedores = datos.proveedores;
+    }).error(function(error){
+        console.log(error);
+    });  
+
+
     
-    $scope.unidades=[
-        {
-            unidad:'lts.',
-            nombre:'Litros'
-        },
-        {
-            unidad:'kg.',
-            nombre:'Kilogramos'
-        },
-        {
-            unidad:'un.',
-            nombre:'Cantidad'
-        }
-    ];
-    
-    $scope.proveedores=[
-        {
-            id:1,
-            nombre:'Crafter'
-        },
-        {
-            id:2,
-            nombre:'Nuevo Origen'
-        },
-        {
-            id:3,
-            nombre:'Botellas SRL'
-        },
-        {
-            id:4,
-            nombre:'Tapitas SRL'
-        }
-    ];
-    
-    $scope.marcas=[
-        'Crafter',
-        'Nuevo Origen',
-        'Bottles',
-        'Tapitas'
-    ];
-    
+    $scope.cargarNuevo = function(newProdNombre,newProdCategoria,newProdValor,newProdCosto,newProdDescripcion,newProdUnidad,newProdMarca,newProdColor,newProdIbu,newProdAlcohol,newProdOrigen){
+
+    console.log($scope);
+
+console.log($scope.newProdNombre);
+console.log(newProdCategoria);
+console.log(newProdValor);
+console.log(newProdCosto);
+console.log(newProdDescripcion);
+console.log(newProdUnidad);
+console.log(newProdMarca);
+console.log(newProdColor);
+console.log(newProdIbu);
+console.log(newProdAlcohol);
+console.log(newProdOrigen);
+
+};
+
     /* 3D select marca */
     
     $scope.doOcultar=function(){
