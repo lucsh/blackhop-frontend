@@ -1735,30 +1735,45 @@ function modalControler ($scope,$http,$log,$uibModalInstance,clientes){
         }
     };
 
-function modalProveedoresControler ($scope,$log,$uibModalInstance,Upload){
+function modalProveedoresControler ($http,$scope,$log,$uibModalInstance,Upload,proveedores){
 
-        $scope.proveedor={}
-        // upload on file select or drop
-        $scope.upload = function (file) {
-        Upload.upload({
-            url: '/',
-            data: {file: file, 'username': $scope.username}
-        }).then(function (resp) {
-            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
-        }, function (resp) {
-            console.log('Error status: ' + resp.status);
-        }, function (evt) {
-            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-            console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
-        });
-        };
-        
-        
-        $scope.guardarProveedor= function(){
-            console.log($scope.proveedor);
-            $scope.proveedores.push($scope.proveedor);
+        $scope.proveedores = proveedores
+        $scope.cargarNuevo= function(newProvNombre,newProvDireccion,newProvTelefono,newProvEmail,newProvMetodoPago,newProvContacto,newProvTelefonoContacto,newProvCuit){
+
+
             
-            $uibModalInstance.close();
+
+            $http.post('http://blackhop-dessin1.rhcloud.com/api/admin/proveedor',{
+                nombre:newProvNombre,
+                direccion:newProvDireccion,
+                telefono:newProvTelefono,
+                email:newProvEmail,
+                metodoPago:newProvMetodoPago,
+                contacto:newProvContacto,
+                telefonoContacto:newProvTelefonoContacto,
+                cuit:newProvCuit
+            }).success(function(datosProveedor){    
+                var newProv = {};
+                newProv.nombre = datosProveedor.data.nombre;
+                newProv.direccon = datosProveedor.data.direccon;
+                newProv.telefono = datosProveedor.data.telefono;
+                newProv.email = datosProveedor.data.email;
+                newProv.metodoPago = datosProveedor.data.metodoPago;
+                newProv.contacto = datosProveedor.data.contacto;
+                newProv.telefonoContacto = datosProveedor.data.telefonoContacto
+                newProv.cuit = datosProveedor.data.cuit;
+
+                $scope.proveedores.push(newProv);
+                $scope.datosProveedor = datosProveedor.data;
+                var nuevoCliente = datosProveedor.data;
+                $uibModalInstance.close($scope.datosProveedor);
+
+            }).error(function(error){
+                console.log(error);
+                $uibModalInstance.close();
+            });
+
+            
         }
         
         $scope.ok = function () {

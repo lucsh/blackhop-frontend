@@ -894,7 +894,10 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
             data: { pageTitle: 'Proveedores' },
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
-                    return $ocLazyLoad.load([
+                    return $ocLazyLoad.load([                        
+                        {
+                            files: ['js/plugins/sweetalert/sweetalert.min.js', 'css/plugins/sweetalert/sweetalert.css']
+                        },
                         {
                             name: 'oitozero.ngSweetAlert',
                             files: ['js/plugins/sweetalert/angular-sweetalert.min.js']
@@ -915,6 +918,9 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
                             files: ['css/plugins/datapicker/angular-datapicker.css','js/plugins/datapicker/angular-datepicker.js']
                         },
                         {
+                            files: ['js/plugins/moment/moment.min.js']
+                        },
+                        {
                             serie: true,
                             files: ['js/plugins/dataTables/datatables.min.js','css/plugins/dataTables/datatables.min.css']
                         },
@@ -927,11 +933,6 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
                             serie: true,
                             name: 'datatables.buttons',
                             files: ['js/plugins/dataTables/angular-datatables.buttons.min.js']
-                        },
-                        {
-                            name: 'ngFileUpload',
-                            files: ['js/plugins/file-upload/ng-file-upload-shim.min.js','js/plugins/file-upload/ng-file-upload.min.js']
-
                         }
                     ]);
                 }

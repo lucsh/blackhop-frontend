@@ -719,7 +719,14 @@ vm.login2 = function() {
             //$scope.getClientes();    
             //$scope.getClienteDerecha(id);
             $scope.clienteDer.fechaNacimiento=moment($scope.clienteDer.fechaNacimiento).locale('es').format('DD/MMM/YYYY');
-
+            $scope.clientes.forEach(function(cliente,index,arreglo){
+                if(cliente.id == id){
+                    cliente.nombre = $scope.clienteDer.nombre;
+                    cliente.apellido = $scope.clienteDer.apellido;
+                    cliente.direccion = $scope.clienteDer.direccion;
+                    cliente.contacto = $scope.clienteDer.contacto;
+                }
+            })
         }).error(function(error){
             console.log(error);
         });
@@ -789,222 +796,129 @@ vm.login2 = function() {
     }
 }])
 
-.controller('proveedoresCtrl', ['$scope','$log','$uibModal','$filter','DTOptionsBuilder','DTColumnDefBuilder','SweetAlert','Upload', function($scope,$log,$uibModal,$filter,DTOptionsBuilder,DTColumnDefBuilder,SweetAlert,Upload){
+.controller('proveedoresCtrl', ['$http','$scope','$log','$uibModal','$filter','DTOptionsBuilder','DTColumnDefBuilder','SweetAlert', function($http,$scope,$log,$uibModal,$filter,DTOptionsBuilder,DTColumnDefBuilder,SweetAlert){
 
-        // upload on file select or drop
-        $scope.upload = function (file) {
-            Upload.upload({
-                url: '/',
-                data: {file: file, 'username': $scope.username}
-            }).then(function (resp) {
-                console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
-            }, function (resp) {
-                console.log('Error status: ' + resp.status);
-            }, function (evt) {
-                var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
-            });
-        };
-
-        $scope.proveedores =[
-        {
-            identificador:1,
-            nombre:"Crafter",
-            direccion:"Ruta 151 km. 123",
-            telefono:"4412345",
-            email:"correo@direccion.com.ar",
-            mPago:"30 dias F. Factura",
-            cuit:"30-12345678/3",
-            contacto:"Luciano Marquez",
-            telefonoContacto:"2996041216",
-            imagen:"img/c1.jpg",
-            GIS:null   
-        },
-        {
-            identificador:2,
-            nombre:"Kalevala",
-            direccion:"San Martin 546",
-            telefono:"4412345",
-            email:"correo@direccion.com.ar",
-            mPago:"20 dias F. Factura",
-            cuit:"30-12345678/3",
-            contacto:"Antonio Rodriguez",
-            telefonoContacto:"2995433634",
-            imagen:"img/c2.jpg",
-            GIS:null   
-        },
-        {
-            identificador:3,
-            nombre:"Botellas SRL",
-            direccion:"Rosa de los Vientos 12",
-            telefono:"4412345",
-            email:"correo@direccion.com.ar",
-            mPago:"30 dias F. Factura",
-            cuit:"30-964542035/3",
-            contacto:"Fiorella Salas",
-            telefonoContacto:"2995691627",
-            imagen:"img/c3.png",
-            GIS:null   
-        },
-        {
-            identificador:4,
-            nombre:"Tapas SRL",
-            direccion:"Garganta de los Montes 455",
-            telefono:"4412345",
-            email:"correo@direccion.com.ar",
-            mPago:"Contado",
-            cuit:"30-456844328/3",
-            contacto:"Martin Moreira",
-            telefonoContacto:"2996888259",
-            imagen:"img/c1.jpg",
-            GIS:null   
-        },
-        {
-            identificador:5,
-            nombre:"Dessin",
-            direccion:"Constitución 26",
-            telefono:"4412345",
-            email:"correo@direccion.com.ar",
-            mPago:"90 dias F. Factura",
-            cuit:"30-362512386/3",
-            contacto:"Mafalda Barela",
-            telefonoContacto:"2996440850",
-            imagen:"img/c2.jpg",
-            GIS:null   
-        },
-        {
-            identificador:6,
-            nombre:"Quantum",
-            direccion:"Rivadavia 568",
-            telefono:"4412345",
-            email:"correo@direccion.com.ar",
-            mPago:"15 dias F. Factura",
-            cuit:"30-89653248/3",
-            contacto:"Liza Ortega",
-            telefonoContacto:"2995664192",
-            imagen:"img/c3.png",
-            GIS:null   
-        },
-        {
-            identificador:7,
-            nombre:"Antares",
-            direccion:"Ant Argentina 382",
-            telefono:"4412345",
-            email:"correo@direccion.com.ar",
-            mPago:"60 dias F. Factura",
-            cuit:"30-635441789/3",
-            contacto:"Juan Colón",
-            telefonoContacto:"2996646540",
-            imagen:"img/c1.jpg",
-            GIS:null   
-        },
-        {
-            identificador:8,
-            nombre:"Proveedor SA",
-            direccion:"Juan B. Justo 452",
-            telefono:"4412345",
-            email:"correo@direccion.com.ar",
-            mPago:"30 dias F. Factura",
-            cuit:"30-12345678/3",
-            contacto:"Ruben Pacheco",
-            telefonoContacto:"2995025237",
-            imagen:"img/c2.jpg",
-            GIS:null   
-        },
-        {
-            identificador:9,
-            nombre:"Etiquetas SRL",
-            direccion:"Independencia 823",
-            telefono:"4412345",
-            email:"correo@direccion.com.ar",
-            mPago:"30 dias F. Factura",
-            cuit:"30-789260684/3",
-            contacto:"Simon Garcia",
-            telefonoContacto:"2995123456",
-            imagen:"img/c1.jpg",
-            GIS:null   
-        },
-        {
-            identificador:10,
-            nombre:"Nuevo Origen",
-            direccion:"Rio Desaguadero 672",
-            telefono:"4412345",
-            email:"correo@direccion.com.ar",
-            mPago:"30 dias F. Factura",
-            cuit:"30-95612345/3",
-            contacto:"Roberto Estrada",
-            telefonoContacto:"2996950755",
-            imagen:"img/c3.png",
-            GIS:null   
-        },
-        {
-            identificador:11,
-            nombre:"La Papeleria",
-            direccion:"Constitución 456",
-            telefono:"4412345",
-            email:"correo@direccion.com.ar",
-            mPago:"30 dias F. Factura",
-            cuit:"30-76834532/3",
-            contacto:"Martin Moreira",
-            telefonoContacto:"2995184011",
-            imagen:"img/c1.jpg",
-            GIS:null   
-        },
-        {
-            identificador:12,
-            nombre:"Productos SA",
-            direccion:"Garganta de los Montes 455",
-            telefono:"4412345",
-            email:"correo@direccion.com.ar",
-            mPago:"30 dias F. Factura",
-            cuit:"30-76429823/3",
-            contacto:"Lionel Villar",
-            telefonoContacto:"2996188911",
-            imagen:"img/c2.jpg",
-            GIS:null               
-        }]
+    $scope.proveedores = [];
+    $scope.provActividadDer = [];
 
 
-        var proveedorDer= $filter("filter")($scope.proveedores, {identificador:'1'});
+    $scope.getProveedorDerecha = function(id){
 
-        $scope.proveedorDer = angular.copy(proveedorDer[0]);
+        $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/proveedor/'+id).success(function(proveedorDer){    
+            //console.log(proveedorDer);
+            $scope.proveedorDer = proveedorDer.data;
 
-
-        $scope.onCopy = function(ident){
-            $scope.proveedorDer='';
-            var proveedorDer= $filter("filter")($scope.proveedores, {identificador:ident});
-            /*Dat FIX*/
-            $scope.proveedorDer = angular.copy(proveedorDer[0]);
-        };
-
-        $scope.onDelete = function(ident){ 
-
-            SweetAlert.swal({
-                title: "¿Estas Seguro?",
-                text: "¡No vas a poder recuperar los datos!",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Si, eliminalo!",
-                cancelButtonText: "No, cancelar!",
-                closeOnConfirm: false,
-                closeOnCancel: false },
-                function (isConfirm) {
-                    if (isConfirm) {
-                        for(var i = 0; i < $scope.proveedores.length; i++){
-                            if ($scope.proveedores[i].id == ident){                    
-                                $scope.proveedores.splice(i, 1);
-                                break;
-                            }
-                        }
-                        SweetAlert.swal("¡Eliminado!", "El proveedor ha sido eliminado", "success");
-                        $scope.proveedorDer='';
-                        $scope.proveedorDer = angular.copy($scope.proveedores[0]);
-                    } else {
-                        SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
-                    }
+            $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/proveedoractividad/'+id).success(function(actividad){    
+                
+                $scope.actividadDer = actividad.data;
+                $scope.actividadDer.forEach(function(acti){
+                    acti.fecha=moment(acti.fecha).locale('es').format('DD/MMM/YYYY');
                 });
-        };
+
+            }).error(function(error){
+                console.log(error);
+            });
+
+        }).error(function(error){
+            console.log(error);
+        });
+
+
+    }
+
+
+
+    $scope.getProveedores = function (){
+
+        $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/proveedor').success(function(proveedor){    
+            //console.log(cliente);
+            $scope.proveedores = proveedor.data;
+            var idProveedorDerecha= $scope.proveedores[0].id;
+
+            if (!$scope.proveedorDer){
+                $scope.getProveedorDerecha(idProveedorDerecha);
+            }
+
+        }).error(function(error){
+            console.log(error);
+        });        
+    }
+
+    $scope.onDelete = function(id){ 
+
+        SweetAlert.swal({
+            title: "¿Estas Seguro?",
+            text: "¡No vas a poder recuperar los datos!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Si, eliminalo!",
+            cancelButtonText: "No, cancelar!",
+            closeOnConfirm: false,
+            closeOnCancel: false },
+            function (isConfirm) {
+                if (isConfirm) {
+
+                    $http.delete('http://blackhop-dessin1.rhcloud.com/api/admin/proveedor/'+id).success(function(response){    
+
+
+                        SweetAlert.swal("¡Eliminado!", "El proveedor ha sido eliminado", "success");
+                        $scope.proveedores.forEach(function(proveedor,index,arreglo){
+                            if(proveedor.id == id){
+                                arreglo.splice(index,1);
+                            }
+                        });
+                        var idProveedorDerecha= $scope.proveedores[0].id;
+                        $scope.getProveedorDerecha(idProveedorDerecha);
+
+                    }).error(function(error){
+                        console.log(error);
+                        SweetAlert.swal("¡Error!", "El proveedor no puede ser eliminado", "error");
+                    });
+
+                } else {
+                    SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
+                }
+            });
+    };
+
+    $scope.getProveedores();
+        
+
+    $scope.onUpdate= function(id){
+        
+        $http.put('http://blackhop-dessin1.rhcloud.com/api/admin/proveedor/'+id,{
+            nombre:$scope.proveedorDer.nombre,
+            direccion:$scope.proveedorDer.direccion,
+            telefono:$scope.proveedorDer.telefono,
+            email:$scope.proveedorDer.email,
+            metodoPago:$scope.proveedorDer.metodoPago,
+            contacto:$scope.proveedorDer.contacto,
+            telefonoContacto:$scope.proveedorDer.telefonoContacto,
+            cuit:$scope.proveedorDer.cuit
+        }).success(function(){
+            /////////////////////////////
+            // NO ESTA VOLVIENDO A TRAER TODO PARA NO COLGAR
+            /////////////////////////////
+            //$scope.getProveedores();    
+            //$scope.getProveedorDerecha(id);
+            
+            $scope.proveedores.forEach(function(proveedor,index,arreglo){
+                if(proveedor.id == id){
+                    proveedor.nombre = $scope.proveedorDer.nombre;
+                    proveedor.apellido = $scope.proveedorDer.apellido;
+                    proveedor.direccion = $scope.proveedorDer.direccion;
+                    proveedor.contacto = $scope.proveedorDer.contacto;
+                }
+            })
+        }).error(function(error){
+            console.log(error);
+        });
+        
+
+    }
+
+
 
         $scope.dtOptions = DTOptionsBuilder.newOptions()
         .withDOM('<"html5buttons"B>lTfgitp')
@@ -1042,10 +956,15 @@ vm.login2 = function() {
                     controller: modalProveedoresControler,
                     windowClass: "animated fadeIn", 
                     scope:$scope,
+                    resolve: {
+                        proveedores: function () {
+                            return $scope.proveedores;
+                        }
+                    }
                 });
             }
         }
-    }])
+}])
 
 .controller('ventasCtrl', ['$scope','$log','$uibModal','DTOptionsBuilder','DTColumnDefBuilder', function($scope,$log,$uibModal,DTOptionsBuilder,DTColumnDefBuilder){
 

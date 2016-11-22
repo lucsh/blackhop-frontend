@@ -13,75 +13,72 @@
                 imagen:"img/c1.jpg",
                 GIS:null   
             }
--->
-    
-    <div class="panel-body">
-        <h3 class="m-t-none m-b">Crear Proveedor</h3>
-        <form role="form" class=""> 
+        -->
 
-            <div class="col-md-12 form-group"><label>Nombre</label>
-                <div><input type="text" placeholder="Nombre" ng-model="proveedor.nombre" class="form-control"> 
+        <div class="panel-body">
+            <h3 class="m-t-none m-b">Crear Proveedor</h3>
+            <form role="form" class=""> 
+
+                <div class="col-md-12 form-group"><label>Nombre</label>
+                    <div><input type="text" placeholder="Nombre" ng-model="newProvNombre" class="form-control"> 
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-12  form-group"><label>Dirección</label>
+                <div class="col-md-12  form-group"><label>Dirección</label>
 
-                <div><input type="text" placeholder="Calle 123, Neuquen" ng-model="proveedor.direccion" class="form-control">
+                    <div><input type="text" placeholder="Calle 123, Neuquen" ng-model="newProvDireccion" class="form-control">
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-5 form-group"><label>Teléfono</label>
+                <div class="col-md-5 form-group"><label>Teléfono</label>
 
-                <div><input type="text" placeholder="2995123456" ng-model="proveedor.telefono" class="form-control">
+                    <div><input type="text" placeholder="2995123456" ng-model="newProvTelefono" class="form-control">
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-7 form-group"><label>Email</label>
+                <div class="col-md-7 form-group"><label>Email</label>
 
-                <div class=""><input type="email" placeholder="email@direccion.com.ar" ng-model="proveedor.email" class="form-control">
+                    <div class=""><input type="email" placeholder="email@direccion.com.ar" ng-model="newProvEmail" class="form-control">
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-6 form-group"><label>Metodo de Pago</label>
+                <div class="col-md-6 form-group"><label>Metodo de Pago</label>
 
-                <div class=""><input type="text" placeholder="30 dias F. Factura" ng-model="proveedor.mPago" class="form-control">
+                    <div class=""><input type="text" placeholder="30 dias F. Factura" ng-model="newProvMetodoPago" class="form-control">
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-6 form-group"><label>CUIT</label>
+                <div class="col-md-6 form-group"><label>CUIT</label>
 
-                <div class=""><input type="text" placeholder="30-12345678/3" ng-model="proveedor.cuit" class="form-control">
+                    <div class=""><input type="text" placeholder="30-12345678/3" ng-model="newProvCuit" class="form-control">
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-6 form-group"><label>Contacto</label>
+                <div class="col-md-6 form-group"><label>Contacto</label>
 
-                <div class=""><input type="text" placeholder="Nombre Contacto" ng-model="proveedor.contacto" class="form-control">
-                    {{proveedor.contacto}}
+                    <div class=""><input type="text" placeholder="Nombre Contacto" ng-model="newProvContacto" class="form-control">
+
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-6 form-group"><label>Teléfono Contacto</label>
+                <div class="col-md-6 form-group"><label>Teléfono Contacto</label>
 
-                <div class=""><input type="text" placeholder="2995123456" ng-model="proveedor.telefonoContacto" class="form-control">
+                    <div class=""><input type="text" placeholder="2995123456" ng-model="newProvTelefonoContacto" class="form-control">
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-6 form-group">
-                <button type="button" class="btn btn-w-m btn-info" ng-model="proveedor.imagen" ngf-select="upload($file)">Seleccionar Imagen</button> <img ng-if="$file" ngf-thumbnail="file || '/thumb.jpg'">
+                <div class="col-md-12">
+                    <button 
+                    type="button" 
+                    class="btn btn-sm btn-primary pull-right m-t-n-xs" 
+
+                    ng-click="cargarNuevo(newProvNombre,newProvDireccion,newProvTelefono,newProvEmail,newProvMetodoPago,newProvContacto,newProvTelefonoContacto,newProvCuit)" 
+                    ng-disabled="!newProvNombre">
+                    Guardar</button>
                 </div>
-            </div>
 
-            
-                </form>
-            </div>
-
-                   
-<div  class="modal-footer m-t-sm">
-        <div class="col-md-10"></div>
-        <div class="col-md-2 animated pulse">
-            <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit" ng-click="guardarProveedor()"><strong>Guardar</strong></button>
+            </form>
         </div>
-</div>
+
 
 
 
