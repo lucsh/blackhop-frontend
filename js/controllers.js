@@ -2140,7 +2140,7 @@ function crearGastoCtrl ($scope,$log,$uibModalInstance,gastos,gastoEdit){
     
 }
 
-function wizardProductoInvantarioCtrl ($scope,$log,$uibModalInstance,SweetAlert,WizardHandler,trabajo,producto){
+function wizardProductoInvantarioCtrl ($http,$scope,$log,$uibModalInstance,SweetAlert,WizardHandler,trabajo,producto){
 
     $scope.productos = $scope.$parent.productosInventario;
     $scope.ubicaciones = $scope.$parent.ubicaciones;
