@@ -277,7 +277,7 @@ vm.login2 = function() {
             total:0.00,
             totalLitros:0,
             selected:-1,
-            recalculando(index,modTotal){
+            recalculando : function (index,modTotal){
                 console.log("recalculandoBarra");
 
                 $scope.resumen.total=0;
@@ -303,14 +303,14 @@ vm.login2 = function() {
                 windowClass: "animated fadeIn",
                 scope:$scope,
                 SweetAlert:SweetAlert,
-                $state
+                $state:$state
 
             });
         }     
 
         $scope.modal={
 
-            scanearCupon(){
+            scanearCupon : function (){
                 $scope.cupon='';
                 var modalInstance = $uibModal.open({
                     templateUrl: 'views/modal_scanear-cupon.html',
@@ -319,7 +319,7 @@ vm.login2 = function() {
                     scope: $scope //paso el scope completo asi lo puedo llenar sin dar vueltas (no se hace :P )
                 });
             },
-            terminarVentaBarra(){
+            terminarVentaBarra : function (){
 
                 $scope.getProductosBarra();
 
@@ -437,7 +437,7 @@ vm.login2 = function() {
         total:0.00,
         totalLitros:0,
         selected:-1,
-        recalculando(index,modTotal){
+        recalculando : function (index,modTotal){
             console.log("recalculando");
 
             $scope.resumen.total=0;
@@ -495,7 +495,7 @@ vm.login2 = function() {
             windowClass: "animated fadeIn",
             scope:$scope,
             SweetAlert:SweetAlert,
-            $state
+            $state:$state
 
         });
     }
@@ -503,7 +503,7 @@ vm.login2 = function() {
 
     $scope.modal={
 
-        terminarVenta(){
+        terminarVenta : function (){
             $scope.getProductos();
 
             if ($scope.clienteSeleccionado){
@@ -531,7 +531,7 @@ vm.login2 = function() {
             }
         },
 
-        abrir(flag){
+        abrir : function (flag){
             var modalInstance = $uibModal.open({
                 templateUrl: 'views/modal_abrir_cliente.html',
                 controller: modalControler,
@@ -549,7 +549,7 @@ vm.login2 = function() {
 
         },
 
-        imprimir(){
+        imprimir : function (){
 
             if ($scope.resumen.numeroProductos<0){ 
 
@@ -765,7 +765,7 @@ vm.login2 = function() {
     ]
 
     $scope.modal={
-        abrir(){
+        abrir : function (){
             var modalInstance = $uibModal.open({
                 templateUrl: 'views/modal_crear_cliente.html',
                 controller: modalControler,
@@ -950,7 +950,7 @@ vm.login2 = function() {
         ]
 
         $scope.modal={
-            abrir(){
+            abrir : function (){
                 var modalInstance = $uibModal.open({
                     templateUrl: 'views/modal_crear_proveedor.html',
                     controller: modalProveedoresControler,
@@ -1251,7 +1251,7 @@ vm.login2 = function() {
         };
 
         $scope.modal={
-            abrir(venta){
+            abrir : function (venta){
                 console.log(venta);
                 var modalInstance = $uibModal.open({
                     templateUrl: 'views/detalle_venta.html',
@@ -1497,7 +1497,7 @@ vm.login2 = function() {
         };
 
         $scope.modal={
-            abrir(compra){
+            abrir : function (compra){
                 console.log(compra);
                 var modalInstance = $uibModal.open({
                     templateUrl: 'views/detalle_compra.html',
@@ -1511,7 +1511,7 @@ vm.login2 = function() {
                     }
                 });
             },        
-            crear(compra,soloMostrar){
+            crear : function (compra,soloMostrar){
                 var items;
                 if(compra){
                     items = [
@@ -1695,17 +1695,17 @@ vm.login2 = function() {
         };   
 
         $scope.vigencia = {
-            extender(i){
+            extender : function (i){
                 $scope.cupones[i-1].fecha= moment().toString();
                 console.log($scope.cupones[i-1]);
                 $scope.calcularEstado(i-1);
             },
-            eliminar(i){
+            eliminar : function (i){
                 $scope.cupones[i-1].vigencia=0;
                 console.log($scope.cupones[i-1]);
                 $scope.calcularEstado(i-1);
             },
-            restaurar(i){
+            restaurar : function (i){
                 $scope.cupones[i-1].vigencia=3;
                 console.log($scope.cupones[i-1]);
                 $scope.calcularEstado(i-1);
@@ -1779,7 +1779,7 @@ vm.login2 = function() {
             ]
 
             $scope.modal={
-                abrir(producto){
+                abrir : function (producto){
                     console.log(producto);
                     var modalInstance = $uibModal.open({
                         templateUrl: 'views/detalle_producto.html',
@@ -1795,7 +1795,7 @@ vm.login2 = function() {
                     }
                 });
                 },
-                crear(){
+                crear : function (){
                     console.log();
                     var modalInstance = $uibModal.open({
                         templateUrl: 'views/crear_producto.html',
@@ -1808,12 +1808,12 @@ vm.login2 = function() {
                             return $scope.productos;
                         },
                         productoEdit:function () {
-                            return '';
+                            return {};
                         }
                     }
                 });
                 },
-                editar(producto){
+                editar : function (producto){
                     console.log(producto);
                     var modalInstance = $uibModal.open({
                         templateUrl: 'views/crear_producto.html',
@@ -2061,7 +2061,7 @@ vm.login2 = function() {
         };
 
         $scope.modal={
-            abrir(alquiler){
+            abrir : function (alquiler){
                 console.log(alquiler);
                 var modalInstance = $uibModal.open({
                     templateUrl: 'views/detalle_alquiler.html',
@@ -2157,7 +2157,7 @@ vm.login2 = function() {
             ]
 
         $scope.modal={ //serian todos con el mismo wizz
-            agregar(producto){
+            agregar : function (producto){
                 var modalInstance = $uibModal.open({
                     templateUrl: 'views/wizard-producto-inventario.html',
                     controller: wizardProductoInvantarioCtrl, 
@@ -2175,7 +2175,7 @@ vm.login2 = function() {
                     }
                 });
             },
-            nuevo(producto){
+            nuevo : function (producto){
                 var modalInstance = $uibModal.open({
                     templateUrl: 'views/wizard-producto-inventario.html',
                     controller: wizardProductoInvantarioCtrl, 
@@ -2193,7 +2193,7 @@ vm.login2 = function() {
                     }
                 });
             },
-            mover(producto){
+            mover : function (producto){
                 var modalInstance = $uibModal.open({
                     templateUrl: 'views/wizard-producto-inventario.html',
                     controller: wizardProductoInvantarioCtrl, 
@@ -2211,7 +2211,7 @@ vm.login2 = function() {
                     }
                 });
             },
-            ajustar(producto){
+            ajustar : function (producto){
                 var modalInstance = $uibModal.open({
                     templateUrl: 'views/wizard-producto-inventario.html',
                     controller: wizardProductoInvantarioCtrl, 
@@ -2337,7 +2337,7 @@ vm.login2 = function() {
         };
 
         $scope.modal={
-            crear(){
+            crear : function (){
                 var modalInstance = $uibModal.open({
                     templateUrl: 'views/crear_alquilable.html',
                     controller: crearAlquilableCtrl, 
@@ -2354,7 +2354,7 @@ vm.login2 = function() {
                     }
                 });
             },
-            editar(alquilable){
+            editar : function (alquilable){
                 var modalInstance = $uibModal.open({
                     templateUrl: 'views/crear_alquilable.html',
                     controller: crearAlquilableCtrl, 
@@ -2454,7 +2454,7 @@ vm.login2 = function() {
     };
 
     $scope.modal={
-        crear(){
+        crear : function (){
             var modalInstance = $uibModal.open({
                 templateUrl: 'views/crear_gasto.html',
                 controller: crearGastoCtrl, 
@@ -2497,7 +2497,7 @@ vm.login2 = function() {
 
         },
 
-        editar(gasto){       
+        editar : function (gasto){       
 
             var modalInstance = $uibModal.open({
                 templateUrl: 'views/editar_gasto.html',
