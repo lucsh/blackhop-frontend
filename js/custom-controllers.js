@@ -2078,7 +2078,7 @@ vm.login2 = function() {
         }
     }])
 
-.controller('productosInventarioCtrl', ['$http','$scope','$log','$uibModal','$filter','DTOptionsBuilder','DTColumnDefBuilder', function($http,$scope,$log,$uibModal,$filter,DTOptionsBuilder,DTColumnDefBuilder){
+.controller('productosInventarioCtrl', ['$http','$scope','$log','$uibModal','$filter','DTOptionsBuilder','DTColumnDefBuilder','SweetAlert',function($http,$scope,$log,$uibModal,$filter,DTOptionsBuilder,DTColumnDefBuilder,SweetAlert){
 
 
     $scope.productosInventario =[]
@@ -2113,6 +2113,7 @@ vm.login2 = function() {
             });        
         }
 
+        //no es necesario? ToDo
         $scope.agregarAjuste = function (){
 
             var ajuste ={
@@ -2168,24 +2169,6 @@ vm.login2 = function() {
                     resolve: {
                         trabajo: function () {
                             return 'agregar';
-                        },
-                        producto: function () {
-                            return producto;
-                        }
-                    }
-                });
-            },
-            nuevo : function (producto){
-                var modalInstance = $uibModal.open({
-                    templateUrl: 'views/wizard-producto-inventario.html',
-                    controller: wizardProductoInvantarioCtrl, 
-                    //controler en controllers.js, no termino de entender porque no lo puedo armar como el resto y si o si tengo que poner una funcion                        
-                    windowClass: "animated fadeIn",
-                    scope: $scope,
-                    backdrop: 'static',
-                    resolve: {
-                        trabajo: function () {
-                            return 'nuevo';
                         },
                         producto: function () {
                             return producto;

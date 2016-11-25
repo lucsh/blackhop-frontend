@@ -1578,7 +1578,7 @@ function ModalInstanceCtrl ($scope, $uibModalInstance) {
 };
 
 function scanearCuponCtrl ($scope,$log,$uibModalInstance,$http){
-    
+
     $scope.cupon.error = false;
 
     $scope.verificarCupon = function () {
@@ -1609,7 +1609,7 @@ function scanearCuponCtrl ($scope,$log,$uibModalInstance,$http){
                     ultimaCompra:response.UltCompraProducto + " - " + response.UltCompraCantidad,
                     fechaUltimaCompra:response.UltCompraFecha
                 }
-                
+
                 $scope.$parent.cuponSeleccionado={
                     numero:$scope.cupon.numero,
                     litros:response.litros
@@ -1626,7 +1626,7 @@ function scanearCuponCtrl ($scope,$log,$uibModalInstance,$http){
     }
 
     $scope.onTextChange = function (){
-        
+
         if ($scope.cupon.numero.length == 13){
                 $scope.verificarCupon();// A LOS 13 DIGITOS 
             } else if ($scope.cupon.numero.length > 13){
@@ -1647,16 +1647,16 @@ function scanearCuponCtrl ($scope,$log,$uibModalInstance,$http){
             $uibModalInstance.dismiss('cancel');
         };
         
-        
+
     };
 
     function modalControler ($scope,$http,$log,$uibModalInstance,clientes){
-        
+
         $scope.clientes = clientes;       
         $scope.asd = moment('01/01/1985');
         
         $scope.seleccion={}
-        
+
         $scope.ok = function () {
             $uibModalInstance.close();
             $scope.$parent.clienteSeleccionado={};
@@ -1669,7 +1669,7 @@ function scanearCuponCtrl ($scope,$log,$uibModalInstance,$http){
         };
         
         $scope.clientesFiltrados = function (filteredData) {          
-            
+
             if (filteredData.length == 1) {
 
                 if ($scope.seleccion.clienteSeleccionado!=filteredData[0].id){
@@ -1683,7 +1683,7 @@ function scanearCuponCtrl ($scope,$log,$uibModalInstance,$http){
             }
             
         }
-        
+
         $scope.seleccionarNuevo= function(id){
             $scope.seleccion.clienteSeleccionado=id;
             
@@ -1692,7 +1692,7 @@ function scanearCuponCtrl ($scope,$log,$uibModalInstance,$http){
           }).error(function(error){
             console.log(error);
         });        
-          
+
       }
 
       $scope.cargarNuevo= function(newCliNombre,newCliApellido,newCliDni,newCliTelefono,newCliCelular,newCliEmail,newCliDireccion,newCliLocalidad){
@@ -1731,7 +1731,7 @@ function scanearCuponCtrl ($scope,$log,$uibModalInstance,$http){
             $uibModalInstance.close();
         });
 
-        
+
     }
 };
 
@@ -1741,7 +1741,7 @@ function modalProveedoresControler ($http,$scope,$log,$uibModalInstance,Upload,p
     $scope.cargarNuevo= function(newProvNombre,newProvDireccion,newProvTelefono,newProvEmail,newProvMetodoPago,newProvContacto,newProvTelefonoContacto,newProvCuit){
 
 
-        
+
 
         $http.post('http://blackhop-dessin1.rhcloud.com/api/admin/proveedor',{
             nombre:newProvNombre,
@@ -1773,9 +1773,9 @@ function modalProveedoresControler ($http,$scope,$log,$uibModalInstance,Upload,p
             $uibModalInstance.close();
         });
 
-        
+
     }
-    
+
     $scope.ok = function () {
         $uibModalInstance.close();
     };
@@ -1787,7 +1787,7 @@ function modalProveedoresControler ($http,$scope,$log,$uibModalInstance,Upload,p
 };
 
 function detalleVentaCtrl ($scope,$log,$uibModalInstance,venta){
-    
+
     $scope.venta=venta;
     $scope.venta.items = [
     {
@@ -1809,7 +1809,7 @@ function detalleVentaCtrl ($scope,$log,$uibModalInstance,venta){
         tipo:"Cervezas por Litro"
     }
     ];
-    
+
     $scope.ok = function () {
         $uibModalInstance.close();
     };
@@ -1854,17 +1854,17 @@ function crearAlquilableCtrl ($scope,$log,$uibModalInstance,alquilables,alquilab
         direccion:''
     }
     ]
-    
+
     $scope.guardar = function (alquilableEdit){
-        
+
         var found = jQuery.inArray(alquilableEdit, $scope.$parent.alquilables);
-        
+
         if (found == -1) { 
             alquilableEdit.id=$scope.alquilables.length+1;
             alquilableEdit.estado='Disponible';
             alquilableEdit.class='badge-primary';                            
             $scope.$parent.alquilables.push(alquilableEdit);
-            
+
         } else {
             $scope.$parent.alquilables.splice(found, 1);                                   
             $scope.$parent.alquilables.push(alquilableEdit);
@@ -1872,7 +1872,7 @@ function crearAlquilableCtrl ($scope,$log,$uibModalInstance,alquilables,alquilab
 
         $uibModalInstance.dismiss('cancel');
     }
-    
+
     $scope.ok = function () {
         $uibModalInstance.close();
     };
@@ -1889,7 +1889,7 @@ function crearGastoCtrl ($scope,$log,$uibModalInstance,gastos,gastoEdit){
 
 
     $scope.guardar = function (gastoEdit){          
-        
+
         var found = jQuery.inArray(gastoEdit, $scope.$parent.gastos);
 
             //Busco la Fecha con jQuery porque no puedo leer el ng-model
@@ -1910,7 +1910,7 @@ function crearGastoCtrl ($scope,$log,$uibModalInstance,gastos,gastoEdit){
         $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
-        
+
     }
 
     function editarGastoCtrl ($scope,$log,$uibModalInstance,gastos,gastoEdit){
@@ -1919,7 +1919,7 @@ function crearGastoCtrl ($scope,$log,$uibModalInstance,gastos,gastoEdit){
 
 
         $scope.guardar = function (gastoEdit){          
-            
+
             var found = jQuery.inArray(gastoEdit, $scope.$parent.gastos);
 
             //Busco la Fecha con jQuery porque no puedo leer el ng-model
@@ -1940,13 +1940,13 @@ function crearGastoCtrl ($scope,$log,$uibModalInstance,gastos,gastoEdit){
         $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
-        
+
     }
     function crearGastoCajaCtrl ($http,$scope,$log,$uibModalInstance,gastoNuevo,SweetAlert){
         $scope.gastoNuevo=gastoNuevo;
 
         $scope.guardar = function (gastoNuevo){
-           
+
 
             SweetAlert.swal({
                 title: "¿Estas Seguro?",
@@ -1975,7 +1975,7 @@ function crearGastoCtrl ($scope,$log,$uibModalInstance,gastos,gastoEdit){
                         });
 
                         $uibModalInstance.close();
-                        
+
                     } else {
                         SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
                     }
@@ -1991,7 +1991,7 @@ function crearGastoCtrl ($scope,$log,$uibModalInstance,gastos,gastoEdit){
         $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
-        
+
     }
 
     function terminarSesionCajaCtrl ($scope,$log,$uibModalInstance,SweetAlert,$state){
@@ -2031,7 +2031,7 @@ function crearGastoCtrl ($scope,$log,$uibModalInstance,gastos,gastoEdit){
                 } else {}
             });
         };
-        
+
     }
 
     function terminarSesionBarraCtrl ($scope,$log,$uibModalInstance,SweetAlert,$state){
@@ -2069,13 +2069,13 @@ function crearGastoCtrl ($scope,$log,$uibModalInstance,gastos,gastoEdit){
                 } else {}
             });
         };
-        
+
     }
 
     function detalleProductoCtrl ($http,$scope,$log,$uibModalInstance,producto,$uibModal,SweetAlert){
 
         $scope.producto=producto;
-        
+
         $scope.editar = function(producto){
             $uibModalInstance.dismiss('cancel');
             console.log(producto);
@@ -2095,7 +2095,7 @@ function crearGastoCtrl ($scope,$log,$uibModalInstance,gastos,gastoEdit){
                         
                     });
         }
-        
+
         $scope.onDelete = function(ident){ 
         //console.log($scope.$parent.productos);
 
@@ -2111,7 +2111,7 @@ function crearGastoCtrl ($scope,$log,$uibModalInstance,gastos,gastoEdit){
             closeOnCancel: false },
             function (isConfirm) {
                 if (isConfirm) {
-                    
+
                     $http.delete('http://blackhop-dessin1.rhcloud.com/api/admin/producto/'+ident)
                     .success(function(){    
                         SweetAlert.swal("¡Eliminado!", "El producto fue eliminado", "success");
@@ -2121,30 +2121,41 @@ function crearGastoCtrl ($scope,$log,$uibModalInstance,gastos,gastoEdit){
                                 break;
                             }
                         }
-                        
+
                     }).error(function(error){
                         SweetAlert.swal("¡Error!", "El producto no pudo ser eliminado", "error");
                         console.log(error);
                     });
                     $uibModalInstance.close();
-                    
+
                 } else {
                     SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
                 }
             }
             
-            
+
             );
-        
+
     }
     
 }
 
-function wizardProductoInvantarioCtrl ($scope,$log,$uibModalInstance,WizardHandler,trabajo,producto){
- 
+function wizardProductoInvantarioCtrl ($scope,$log,$uibModalInstance,SweetAlert,WizardHandler,trabajo,producto){
+
     $scope.productos = $scope.$parent.productosInventario;
     $scope.ubicaciones = $scope.$parent.ubicaciones;
+    $scope.datos={};
+    $scope.datos.cantSel=0;
+    $scope.datos.query="";
     
+
+    $scope.onCantidadTextoChange = function(){
+        if ($scope.datos.cantSel>$scope.datos.sliderEnd){
+            $scope.datos.cantSel=parseInt($scope.datos.cantSel/10);
+            console.log($scope.datos.cantSel);
+
+        }
+    }
     
     $scope.seleccionarProducto= function (ident){
         for(var i = 0; i < $scope.$parent.productosInventario.length; i++){
@@ -2157,9 +2168,9 @@ function wizardProductoInvantarioCtrl ($scope,$log,$uibModalInstance,WizardHandl
     }
     
     $scope.seleccionarOrigen= function (ident){
-        for(var i = 0; i < $scope.$parent.ubicaciones.length; i++){
+        for(var i = 0; i < $scope.ubicaciones.length; i++){
             if ($scope.$parent.ubicaciones[i].nombre == ident){                  
-                $scope.ubicacionOrigen=$scope.$parent.ubicaciones[i];
+                $scope.ubicacionOrigen=$scope.ubicaciones[i];
                 $scope.origenNombre=$scope.ubicacionOrigen.nombre + ' - ' + $scope.ubicacionOrigen.direccion;                        
                 
                 break;
@@ -2168,9 +2179,10 @@ function wizardProductoInvantarioCtrl ($scope,$log,$uibModalInstance,WizardHandl
     }
     
     $scope.seleccionarDestino= function (ident){
-        for(var i = 0; i < $scope.$parent.ubicaciones.length; i++){
-            if ($scope.$parent.ubicaciones[i].nombre == ident){                  
-                $scope.ubicacionDestino=$scope.$parent.ubicaciones[i];
+        for(var i = 0; i < $scope.ubicaciones.length; i++){
+            if ($scope.ubicaciones[i].id == ident){
+                $scope.ubicacionDestino=$scope.ubicaciones[i];
+                $scope.datos.query=$scope.ubicacionDestino.nombre;
                 $scope.destinoNombre=$scope.ubicacionDestino.nombre + ' - ' + $scope.ubicacionDestino.direccion;
                 break;
             }
@@ -2180,31 +2192,85 @@ function wizardProductoInvantarioCtrl ($scope,$log,$uibModalInstance,WizardHandl
         console.log(cantidad);
         $scope.cantidadNombre=cantidad + ' ' + $scope.productoEdit.unidad;
         console.log($scope.cantidadNombre);
+        console.log(trabajo);
+
+            if(trabajo=="ajustar"){
+                SweetAlert.swal({
+                    title: "¿Estas Seguro?",
+                    text: "Se va a aplicar un Ajuste de <span style='color:#F8BB86; font-weight:600'>" + $scope.cantidadNombre +"</span>",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Si, Ajustar!",
+                    cancelButtonText: "No, cancelar!",
+                    html: true,
+                    closeOnConfirm: false,
+                    closeOnCancel: false },
+                    function (isConfirm) { 
+                        if (isConfirm) {
+                            $scope.productoEdit.stock-=cantidad;
+                            SweetAlert.swal("¡Hecho!", "El ajuste fue aplicado", "success"); 
+                            $uibModalInstance.close();
+                        } else {
+                            SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
+                        }
+                });
+            } else if(trabajo=="agregar"){
+                SweetAlert.swal({
+                    title: "¿Estas Seguro?",
+                    text: "Se van a agregar <span style='color:#F8BB86; font-weight:600'>" + $scope.cantidadNombre +"</span>",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Si, agregar!",
+                    cancelButtonText: "No, cancelar!",
+                    html: true,
+                    closeOnConfirm: false,
+                    closeOnCancel: false },
+                    function (isConfirm) { 
+                        if (isConfirm) {
+                            $scope.productoEdit.stock+=cantidad;
+                            SweetAlert.swal("¡Hecho!", "El ajuste fue aplicado", "success"); 
+                            $uibModalInstance.close();
+                        } else {
+                            SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
+                        }
+                });
+            }
         
-    }
+    }//end seleccionarCantidad
     
     switch (trabajo){
-        case 'agregar':
+        case 'agregar': 
+        console.log("agregar");
+
         $scope.seleccionarProducto(producto.id);
         $scope.productoDisabled=true;
-        $scope.seleccionarDestino(producto.ubicacion);
-        $scope.destinoDisabled=true;   
+        $scope.datos.sliderStart=0;
+        $scope.datos.sliderEnd=1000;
+        // no me importa el desde
+        $scope.origenDisabled=true;
+        $scope.destinoDisabled=true;
+        $scope.indicatorsDisabled=true;
+
         break;
-        case 'nuevo':
-        
-        break; 
         case 'mover':
+        console.log("mover");
+
         $scope.seleccionarProducto(producto.id);
         $scope.productoDisabled=true;
+        $scope.datos.sliderStart=0;
+        $scope.datos.sliderEnd=$scope.productoEdit.stock;
         $scope.seleccionarOrigen(producto.ubicacion);
         $scope.origenDisabled=true;
+
         break; 
-        case 'ajustar':
+        case 'ajustar': 
+        console.log("ajustar");
+
         $scope.seleccionarProducto(producto.id);
         $scope.productoDisabled=true;
-        $scope.seleccionarOrigen(producto.ubicacion);
         $scope.origenDisabled=true;
-        $scope.seleccionarDestino("Ajuste");
         $scope.destinoDisabled=true;
         $scope.indicatorsDisabled=true;
         break;
@@ -2216,14 +2282,39 @@ function wizardProductoInvantarioCtrl ($scope,$log,$uibModalInstance,WizardHandl
     };
     
     $scope.ok = function () {
-        $uibModalInstance.close();
+        if(trabajo=="mover"){
+                SweetAlert.swal({
+                    title: "¿Estas Seguro?",
+                    text: "Se van a mover <span style='color:#F8BB86; font-weight:600'>" + $scope.cantidadNombre +"</br>a " + $scope.destinoNombre+"</span>",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Si, mover!",
+                    cancelButtonText: "No, cancelar!",
+                    html: true,
+                    closeOnConfirm: false,
+                    closeOnCancel: false },
+                    function (isConfirm) { 
+                        if (isConfirm) {
+
+                            $scope.productoEdit.stock-=$scope.datos.cantSel;
+                            //necesito el id de ese producto en la otra ubicacion para sumarlo
+
+
+                            SweetAlert.swal("¡Hecho!", "Se realizo el movimiento", "success"); 
+                            $uibModalInstance.close();
+                        } else {
+                            SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
+                        }
+                });
+            }
     };
 
 }
 
 
 function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,WizardHandler,clienteSeleccionado,resumen){
- 
+
     $scope.resumen=resumen;
     $scope.clienteSeleccionado=clienteSeleccionado;
     
@@ -2262,7 +2353,7 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
     };
     
     $scope.ok = function () {        
-        
+
         $uibModalInstance.close();
         
         var totalLitrosCupones=0;
@@ -2279,7 +2370,7 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
             item.costo = $scope.resumen.productos[i].productoReal.valor;
 
             itemsVenta.push(item);
-            
+
             
             if ($scope.resumen.productos[i].productoReal.categoria=="Cupones"){            
                 totalLitrosCupones+=$scope.resumen.productos[i].cantidad;
@@ -2290,7 +2381,7 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
 
         
         $http.post('http://blackhop-dessin1.rhcloud.com/api/pos/caja/venta', {
-            
+
             idCliente:$scope.clienteSeleccionado.id,
             monto: $scope.resumen.total,
             itemsVenta: JSON.stringify(itemsVenta),
@@ -2308,7 +2399,7 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
       });
         
         if (totalLitrosCupones>0){
-            
+
 
                 /*    qz.websocket.connect().then(function() {
                       alert("Connected!");
@@ -2320,7 +2411,7 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
 
 
                     cupon.litros=totalLitrosCupones;
-                    
+
                     var modalInstance = $uibModal.open({
                         templateUrl: 'views/imprimir_cupon.html',
                         controller: imprimirCuponCtrl, 
@@ -2344,7 +2435,7 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
     $scope.newProd = angular.copy(productoEdit);
     $scope.flagEditar=false;
 
-    
+
     /* Nueva Marca init */
     $scope.tresdeStartVisibleClass = 'tresde-up-first-visible ';
     $scope.tresdeStartHiddenClass = 'tresde-up-second-hidden ';
@@ -2400,7 +2491,7 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
         }
         console.log($scope.flagEditar);
         if ($scope.flagEditar){
-            
+
             $http.put('http://blackhop-dessin1.rhcloud.com/api/admin/producto/'+$scope.newProd.id,{
                 nombre:$scope.newProd.nombre,
                 categoria:$scope.newProd.categoria.id,
@@ -2426,11 +2517,11 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
              SweetAlert.swal("Error", error.message, "error");
              console.log(error);
          });
-            
+
         } else{
 
             $http.post('http://blackhop-dessin1.rhcloud.com/api/admin/producto', {
-                
+
                 nombre:$scope.newProd.nombre,
                 categoria:$scope.newProd.categoria.id,
                 valor:$scope.newProd.valor,
@@ -2653,7 +2744,7 @@ function detalleAlquilerClienteCtrl ($scope,$log,$uibModalInstance,alquiler){
                 GIS:null,
                 estado:'Activo'
             }]
-            
+
             switch ($scope.alquiler.estado){
                 case 'Con Retraso':
                 $scope.borde= "border: 2px solid #ed5565";
@@ -2668,7 +2759,7 @@ function detalleAlquilerClienteCtrl ($scope,$log,$uibModalInstance,alquiler){
                 $scope.borde= "border: 2px solid #1c84c6";
                 break;
             };    
-            
+
 
             var fA = moment($scope.alquiler.fecha);
             var fD = moment($scope.alquiler.fechaDevolucion);
@@ -2692,7 +2783,7 @@ function detalleAlquilerClienteCtrl ($scope,$log,$uibModalInstance,alquiler){
         };
 
         function detalleCompraCtrl ($scope,$log,$uibModalInstance,compra){
-            
+
             $scope.compra=compra;
             $scope.compra.items = [
             {
@@ -2716,7 +2807,7 @@ function detalleAlquilerClienteCtrl ($scope,$log,$uibModalInstance,alquiler){
                 tipo:"Cervezas por Litro"
             }
             ];
-            
+
             $scope.ok = function () {
                 $uibModalInstance.close();
             };
@@ -2724,7 +2815,7 @@ function detalleAlquilerClienteCtrl ($scope,$log,$uibModalInstance,alquiler){
             $scope.cancel = function () {
                 $uibModalInstance.dismiss('cancel');
             };
-            
+
             $scope.getTotal = function(){
                 var total = 0;
                 for(var i = 0; i < $scope.compra.items.length; i++){
@@ -2738,9 +2829,9 @@ function detalleAlquilerClienteCtrl ($scope,$log,$uibModalInstance,alquiler){
         function crearEditarCompraCtrl ($scope,$log,$uibModalInstance,items,aCompra,soloMostrar){
 
             $scope.soloMostrar=soloMostrar;
-            
+
             console.log($scope.soloMostrar);
-            
+
             $scope.agregarItem = function(){
                 var newItem ={
                     id:Number($scope.compra.items.length)+1,
@@ -2834,7 +2925,7 @@ function detalleAlquilerClienteCtrl ($scope,$log,$uibModalInstance,alquiler){
             };       
 
             $scope.guardar = function(){
-                
+
         //verifico si ya existe (edicion vs creacion)
         var nuevaCompra=true;
         
@@ -2846,9 +2937,9 @@ function detalleAlquilerClienteCtrl ($scope,$log,$uibModalInstance,alquiler){
              nuevaCompra=false;
              break;
          }
-         
+
      }
-     
+
      if(nuevaCompra){
         $scope.compra.fecha=moment($scope.compra.fecha).locale('es').format('DD/MMM/YY');
         $scope.compra.estado='Pedido';
@@ -2857,7 +2948,7 @@ function detalleAlquilerClienteCtrl ($scope,$log,$uibModalInstance,alquiler){
 
         $scope.compras.push($scope.compra);
     }
-    
+
     $uibModalInstance.close();
 }    
 
@@ -2882,7 +2973,7 @@ $scope.cambiarEstado = function(estado){
     $scope.compra.estado=estado;
     $scope.compra.fecha=new Date();        
     $scope.asignarClasesEstado();    
-    
+
 }
 $scope.asignarClasesEstado = function(){
  switch ($scope.compra.estado){
@@ -3553,7 +3644,7 @@ $scope.productos=[
             }]
         }else{
         //$scope.compra=aCompra; //con '=' son el mismo (no preguntes)
-        
+
         $scope.compra = angular.copy(aCompra);
         
         $scope.estadoAnterior=$scope.compra.estado;
@@ -3577,14 +3668,14 @@ $scope.productos=[
        };
 
        function imprimirCuponCtrl ($scope,$log,$uibModalInstance,cupon){
-        
+
         $scope.cupon=cupon; 
-        
+
         //var f = moment($scope.cupon.fecha);
         var f = moment($scope.cupon.fecha);            
         var vencimiento =f.clone().add(cupon.vigencia,'d');
         $scope.vencimiento=moment(vencimiento).locale('es').format('DD/MMM/YYYY');
-        
+
         $scope.barcodeType = 'EAN';
 
         $scope.barcodeOptions = {
@@ -3678,7 +3769,7 @@ function imprimirTurnoCtrl ($scope,$http,$log,$uibModalInstance){
     }).error(function(error){
         console.log(error);
     })
-    
+
     $scope.cancel = function () {
 
         $uibModalInstance.dismiss('cancel');
@@ -3759,13 +3850,13 @@ function canillaCambiarProductoCtrl ($http,$scope,$log,$uibModalInstance,idCanil
         }
         //end Gilada
 
-        
+
         $scope.guardar = function (idPS){
          $uibModalInstance.close(idPS);  
 
      }
 
-     
+
      $scope.vaciar = function (){
         $scope.$parent.canillas[idCanilla].idInventario='';
         $scope.$parent.canillas[idCanilla].productoMarca='';
@@ -3777,9 +3868,9 @@ function canillaCambiarProductoCtrl ($http,$scope,$log,$uibModalInstance,idCanil
         $uibModalInstance.close();
                 //cambiar a put
             }
-            
-            
-            
+
+
+
             $scope.ok = function () {
                 $uibModalInstance.close();
             };
@@ -3787,7 +3878,7 @@ function canillaCambiarProductoCtrl ($http,$scope,$log,$uibModalInstance,idCanil
             $scope.cancel = function () {
                 $uibModalInstance.dismiss('cancel');
             };
-            
+
         }
 
 /**

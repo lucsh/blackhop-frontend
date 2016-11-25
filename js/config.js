@@ -944,7 +944,10 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
             data: { pageTitle: 'Alquilables' },
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
-                    return $ocLazyLoad.load([
+                    return $ocLazyLoad.load([                        
+                        {
+                            files: ['js/plugins/sweetalert/sweetalert.min.js', 'css/plugins/sweetalert/sweetalert.css']
+                        },
                         {
                             name: 'colorpicker.module',
                             files: ['css/plugins/colorpicker/colorpicker.css','js/plugins/colorpicker/bootstrap-colorpicker-module.js']
@@ -1097,7 +1100,14 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
             data: { pageTitle: 'Productos' },
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
-                    return $ocLazyLoad.load([
+                    return $ocLazyLoad.load([                        
+                        {
+                            files: ['js/plugins/sweetalert/sweetalert.min.js', 'css/plugins/sweetalert/sweetalert.css']
+                        },
+                        {
+                            name: 'oitozero.ngSweetAlert',
+                            files: ['js/plugins/sweetalert/angular-sweetalert.min.js']
+                        },
                         {
                             name: 'nouislider',
                             files: ['css/plugins/nouslider/jquery.nouislider.css','js/plugins/nouslider/jquery.nouislider.min.js','js/plugins/nouslider/angular-nouislider.js']
