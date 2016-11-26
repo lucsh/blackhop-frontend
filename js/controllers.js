@@ -2208,8 +2208,28 @@ function wizardProductoInvantarioCtrl ($http,$scope,$log,$uibModalInstance,Sweet
                     closeOnCancel: false },
                     function (isConfirm) { 
                         if (isConfirm) {
-                            $scope.productoEdit.stock-=cantidad;
-                            SweetAlert.swal("¡Hecho!", "El ajuste fue aplicado", "success"); 
+
+                            /*
+                            ACA VA EL PUT DE AJUSTAR
+                            */
+                            $http.put('http://blackhop-dessin1.rhcloud.com/api/admin/inventarioajustar/'+$scope.productoEdit.id,{
+                                cantidad:cantidad
+                            }).success(function(response){    
+                                //$scope.productoEdit.stock-=cantidad;
+                                //$scope.productoEdit = response.data;
+                                $scope.productos.forEach(function(producto,index,arreglo){
+                                    if(producto.id == response.data.id){
+                                        arreglo[index] = response.data;
+                                    }
+                                });
+                                SweetAlert.swal("¡Hecho!", "El ajuste fue aplicado", "success");    
+                            }).error(function(error){
+                                SweetAlert.swal("Error", error, "error");
+                            });
+
+
+                            //$scope.productoEdit.stock-=cantidad;
+                            //SweetAlert.swal("¡Hecho!", "El ajuste fue aplicado", "success"); 
                             $uibModalInstance.close();
                         } else {
                             SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
@@ -2229,8 +2249,30 @@ function wizardProductoInvantarioCtrl ($http,$scope,$log,$uibModalInstance,Sweet
                     closeOnCancel: false },
                     function (isConfirm) { 
                         if (isConfirm) {
-                            $scope.productoEdit.stock+=cantidad;
-                            SweetAlert.swal("¡Hecho!", "El ajuste fue aplicado", "success"); 
+
+                            /*
+                            ACA VA EL PUT de AGREGAR
+                            */
+                            $http.put('http://blackhop-dessin1.rhcloud.com/api/admin/inventarioagregar/'+$scope.productoEdit.id,{
+                                cantidad:cantidad
+                            }).success(function(response){    
+                                //$scope.productoEdit.stock+=cantidad;
+                                //$scope.productoEdit = response.data;
+                                $scope.productos.forEach(function(producto,index,arreglo){
+                                    if(producto.id == response.data.id){
+                                        arreglo[index] = response.data;
+                                    }
+                                });
+                                SweetAlert.swal("¡Hecho!", "El ajuste fue aplicado", "success"); 
+                                $uibModalInstance.close();
+                                
+                            }).error(function(error){
+                                console.log(error);
+                                SweetAlert.swal("Error", error, "error");
+                            });
+
+                            //$scope.productoEdit.stock+=cantidad;
+                            //SweetAlert.swal("¡Hecho!", "El ajuste fue aplicado", "success"); 
                             $uibModalInstance.close();
                         } else {
                             SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
@@ -2285,7 +2327,7 @@ function wizardProductoInvantarioCtrl ($http,$scope,$log,$uibModalInstance,Sweet
         if(trabajo=="mover"){
                 SweetAlert.swal({
                     title: "¿Estas Seguro?",
-                    text: "Se van a mover <span style='color:#F8BB86; font-weight:600'>" + $scope.cantidadNombre +"</br>a " + $scope.destinoNombre+"</span>",
+                    text: "Se van a mover <span style='color:#F8BB86; font-weight:600'>" + $scope.cantidadNombre +"</br>de "+$scope.productoEdit.ubicacion+"</br> a " + $scope.destinoNombre+"</span>",
                     type: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#DD6B55",
@@ -2297,11 +2339,45 @@ function wizardProductoInvantarioCtrl ($http,$scope,$log,$uibModalInstance,Sweet
                     function (isConfirm) { 
                         if (isConfirm) {
 
-                            $scope.productoEdit.stock-=$scope.datos.cantSel;
+                            /*
+                            ACA VA EL PUT DE MOVER
+                            */
+                            console.log($scope);
+                            
+                            
+                            $http.put('http://blackhop-dessin1.rhcloud.com/api/admin/inventariomover/'+$scope.productoEdit.id,{
+                                cantidad:$scope.datos.cantSel,
+                                ubicacionDestino:$scope.ubicacionDestino.id
+                            }).success(function(response){    
+                                //$scope.productoEdit.stock-=$scope.datos.cantSel;
+                                //$scope.productoEdit = response.inventarioOrigen;
+
+                                $scope.productos.forEach(function(producto,index,arreglo){
+                                    if(producto.id == response.inventarioDestino.id){
+                                        arreglo[index] = response.inventarioDestino;
+                                    }
+                                    if(producto.id == response.inventarioOrigen.id){
+                                        arreglo[index] = response.inventarioOrigen;
+                                    }
+                                });
+                                SweetAlert.swal("¡Hecho!", "Se realizo el movimiento", "success"); 
+                                $uibModalInstance.close();
+                                
+                            }).error(function(error){
+                                console.log(error);
+                                SweetAlert.swal("Error", error, "error");
+                            });
+
+
+                            
+
+                            //console.log('###############');
+                            //console.log($scope.productos);
+                            //$scope.productoEdit.stock-=$scope.datos.cantSel;
                             //necesito el id de ese producto en la otra ubicacion para sumarlo
 
 
-                            SweetAlert.swal("¡Hecho!", "Se realizo el movimiento", "success"); 
+                            //SweetAlert.swal("¡Hecho!", "Se realizo el movimiento", "success"); 
                             $uibModalInstance.close();
                         } else {
                             SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
