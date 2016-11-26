@@ -42,10 +42,20 @@
                             <td><div class="col-lg-5">{{ cupon.vigencia }} días</div>
                             <div ng-if="cupon.estado!='Usado'" class="tresde-right-container" >
                                 <div class="{{isHover}}">
-                                <button class="btn btn-primary btn-xs" type="button" ng-click="vigencia.extender(cupon.id)" tooltip-placement="top" uib-tooltip="Extender"><i class="fa fa-plus"></i></button>
-                                <button class="btn btn-info btn-xs" type="button" ng-click="vigencia.restaurar(cupon.id)" tooltip-placement="top" uib-tooltip="Restaurar"><i class="fa fa-check"></i></button>
-                                <button class="btn btn-danger btn-xs" type="button" ng-click="vigencia.eliminar(cupon.id)" tooltip-placement="top" uib-tooltip="Revocar"><i class="fa fa-times"></i></button>
-                                <button class="btn btn-success btn-xs" type="button" ng-click="imprimir(cupon)" tooltip-placement="top" uib-tooltip="Imprimir"><i class="fa fa-print"></i></button>
+                                    <button class="btn btn-primary btn-xs" type="button" ng-click="vigencia.extender(cupon.id)" tooltip-placement="top" uib-tooltip="Extender">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                    <!--
+                                    <button class="btn btn-info btn-xs" type="button" ng-click="vigencia.restaurar(cupon.id)" tooltip-placement="top" uib-tooltip="Restaurar">
+                                        <i class="fa fa-check"></i>
+                                    </button>
+                                    -->
+                                    <button class="btn btn-danger btn-xs" type="button" ng-click="vigencia.eliminar(cupon.id)" tooltip-placement="top" uib-tooltip="Revocar">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                    <button class="btn btn-success btn-xs" type="button" ng-click="imprimir(cupon)" tooltip-placement="top" uib-tooltip="Imprimir">
+                                        <i class="fa fa-print"></i>
+                                    </button>
                                 </div>
                             </div> 
                                 </td> 

@@ -1563,7 +1563,7 @@ vm.login2 = function() {
         }
     }])
 
-.controller('cuponesCtrl',['$scope','$log','$uibModal','DTOptionsBuilder','DTColumnDefBuilder',function($scope,$log,$uibModal,DTOptionsBuilder,DTColumnDefBuilder){
+.controller('cuponesCtrl',['$http','$scope','$log','$uibModal','DTOptionsBuilder','DTColumnDefBuilder',function($http,$scope,$log,$uibModal,DTOptionsBuilder,DTColumnDefBuilder){
 
     $scope.dtOptions = DTOptionsBuilder.newOptions()
     .withDOM('<"html5buttons"B>lTfgitp')
@@ -1597,52 +1597,47 @@ vm.login2 = function() {
     DTColumnDefBuilder.newColumnDef(6).notSortable().withOption('sWidth', '200px'),
     ]
 
+
+
+
         /**
          * cupones 
          */
-         $scope.cupones = [
-         {
-            id: '1',
-            nombreCliente:'Lucas Del Pozzi',
-            vigencia:3,
-            codigo:'985647532159',
-            fecha:'2016-08-17 22:23:44.657',
-            litros:2.00,
-                estado: '',//se calcula abajo
-                class: ''// se calcula abajo
-            },
-            {
-                id: '2',
-                nombreCliente:'Matias Del Pozzi',
-                vigencia:3,
-                codigo:'986521456982',
-                fecha:'2016-08-17 22:23:44.657',
-                litros:2.00,
-                estado: '',//se calcula abajo
-                class: ''// se calcula abajo
-            },
-            {
-                id: '3',
-                nombreCliente:'Lucas Del Pozzi',
-                vigencia:3,
-                codigo:'965832145625',
-                fecha:'2016-08-18 22:23:44.657',
-                litros:4.00,
-                estado: 'Usado',//se calcula abajo
-                class: 'badge-success'// se calcula abajo
-            },
-            {
-                id: '4',
-                nombreCliente:'Martin Moreira',
-                vigencia:3,
-                codigo:'986534785123',
-                fecha:'2016-08-19 22:23:44.657',
-                litros:4.00,
-                estado: '',//se calcula abajo
-                class: ''// se calcula abajo
-            }
+         $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/cupon').success(function(response){    
+            
+            $scope.cupones = response.data;
 
-            ]; 
+            $scope.cupones.forEach(function(cupon,indice){
+                        
+                var f = moment($scope.cupones[indice].fecha);
+                var now = moment();            
+                var vencimiento =now.clone().add(1,'d');
+
+                if (vencimiento.diff(f, 'days')>$scope.cupones[indice].vigencia){
+                    $scope.cupones[indice].estado='Vencido';                            
+                } else if(((vencimiento.diff(f, 'days'))+1==$scope.cupones[indice].vigencia)||(vencimiento.diff(f, 'days')==$scope.cupones[indice].vigencia)){
+                    $scope.cupones[indice].estado='Por Vencer';
+                } else {
+                    $scope.cupones[indice].estado='Vigente';
+                };
+
+                switch ($scope.cupones[indice].estado){
+                    case 'Vencido':
+                    $scope.cupones[indice].class= "badge-danger";
+                    break;
+                    case 'Vigente':
+                    $scope.cupones[indice].class= "badge-primary";
+                    break; 
+                    case 'Por Vencer':
+                    $scope.cupones[indice].class= "badge-warning";
+                    break;
+                }
+            });
+         
+        }).error(function(error){
+            console.log(error);
+        });  
+        
 
             function ean13_checksum(ean) {
                 var checksum = 0;
@@ -1653,7 +1648,7 @@ vm.login2 = function() {
                 return ((10 - (checksum % 10 )) % 10);
             }
 
-
+            /*
             $scope.calcularEstado=function(indice){
                 var f = moment($scope.cupones[indice].fecha);
                 var now = moment();            
@@ -1681,8 +1676,8 @@ vm.login2 = function() {
                 $scope.cupones[indice].fecha=moment($scope.cupones[indice].fecha).locale('es').format('DD/MMM/YYYY');
                 console.log($scope.cupones[indice].fecha);
             };
-
-
+            
+            
             for(var i = 0; i < $scope.cupones.length; i++){
             //calcular EAN checksum (ultimo digito)
             $scope.cupones[i].codigo+=ean13_checksum($scope.cupones[i].codigo);
@@ -1691,25 +1686,65 @@ vm.login2 = function() {
             if ($scope.cupones[i].estado!="Usado"){
                 $scope.calcularEstado(i);                
             }else{$scope.cupones[i].fecha=moment($scope.cupones[i].fecha).locale('es').format('DD/MMM/YYYY');}
+            
+            };   
 
-        };   
+
+
+            case 'Vencido':
+                    $scope.cupones[indice].class= "badge-danger";
+                    break;
+                    case 'Vigente':
+                    $scope.cupones[indice].class= "badge-primary";
+                    break; 
+                    case 'Por Vencer':
+                    $scope.cupones[indice].class= "badge-warning";
+                    break;
+            */
 
         $scope.vigencia = {
             extender : function (i){
-                $scope.cupones[i-1].fecha= moment().toString();
-                console.log($scope.cupones[i-1]);
-                $scope.calcularEstado(i-1);
+                //$scope.cupones[i-1].fecha= moment().toString();
+                //console.log($scope.cupones[i-1]);
+                //$scope.calcularEstado(i-1);
+                $http.put('http://blackhop-dessin1.rhcloud.com/api/admin/extendercupon/'+i)
+                .success(function(response){    
+                     $scope.cupones.forEach(function(cupon,index,arreglo){
+                        if(cupon.id == response.data.id){
+                            arreglo[index]=response.data;
+                            arreglo[index].class= "badge-primary";
+                            arreglo[index].estado='Vigente'; 
+                        }
+
+                     });
+                }).error(function(error){
+                    console.log(error);
+                });
             },
             eliminar : function (i){
-                $scope.cupones[i-1].vigencia=0;
-                console.log($scope.cupones[i-1]);
-                $scope.calcularEstado(i-1);
-            },
+                //$scope.cupones[i-1].vigencia=0;
+                //console.log($scope.cupones[i-1]);
+                //$scope.calcularEstado(i-1);
+                $http.put('http://blackhop-dessin1.rhcloud.com/api/admin/invalidarcupon/'+i)
+                .success(function(response){    
+                     $scope.cupones.forEach(function(cupon,index,arreglo){
+                        if(cupon.id == response.data.id){
+                            arreglo[index]=response.data;
+                            arreglo[index].class= "badge-warning";
+                            arreglo[index].estado='Vencido'; 
+                        }
+                     });
+                }).error(function(error){
+                    console.log(error);
+                });
+                    
+            }/*,
             restaurar : function (i){
                 $scope.cupones[i-1].vigencia=3;
                 console.log($scope.cupones[i-1]);
                 $scope.calcularEstado(i-1);
             }
+            */
         };  
 
         $scope.imprimir= function (cupon){
