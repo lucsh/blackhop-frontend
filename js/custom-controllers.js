@@ -966,7 +966,18 @@ vm.login2 = function() {
         }
 }])
 
-.controller('ventasCtrl', ['$scope','$log','$uibModal','DTOptionsBuilder','DTColumnDefBuilder', function($scope,$log,$uibModal,DTOptionsBuilder,DTColumnDefBuilder){
+.controller('ventasCtrl', ['$http','$scope','$log','$uibModal','DTOptionsBuilder','DTColumnDefBuilder', function($http, $scope,$log,$uibModal,DTOptionsBuilder,DTColumnDefBuilder){
+
+            /**
+         * ventas  morecapo
+         */
+
+        $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/venta').success(function(response){    
+            $scope.ventas = response.data;
+        }).error(function(error){
+            console.log(error);
+        }); 
+
 
     $scope.dtOptions = DTOptionsBuilder.newOptions()
     .withDOM('<"html5buttons"B>lTfgitp')
@@ -994,253 +1005,11 @@ vm.login2 = function() {
     DTColumnDefBuilder.newColumnDef(1),
     DTColumnDefBuilder.newColumnDef(2),
     DTColumnDefBuilder.newColumnDef(3).withOption('sWidth', '60px'),
-    DTColumnDefBuilder.newColumnDef(4).notSortable()
+    DTColumnDefBuilder.newColumnDef(4)
     ]
-        /**
-         * ventas 
-         */
-         $scope.ventas = [
-         {
-            id: '1',
-            cliente: 'Monica Geller',
-            fecha: '10/6/15',
-            monto:'150.00'
-        },
-        {
-            id: '2',
-            cliente: 'Rachel Green',
-            fecha: '10/6/15',
-            monto:'300.00'
-        },
-        {
-            id: '3',
-            cliente: 'Chandler Bing',
-            fecha: '10/6/15',
-            monto:'150.00'
-        },
-        {
-            id: '4',
-            cliente: 'Joseph Tribbiani',
-            fecha: '10/6/15',
-            monto:'150.00'
-        },
-        {
-            id: '5',
-            cliente: 'Phoeebe Buffey',
-            fecha: '10/6/15',
-            monto:'150.00'
-        },
-        {
-            id: '6',
-            cliente: 'Monica Geller',
-            fecha: '10/6/15',
-            monto:'150.00'
-        },
-        {
-            id: '7',
-            cliente: 'Rachel Green',
-            fecha: '10/6/15',
-            monto:'300.00'
-        },
-        {
-            id: '8',
-            cliente: 'Phoeebe Buffey',
-            fecha: '10/6/15',
-            monto:'150.00'
-        },
-        {
-            id: '9',
-            cliente: 'Monica Geller',
-            fecha: '10/6/15',
-            monto:'150.00'
-        },
-        {
-            id: '10',
-            cliente: 'Rachel Green',
-            fecha: '11/6/15',
-            monto:'300.00'
-        },
-        {
-            id: '11',
-            cliente: 'Chandler Bing',
-            fecha: '11/6/15',
-            monto:'150.00'
-        },
-        {
-            id: '12',
-            cliente: 'Joseph Tribbiani',
-            fecha: '11/6/15',
-            monto:'150.00'
-        },
-        {
-            id: '13',
-            cliente: 'Phoeebe Buffey',
-            fecha: '12/6/15',
-            monto:'150.00'
-        },
-        {
-            id: '14',
-            cliente: 'Monica Geller',
-            fecha: '12/6/15',
-            monto:'150.00'
-        },
-        {
-            id: '15',
-            cliente: 'Rachel Green',
-            fecha: '12/6/15',
-            monto:'300.00'
-        },
-        {
-            id: '16',
-            cliente: 'Chandler Bing',
-            fecha: '10/6/15',
-            monto:'150.00'
-        },
-        {
-            id: '17',
-            cliente: 'Joseph Tribbiani',
-            fecha: '12/6/15',
-            monto:'150.00'
-        },
-        {
-            id: '18',
-            cliente: 'Phoeebe Buffey',
-            fecha: '12/6/15',
-            monto:'150.00'
-        },
-        {
-            id: '19',
-            cliente: 'Phoeebe Buffey',
-            fecha: '10/6/15',
-            monto:'150.00'
-        },
-        {
-            id: '20',
-            cliente: 'Phoeebe Buffey',
-            fecha: '13/6/15',
-            monto:'150.00'
-        },
-        {
-            id: '21',
-            cliente: 'Monica Geller',
-            fecha: '13/6/15',
-            monto:'150.00'
-        },
-        {
-            id: '22',
-            cliente: 'Rachel Green',
-            fecha: '13/6/15',
-            monto:'300.00'
-        },
-        {
-            id: '23',
-            cliente: 'Chandler Bing',
-            fecha: '13/6/15',
-            monto:'150.00'
-        },
-        {
-            id: '24',
-            cliente: 'Joseph Tribbiani',
-            fecha: '13/6/15',
-            monto:'150.00'
-        },
-        {
-            id: '25',
-            cliente: 'Phoeebe Buffey',
-            fecha: '13/6/15',
-            monto:'150.00'
-        },
-        {
-            id: '26',
-            cliente: 'Monica Geller',
-            fecha: '14/6/15',
-            monto:'150'
-        },
-        {
-            id: '27',
-            cliente: 'Rachel Green',
-            fecha: '14/6/15',
-            monto:'300.00'
-        },
-        {
-            id: '28',
-            cliente: 'Phoeebe Buffey',
-            fecha: '14/6/15',
-            monto:'150.00'
-        },
-        {
-            id: '29',
-            cliente: 'Monica Geller',
-            fecha: '14/6/15',
-            monto:'150.00'
-        },
-        {
-            id: '30',
-            cliente: 'Monica Geller',
-            fecha: '14/6/15',
-            monto:'150.00'
-        },
-        {
-            id: '31',
-            cliente: 'Monica Geller',
-            fecha: '15/6/15',
-            monto:'150.00'
-        },
-        {
-            id: '32',
-            cliente: 'Rachel Green',
-            fecha: '15/6/15',
-            monto:'300.00'
-        },
-        {
-            id: '33',
-            cliente: 'Chandler Bing',
-            fecha: '10/6/15',
-            monto:'150'
-        },
-        {
-            id: '34',
-            cliente: 'Joseph Tribbiani',
-            fecha: '10/6/15',
-            monto:'150.00'
-        },
-        {
-            id: '35',
-            cliente: 'Phoeebe Buffey',
-            fecha: '16/6/15',
-            monto:'150.00'
-        },
-        {
-            id: '36',
-            cliente: 'Monica Geller',
-            fecha: '16/6/15',
-            monto:'150.00'
-        },
-        {
-            id: '37',
-            cliente: 'Rachel Green',
-            fecha: '16/6/15',
-            monto:'300.00'
-        },
-        {
-            id: '38',
-            cliente: 'Phoeebe Buffey',
-            fecha: '16/6/15',
-            monto:'150.00'
-        },
-        {
-            id: '39',
-            cliente: 'Monica Geller',
-            fecha: '16/6/15',
-            monto:'150.00'
-        },
-        {
-            id: '40',
-            cliente: 'Rachel Green',
-            fecha: '17/6/15',
-            monto:'300.00'
-        }
-        ];
+
+
+         
 
         $scope.ok = function () {
             $uibModalInstance.close();

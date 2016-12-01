@@ -1735,7 +1735,7 @@ function scanearCuponCtrl ($scope,$log,$uibModalInstance,$http){
     }
 };
 
-function modalProveedoresControler ($http,$scope,$log,$uibModalInstance,Upload,proveedores){
+function modalProveedoresControler ($http,$scope,$log,$uibModalInstance,proveedores){
 
     $scope.proveedores = proveedores;
     $scope.cargarNuevo= function(newProvNombre,newProvDireccion,newProvTelefono,newProvEmail,newProvMetodoPago,newProvContacto,newProvTelefonoContacto,newProvCuit){
@@ -1786,29 +1786,21 @@ function modalProveedoresControler ($http,$scope,$log,$uibModalInstance,Upload,p
 
 };
 
-function detalleVentaCtrl ($scope,$log,$uibModalInstance,venta){
+function detalleVentaCtrl ($http,$scope,$log,$uibModalInstance,venta){
 
     $scope.venta=venta;
-    $scope.venta.items = [
-    {
-        id:1,
-        cantidad:2,
-        costo:75,
-        marca:"Crafter",
-        nombre:"IPA",
-        descripcion:"Una pale ale lupulada, moderadamente fuerte, con características consistentes con el uso de maltas, lúpulos y levadura inglesas.",
-        tipo:"Cervezas por Litro"
-    },
-    {
-        id:2,
-        cantidad:2,
-        costo:75,
-        marca:"Crafter",
-        nombre:"Scothish",
-        descripcion:"Una cerveza de cuerpo entero con un color que va del cobre profundo al marrón, de 10 a 45 SRM. Tienen mucho menos agregado de lúpulos que las versiones inglesas y por lo tanto con más sabor a malta.",
-        tipo:"Cervezas por Litro"
-    }
-    ];
+    $scope.total = 0;
+    $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/venta/'+$scope.venta.id).success(function(response){    
+        $scope.venta.items = response.data;
+
+        $scope.venta.items.forEach(function(item){
+            $scope.total += (item.costo * item.cantidad);
+        });
+        
+    }).error(function(error){
+        console.log(error);
+    }); 
+
 
     $scope.ok = function () {
         $uibModalInstance.close();
@@ -1818,14 +1810,7 @@ function detalleVentaCtrl ($scope,$log,$uibModalInstance,venta){
         $uibModalInstance.dismiss('cancel');
     };
     
-    $scope.getTotal = function(){
-        var total = 0;
-        for(var i = 0; i < $scope.venta.items.length; i++){
-            var item = $scope.venta.items[i];
-            total += (item.costo * item.cantidad);
-        }
-        return total;
-    }
+   
 };
 
 function crearAlquilableCtrl ($scope,$log,$uibModalInstance,alquilables,alquilableEdit){
