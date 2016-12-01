@@ -2338,10 +2338,10 @@ vm.login2 = function() {
                 case 'venta':
                 $scope.historial[i].icono= "text-navy fa-cart-arrow-down";
                 break; 
-                case 'Ajuste':
+                case 'retiro':
                 $scope.historial[i].icono= "text-danger fa-arrow-circle-up";
                 break; 
-                case 'Movimiento':
+                case 'Movimiento'://no se usa
                 $scope.historial[i].icono= "text-warning fa-arrow-circle-right";
                 break;
             }

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp" >
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Angualr Test</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/app.css">
+  <!-- Bootstrap -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+
+<div class="container" ng-controller="myController"> 
+        <div class="row equal">
+
+            <div class="col-md-2">
+            <a href="#" id="prev"></a>
+            </div>
+            <div class="col-md-7">
+                <table class="alquileres center-block">
+                    <thead>
+                        <tr>
+                        <th>L</th>
+                        <th>M</th>
+                        <th>X</th>
+                        <th>J</th>
+                        <th>V</th>
+                        <th>S</th>
+                        <th>D</th>  
+                        <th>L</th>
+                        <th>M</th>
+                        <th>X</th>
+                        <th>J</th>
+                        <th>V</th>
+                        <th>S</th>
+                        <th>D</th>  
+                        <th>L</th>
+                        <th>M</th>
+                        <th>X</th>
+                        <th>J</th>
+                        <th>V</th>
+                        <th>S</th>
+                        <th>D</th>                        
+                        </tr>
+                    </thead>
+                    
+                    <tbody ng-init="mostrarDia=false">
+                        <tr ng-repeat="alquilable in alquilables" >
+                            <td ng-repeat="dia in alquilable.dias" 
+                            style="{{dia.hover}}"
+                            ng-mouseenter="calculateClass(alquilable.id,dia.id);mostrarDia=true"
+                            ng-mouseleave="calculateClassAnterior(alquilable.id,dia.id);mostrarDia=false"
+                            ><span ng-show="mostrarDia">{{dia.diaFecha}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+          <div class="col-md-2">
+          <a href="#" id="next"></a>
+          </div>
+       </div> 
+       <div ng-show="alquiler.desde" class="row info-alquiler">
+         <div class="col-md-7 col-md-offset-2 text-right">
+          <span class="">
+            <strong>Desde:</strong>  {{alquiler.desde}}
+          </span>
+         </div>
+         <div class="col-md-7 col-md-offset-2 text-right">
+          <span class="">
+            <strong>Hasta:</strong> {{alquiler.hasta}}
+          </span>
+         </div>
+       </div>
+    </div>
+
+
+
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/moment-with-locales.min.js"></script>
+  <script src="js/angular.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
