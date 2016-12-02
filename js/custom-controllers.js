@@ -746,16 +746,16 @@ vm.login2 = function() {
 
             {extend: 'print',
             customize: function (win){
-               $(win.document.body).addClass('white-bg');
-               $(win.document.body).css('font-size', '10px');
+             $(win.document.body).addClass('white-bg');
+             $(win.document.body).css('font-size', '10px');
 
-               $(win.document.body).find('table')
-               .addClass('compact')
-               .css('font-size', 'inherit');
-           }, 
-           text: 'Imprimir'
-       }
-       ]);   
+             $(win.document.body).find('table')
+             .addClass('compact')
+             .css('font-size', 'inherit');
+         }, 
+         text: 'Imprimir'
+     }
+     ]);   
 
     $scope.dtColumnDefs = [
     DTColumnDefBuilder.newColumnDef(0).notVisible(),
@@ -883,7 +883,7 @@ vm.login2 = function() {
     };
 
     $scope.getProveedores();
-        
+    
 
     $scope.onUpdate= function(id){
         
@@ -920,9 +920,9 @@ vm.login2 = function() {
 
 
 
-        $scope.dtOptions = DTOptionsBuilder.newOptions()
-        .withDOM('<"html5buttons"B>lTfgitp')
-        .withButtons([
+    $scope.dtOptions = DTOptionsBuilder.newOptions()
+    .withDOM('<"html5buttons"B>lTfgitp')
+    .withButtons([
             /*{extend: 'copy', text: 'Copiar'},
             {extend: 'csv'},*/
             {extend: 'excel', title: 'Proveedores'},
@@ -930,40 +930,40 @@ vm.login2 = function() {
 
             {extend: 'print',
             customize: function (win){
-               $(win.document.body).addClass('white-bg');
-               $(win.document.body).css('font-size', '10px');
+             $(win.document.body).addClass('white-bg');
+             $(win.document.body).css('font-size', '10px');
 
-               $(win.document.body).find('table')
-               .addClass('compact')
-               .css('font-size', 'inherit');
-           }
-           , text: 'Imprimir'
-       }
-       ])
+             $(win.document.body).find('table')
+             .addClass('compact')
+             .css('font-size', 'inherit');
+         }
+         , text: 'Imprimir'
+     }
+     ])
 
-        $scope.dtColumnDefs = [
-        DTColumnDefBuilder.newColumnDef(0).notVisible(),
-        DTColumnDefBuilder.newColumnDef(1),
-        DTColumnDefBuilder.newColumnDef(2).notSortable(),
-        DTColumnDefBuilder.newColumnDef(3),
-        DTColumnDefBuilder.newColumnDef(4).notSortable(),
-        ]
+    $scope.dtColumnDefs = [
+    DTColumnDefBuilder.newColumnDef(0).notVisible(),
+    DTColumnDefBuilder.newColumnDef(1),
+    DTColumnDefBuilder.newColumnDef(2).notSortable(),
+    DTColumnDefBuilder.newColumnDef(3),
+    DTColumnDefBuilder.newColumnDef(4).notSortable(),
+    ]
 
-        $scope.modal={
-            abrir : function (){
-                var modalInstance = $uibModal.open({
-                    templateUrl: 'views/modal_crear_proveedor.html',
-                    controller: modalProveedoresControler,
-                    windowClass: "animated fadeIn", 
-                    scope:$scope,
-                    resolve: {
-                        proveedores: function () {
-                            return $scope.proveedores;
-                        }
+    $scope.modal={
+        abrir : function (){
+            var modalInstance = $uibModal.open({
+                templateUrl: 'views/modal_crear_proveedor.html',
+                controller: modalProveedoresControler,
+                windowClass: "animated fadeIn", 
+                scope:$scope,
+                resolve: {
+                    proveedores: function () {
+                        return $scope.proveedores;
                     }
-                });
-            }
+                }
+            });
         }
+    }
 }])
 
 .controller('ventasCtrl', ['$http','$scope','$log','$uibModal','DTOptionsBuilder','DTColumnDefBuilder', function($http, $scope,$log,$uibModal,DTOptionsBuilder,DTColumnDefBuilder){
@@ -972,44 +972,44 @@ vm.login2 = function() {
          * ventas  morecapo
          */
 
-        $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/venta').success(function(response){    
+         $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/venta').success(function(response){    
             $scope.ventas = response.data;
         }).error(function(error){
             console.log(error);
         }); 
 
 
-    $scope.dtOptions = DTOptionsBuilder.newOptions()
-    .withDOM('<"html5buttons"B>lTfgitp')
-    .withButtons([
-        {extend: 'copy', text: 'Copiar'},
-        {extend: 'csv'},
-        {extend: 'excel', title: 'Ventas'},
-        {extend: 'pdf', title: 'Ventas'},
+        $scope.dtOptions = DTOptionsBuilder.newOptions()
+        .withDOM('<"html5buttons"B>lTfgitp')
+        .withButtons([
+            {extend: 'copy', text: 'Copiar'},
+            {extend: 'csv'},
+            {extend: 'excel', title: 'Ventas'},
+            {extend: 'pdf', title: 'Ventas'},
 
-        {extend: 'print',
-        customize: function (win){
-           $(win.document.body).addClass('white-bg');
-           $(win.document.body).css('font-size', '10px');
+            {extend: 'print',
+            customize: function (win){
+             $(win.document.body).addClass('white-bg');
+             $(win.document.body).css('font-size', '10px');
 
-           $(win.document.body).find('table')
-           .addClass('compact')
-           .css('font-size', 'inherit');
-       }
-       , text: 'Imprimir'
-   }
-   ])
-    .withOption('order', [0, 'desc']);
-    $scope.dtColumnDefs = [
-    DTColumnDefBuilder.newColumnDef(0).withOption('sWidth', '25px'),
-    DTColumnDefBuilder.newColumnDef(1),
-    DTColumnDefBuilder.newColumnDef(2),
-    DTColumnDefBuilder.newColumnDef(3).withOption('sWidth', '60px'),
-    DTColumnDefBuilder.newColumnDef(4)
-    ]
+             $(win.document.body).find('table')
+             .addClass('compact')
+             .css('font-size', 'inherit');
+         }
+         , text: 'Imprimir'
+     }
+     ])
+        .withOption('order', [0, 'desc']);
+        $scope.dtColumnDefs = [
+        DTColumnDefBuilder.newColumnDef(0).withOption('sWidth', '25px'),
+        DTColumnDefBuilder.newColumnDef(1),
+        DTColumnDefBuilder.newColumnDef(2),
+        DTColumnDefBuilder.newColumnDef(3).withOption('sWidth', '60px'),
+        DTColumnDefBuilder.newColumnDef(4)
+        ]
 
 
-         
+        
 
         $scope.ok = function () {
             $uibModalInstance.close();
@@ -1038,7 +1038,7 @@ vm.login2 = function() {
 
     }])
 
-.controller('comprasCtrl', ['$scope','$log','$uibModal','DTOptionsBuilder','DTColumnDefBuilder', function($scope,$log,$uibModal,DTOptionsBuilder,DTColumnDefBuilder){
+.controller('comprasCtrl', ['$http','$scope','$log','$uibModal','DTOptionsBuilder','DTColumnDefBuilder', function($http,$scope,$log,$uibModal,DTOptionsBuilder,DTColumnDefBuilder){
 
     $scope.dtOptions = DTOptionsBuilder.newOptions()
     .withDOM('<"html5buttons"B>lTfgitp')
@@ -1050,16 +1050,16 @@ vm.login2 = function() {
 
         {extend: 'print',
         customize: function (win){
-           $(win.document.body).addClass('white-bg');
-           $(win.document.body).css('font-size', '10px');
+         $(win.document.body).addClass('white-bg');
+         $(win.document.body).css('font-size', '10px');
 
-           $(win.document.body).find('table')
-           .addClass('compact')
-           .css('font-size', 'inherit');
-       }
-       , text: 'Imprimir'
-   }
-   ])
+         $(win.document.body).find('table')
+         .addClass('compact')
+         .css('font-size', 'inherit');
+     }
+     , text: 'Imprimir'
+ }
+ ])
     .withOption('order', [0, 'desc']);
     $scope.dtColumnDefs = [
     DTColumnDefBuilder.newColumnDef(0).withOption('sWidth', '25px'),
@@ -1071,206 +1071,60 @@ vm.login2 = function() {
         /**
          * compras 
          */
-         $scope.compras = [
-         {
-            id: '1',
-            nombreProveedor:'Crafter',
-            proveedorId:1,
-            estado: 'Pedido',
-            fecha: new Date('06/10/15'),
-            monto:'1500.00'
-        },
-        {
-            id: '2',
-            nombreProveedor:'Nuevo Origen',
-            proveedorId:10,
-            estado: 'Pagado',
-            fecha: new Date('06/10/15'),
-            monto:'1000.00'
-        },
-        {
-            id: '3',
-            nombreProveedor:'Botellas SRL',
-            proveedorId:3,
-            estado: 'Finalizado',
-            fecha: new Date('06/10/15'),
-            monto:'2500.25'
-        },
-        {
-            id: '4',
-            nombreProveedor:'Nuevo Origen',
-            proveedorId:10,
-            estado: 'Pagado',
-            fecha: new Date('06/10/15'),
-            monto:'1000.00'
-        },
-        {
-            id: '5',
-            nombreProveedor:'Tapas SRL',
-            proveedorId:4,
-            estado: 'Pedido',
-            fecha: new Date('06/10/15'),
-            monto:'2604.25'
-        },
-        {
-            id: '6',
-            nombreProveedor:'Kalevala',
-            proveedorId:2,
-            estado: 'Pagado',
-            fecha: new Date('06/10/15'),
-            monto:'3000.00'
-        },
-        {
-            id: '7',
-            nombreProveedor:'Crafter',
-            proveedorId:1,
-            estado: 'Pagado',
-            fecha: new Date('06/11/15'),
-            monto:'3000.00'
-        },
-        {
-            id: '8',
-            nombreProveedor:'Nuevo Origen',
-            proveedorId:10,
-            estado: 'Finalizado',
-            fecha: new Date('06/11/15'),
-            monto:'3000.00'
-        },
-        {
-            id: '9',
-            nombreProveedor:'Crafter',
-            proveedorId:1,
-            estado: 'Pagado',
-            fecha: new Date('06/11/15'),
-            monto:'3000.00'
-        },
-        {
-            id: '10',
-            nombreProveedor:'Kalevala',
-            proveedorId:2,
-            estado: 'Pagado',
-            fecha: new Date('06/11/15'),
-            monto:'3000.00'
-        },
-        {
-            id: '11',
-            nombreProveedor:'Crafter',
-            proveedorId:1,
-            estado: 'Pedido',
-            fecha: new Date('06/11/15'),
-            monto:'1500.00'
-        },
-        {
-            id: '12',
-            nombreProveedor:'Nuevo Origen',
-            proveedorId:10,
-            estado: 'Pagado',
-            fecha: new Date('06/11/15'),
-            monto:'1000.00'
-        },
-        {
-            id: '13',
-            nombreProveedor:'Botellas SRL',
-            proveedorId:3,
-            estado: 'Finalizado',
-            fecha: new Date('06/11/15'),
-            monto:'2500.25'
-        },
-        {
-            id: '14',
-            nombreProveedor:'Nuevo Origen',
-            proveedorId:10,
-            estado: 'Pagado',
-            fecha: new Date('06/11/15'),
-            monto:'1000.00'
-        },
-        {
-            id: '15',
-            nombreProveedor:'Tapas SRL',
-            proveedorId:4,
-            estado: 'Pedido',
-            fecha: new Date('06/11/15'),
-            monto:'2604.25'
-        },
-        {
-            id: '16',
-            nombreProveedor:'Kalevala',
-            proveedorId:2,
-            estado: 'Pagado',
-            fecha: new Date('06/11/15'),
-            monto:'3000.00'
-        },
-        {
-            id: '17',
-            nombreProveedor:'Crafter',
-            proveedorId:1,
-            estado: 'Pagado',
-            fecha: new Date('06/11/15'),
-            monto:'3000.00'
-        },
-        {
-            id: '18',
-            nombreProveedor:'Nuevo Origen',
-            proveedorId:10,
-            estado: 'Finalizado',
-            fecha: new Date('06/11/15'),
-            monto:'3000.00'
-        },
-        {
-            id: '19',
-            nombreProveedor:'Crafter',
-            proveedorId:1,
-            estado: 'Pagado',
-            fecha: new Date('06/11/15'),
-            monto:'3000.00'
-        },
-        {
-            id: '20',
-            nombreProveedor:'Kalevala',
-            proveedorId:2,
-            estado: 'Finalizado',
-            fecha: new Date('06/13//15'),
-            monto:'3000.00'
-        },
-        {
-            id: '21',
-            nombreProveedor:'Kalevala',
-            proveedorId:2,
-            estado: 'Finalizado',
-            fecha: new Date('06/13//15'),
-            monto:'1500.00'
-        }
-        ];
 
-        for(var i = 0; i < $scope.compras.length; i++){
-            $scope.compras[i].fecha=moment($scope.compras[i].fecha).locale('es').format('DD/MMM/YY');
-            switch ($scope.compras[i].estado){
-                case 'Finalizado':
-                $scope.compras[i].class= "badge-primary";
-                break;
-                case 'Pagado':
-                $scope.compras[i].class= "badge-success";
-                break; 
-                case 'Pedido':
-                $scope.compras[i].class= "badge-info";
-                break;
-            }
-        };
+         $scope.getCompras = function(){
+           $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/compra').success(function(response){    
+            $scope.compras = response.data;
+            for(var i = 0; i < $scope.compras.length; i++){
+                $scope.compras[i].fecha=moment($scope.compras[i].fecha).locale('es').format('DD/MMM/YY');
+                switch ($scope.compras[i].estado.nombre){
+                    case 'Finalizado':
+                    $scope.compras[i].class= "badge-primary";
+                    break;
+                    case 'Pagado':
+                    $scope.compras[i].class= "badge-success";
+                    break; 
+                    case 'Pedido':
+                    $scope.compras[i].class= "badge-info";
+                    break;
+                }
+            };
+        }).error(function(error){
+            console.log(error);
+        }); 
+    }
 
-        $scope.ok = function () {
-            $uibModalInstance.close();
-        };
+    $scope.getCompras();
 
-        $scope.cancel = function () {
-            $uibModalInstance.dismiss('cancel');
-        };
+    $scope.getDatosCompras = function(){
+       $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/compradatos').success(function(response){
+        $scope.productos = response.productos;
+        $scope.proveedores = response.proveedores;
+        $scope.estados = response.estados;
+    }).error(function(error){
+        console.log(error);
+    }); 
+}
 
-        $scope.modal={
-            abrir : function (compra){
-                console.log(compra);
-                var modalInstance = $uibModal.open({
-                    templateUrl: 'views/detalle_compra.html',
-                    controller: detalleCompraCtrl, 
+$scope.getDatosCompras();
+
+
+
+
+$scope.ok = function () {
+    $uibModalInstance.close();
+};
+
+$scope.cancel = function () {
+    $uibModalInstance.dismiss('cancel');
+};
+
+$scope.modal={
+    abrir : function (compra){
+        console.log(compra);
+        var modalInstance = $uibModal.open({
+            templateUrl: 'views/detalle_compra.html',
+            controller: detalleCompraCtrl, 
                     //controler en controllers.js, no termino de entender porque no lo puedo armar como el resto y si o si tengo que poner una funcion                        
                     windowClass: "animated fadeIn",
                     resolve: {
@@ -1279,58 +1133,108 @@ vm.login2 = function() {
                         }
                     }
                 });
-            },        
-            crear : function (compra,soloMostrar){
-                var items;
-                if(compra){
-                    items = [
-                    {
-                        id:1,
-                        cantidad:200,
-                        costo:35,
-                        productoId:1,
-                        marca:"Crafter",
-                        nombre:"American IPA",
-                        descripcion:"Una pale ale lupulada, moderadamente fuerte, con características consistentes con el uso de maltas, lúpulos y levadura inglesas.",
-                        tipo:"Cervezas por Litro"
+    },        
+    crear : function (compra,soloMostrar){
+
+        $scope.getDatosCompra = function(){
+            
+           $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/compra/' + compra.id).success(function(response){    
+            $scope.compra = response.compra;
+            $scope.itemsCompra = response.itemsCompra;
+            $scope.proveedor = response.proveedor;
+            $scope.compra.fecha=moment($scope.compra.fecha).locale('es').format('DD/MMM/YY');
+            console.log($scope.compra);
+
+
+
+            var modalInstance = $uibModal.open({
+                templateUrl: 'views/crear-editar_compra.html',
+                controller: crearEditarCompraCtrl, 
+                scope:$scope,
+                size:'lg',
+                //controler en controllers.js, no termino de entender porque no lo puedo armar como el resto y si o si tengo que poner una funcion                        
+                windowClass: "animated fadeIn",
+                backdrop  : 'static',
+                keyboard  : false,
+                resolve: {
+                    items: function () {
+                        console.log($scope.itemsCompra);
+
+                        return $scope.itemsCompra;
+
                     },
-                    {
-                        id:2,
-                        cantidad:200,
-                        costo:35,
-                        productoId:2,                                
-                        marca:"Blest",
-                        nombre:"Pilsen",
-                        descripcion:"Una cerveza de cuerpo entero con un color que va del cobre profundo al marrón, de 10 a 45 SRM. Tienen mucho menos agregado de lúpulos que las versiones inglesas y por lo tanto con más sabor a malta.",
-                        tipo:"Cervezas por Litro"
+                    aCompra: function () {
+                        return $scope.compra;
+                    },
+                    aProveedor: function () {
+                        return $scope.proveedor;
+                    },
+                    soloMostrar: function () {
+                        return soloMostrar;
+                    },
+                    productos: function () {
+                        return $scope.productos;
+                    },
+                    proveedores: function () {
+                        return $scope.proveedores;
+                    },
+                    estados: function () {
+                        return $scope.estados;
                     }
-                    ];
                 }
-                
-                var modalInstance = $uibModal.open({
-                    templateUrl: 'views/crear-editar_compra.html',
-                    controller: crearEditarCompraCtrl, 
-                    scope:$scope,
-                    size:'lg',
-                    //controler en controllers.js, no termino de entender porque no lo puedo armar como el resto y si o si tengo que poner una funcion                        
-                    windowClass: "animated fadeIn",
-                    backdrop  : 'static',
-                    keyboard  : false,
-                    resolve: {
-                        items: function () {
-                            return items;
-                        },
-                        aCompra: function () {
-                            return compra;
-                        },
-                        soloMostrar: function () {
-                            return soloMostrar;
-                        }
-                    }
-                });
+            });
+
+        }).error(function(error){
+            console.log(error);
+        }); 
+        
+    }
+    if(compra){
+        $scope.getDatosCompra();
+    }else{
+        var modalInstance = $uibModal.open({
+            templateUrl: 'views/crear-editar_compra.html',
+            controller: crearEditarCompraCtrl, 
+            scope:$scope,
+            size:'lg',
+            //controler en controllers.js, no termino de entender porque no lo puedo armar como el resto y si o si tengo que poner una funcion                        
+            windowClass: "animated fadeIn",
+            backdrop  : 'static',
+            keyboard  : false,
+            resolve: {
+                items: function () {
+                  
+                   
+
+                    return $scope.itemsCompra;
+
+                },
+                aCompra: function () {
+                    return $scope.compra;
+                },
+                aProveedor: function () {
+                    return $scope.proveedor;
+                },
+                soloMostrar: function () {
+                    return soloMostrar;
+                },
+                productos: function () {
+                    return $scope.productos;
+                },
+                proveedores: function () {
+                    return $scope.proveedores;
+                },
+                estados: function () {
+                    return $scope.estados;
+                }
             }
-        }
-    }])
+        });
+    }
+    
+    
+}
+}
+}])
 
 .controller('cuponesCtrl',['$http','$scope','$log','$uibModal','DTOptionsBuilder','DTColumnDefBuilder',function($http,$scope,$log,$uibModal,DTOptionsBuilder,DTColumnDefBuilder){
 
@@ -1344,16 +1248,16 @@ vm.login2 = function() {
 
         {extend: 'print',
         customize: function (win){
-           $(win.document.body).addClass('white-bg');
-           $(win.document.body).css('font-size', '10px');
+         $(win.document.body).addClass('white-bg');
+         $(win.document.body).css('font-size', '10px');
 
-           $(win.document.body).find('table')
-           .addClass('compact')
-           .css('font-size', 'inherit');
-       }
-       , text: 'Imprimir'
-   }
-   ])
+         $(win.document.body).find('table')
+         .addClass('compact')
+         .css('font-size', 'inherit');
+     }
+     , text: 'Imprimir'
+ }
+ ])
     .withOption('order', [0, 'desc']);
 
     $scope.dtColumnDefs = [
@@ -1377,7 +1281,7 @@ vm.login2 = function() {
             $scope.cupones = response.data;
 
             $scope.cupones.forEach(function(cupon,indice){
-                        
+                
                 var f = moment($scope.cupones[indice].fecha);
                 var now = moment();            
                 var vencimiento =now.clone().add(1,'d');
@@ -1402,20 +1306,20 @@ vm.login2 = function() {
                     break;
                 }
             });
-         
+            
         }).error(function(error){
             console.log(error);
         });  
         
 
-            function ean13_checksum(ean) {
-                var checksum = 0;
-                ean = ean.split('').reverse();
-                for(var pos in ean){
-                    checksum += ean[pos] * (3 - 2 * (pos % 2));
-                }
-                return ((10 - (checksum % 10 )) % 10);
+        function ean13_checksum(ean) {
+            var checksum = 0;
+            ean = ean.split('').reverse();
+            for(var pos in ean){
+                checksum += ean[pos] * (3 - 2 * (pos % 2));
             }
+            return ((10 - (checksum % 10 )) % 10);
+        }
 
             /*
             $scope.calcularEstado=function(indice){
@@ -1469,44 +1373,44 @@ vm.login2 = function() {
                     case 'Por Vencer':
                     $scope.cupones[indice].class= "badge-warning";
                     break;
-            */
+                    */
 
-        $scope.vigencia = {
-            extender : function (i){
+                    $scope.vigencia = {
+                        extender : function (i){
                 //$scope.cupones[i-1].fecha= moment().toString();
                 //console.log($scope.cupones[i-1]);
                 //$scope.calcularEstado(i-1);
                 $http.put('http://blackhop-dessin1.rhcloud.com/api/admin/extendercupon/'+i)
                 .success(function(response){    
-                     $scope.cupones.forEach(function(cupon,index,arreglo){
-                        if(cupon.id == response.data.id){
-                            arreglo[index]=response.data;
-                            arreglo[index].class= "badge-primary";
-                            arreglo[index].estado='Vigente'; 
-                        }
+                   $scope.cupones.forEach(function(cupon,index,arreglo){
+                    if(cupon.id == response.data.id){
+                        arreglo[index]=response.data;
+                        arreglo[index].class= "badge-primary";
+                        arreglo[index].estado='Vigente'; 
+                    }
 
-                     });
-                }).error(function(error){
-                    console.log(error);
                 });
-            },
-            eliminar : function (i){
+               }).error(function(error){
+                console.log(error);
+            });
+           },
+           eliminar : function (i){
                 //$scope.cupones[i-1].vigencia=0;
                 //console.log($scope.cupones[i-1]);
                 //$scope.calcularEstado(i-1);
                 $http.put('http://blackhop-dessin1.rhcloud.com/api/admin/invalidarcupon/'+i)
                 .success(function(response){    
-                     $scope.cupones.forEach(function(cupon,index,arreglo){
-                        if(cupon.id == response.data.id){
-                            arreglo[index]=response.data;
-                            arreglo[index].class= "badge-warning";
-                            arreglo[index].estado='Vencido'; 
-                        }
-                     });
-                }).error(function(error){
-                    console.log(error);
+                   $scope.cupones.forEach(function(cupon,index,arreglo){
+                    if(cupon.id == response.data.id){
+                        arreglo[index]=response.data;
+                        arreglo[index].class= "badge-warning";
+                        arreglo[index].estado='Vencido'; 
+                    }
                 });
-                    
+               }).error(function(error){
+                console.log(error);
+            });
+               
             }/*,
             restaurar : function (i){
                 $scope.cupones[i-1].vigencia=3;
@@ -1554,9 +1458,9 @@ vm.login2 = function() {
     $scope.getProductos();
 
 
-            $scope.dtOptions = DTOptionsBuilder.newOptions()
-            .withDOM('<"html5buttons"B>lTfgitp')
-            .withButtons([
+    $scope.dtOptions = DTOptionsBuilder.newOptions()
+    .withDOM('<"html5buttons"B>lTfgitp')
+    .withButtons([
             /*{extend: 'copy', text: 'Copiar'},
             {extend: 'csv'},*/
             {extend: 'excel', title: 'Productos'},
@@ -1564,30 +1468,30 @@ vm.login2 = function() {
 
             {extend: 'print',
             customize: function (win){
-               $(win.document.body).addClass('white-bg');
-               $(win.document.body).css('font-size', '10px');
+             $(win.document.body).addClass('white-bg');
+             $(win.document.body).css('font-size', '10px');
 
-               $(win.document.body).find('table')
-               .addClass('compact')
-               .css('font-size', 'inherit');
-           }, 
-           text: 'Imprimir'
-       }
-       ]);   
+             $(win.document.body).find('table')
+             .addClass('compact')
+             .css('font-size', 'inherit');
+         }, 
+         text: 'Imprimir'
+     }
+     ]);   
 
-            $scope.dtColumnDefs = [
-            DTColumnDefBuilder.newColumnDef(0).notVisible(),
-            DTColumnDefBuilder.newColumnDef(1),
-            DTColumnDefBuilder.newColumnDef(2),
-            DTColumnDefBuilder.newColumnDef(3)
-            ]
+    $scope.dtColumnDefs = [
+    DTColumnDefBuilder.newColumnDef(0).notVisible(),
+    DTColumnDefBuilder.newColumnDef(1),
+    DTColumnDefBuilder.newColumnDef(2),
+    DTColumnDefBuilder.newColumnDef(3)
+    ]
 
-            $scope.modal={
-                abrir : function (producto){
-                    console.log(producto);
-                    var modalInstance = $uibModal.open({
-                        templateUrl: 'views/detalle_producto.html',
-                        controller: detalleProductoCtrl, 
+    $scope.modal={
+        abrir : function (producto){
+            console.log(producto);
+            var modalInstance = $uibModal.open({
+                templateUrl: 'views/detalle_producto.html',
+                controller: detalleProductoCtrl, 
                     //controler en controllers.js, no termino de entender porque no lo puedo armar como el resto y si o si tengo que poner una funcion                        
                     windowClass: "animated fadeIn",
                     scope: $scope,
@@ -1598,13 +1502,13 @@ vm.login2 = function() {
                         }
                     }
                 });
-                },
-                crear : function (){
-                    console.log();
-                    var modalInstance = $uibModal.open({
-                        templateUrl: 'views/crear_producto.html',
-                        controller: crearProductoCtrl, 
-                        scope:$scope,
+        },
+        crear : function (){
+            console.log();
+            var modalInstance = $uibModal.open({
+                templateUrl: 'views/crear_producto.html',
+                controller: crearProductoCtrl, 
+                scope:$scope,
                     //controler en controllers.js, no termino de entender porque no lo puedo armar como el resto y si o si tengo que poner una funcion                        
                     windowClass: "animated fadeIn",
                     resolve: {
@@ -1616,12 +1520,12 @@ vm.login2 = function() {
                         }
                     }
                 });
-                },
-                editar : function (producto){
-                    console.log(producto);
-                    var modalInstance = $uibModal.open({
-                        templateUrl: 'views/crear_producto.html',
-                        controller: crearProductoCtrl, 
+        },
+        editar : function (producto){
+            console.log(producto);
+            var modalInstance = $uibModal.open({
+                templateUrl: 'views/crear_producto.html',
+                controller: crearProductoCtrl, 
                     //controler en controllers.js, no termino de entender porque no lo puedo armar como el resto y si o si tengo que poner una funcion                        
                     windowClass: "animated fadeIn",
                     resolve: {
@@ -1634,9 +1538,9 @@ vm.login2 = function() {
                     }
 
                 });
-                }
-            }
-        }])
+        }
+    }
+}])
 
 .controller('alquileresCtrl', ['$scope','$log','$uibModal','DTOptionsBuilder','DTColumnDefBuilder', function($scope,$log,$uibModal,DTOptionsBuilder,DTColumnDefBuilder){
 
@@ -1651,16 +1555,16 @@ vm.login2 = function() {
 
         {extend: 'print',
         customize: function (win){
-           $(win.document.body).addClass('white-bg');
-           $(win.document.body).css('font-size', '10px');
+         $(win.document.body).addClass('white-bg');
+         $(win.document.body).css('font-size', '10px');
 
-           $(win.document.body).find('table')
-           .addClass('compact')
-           .css('font-size', 'inherit');
-       }
-       , text: 'Imprimir'
-   }
-   ])
+         $(win.document.body).find('table')
+         .addClass('compact')
+         .css('font-size', 'inherit');
+     }
+     , text: 'Imprimir'
+ }
+ ])
     .withOption('order', [0, 'desc']);
 
     $scope.dtColumnDefs = [
@@ -1893,7 +1797,7 @@ vm.login2 = function() {
             
             console.log(productos);
             $scope.productosInventario = productos.data;
-         
+            
         }).error(function(error){
             console.log(error);
         });        
@@ -1902,39 +1806,39 @@ vm.login2 = function() {
     $scope.getProductosInventario();
 
 
-        $scope.ubicaciones =[]
+    $scope.ubicaciones =[]
     
-        $scope.getUbicaciones = function (){
+    $scope.getUbicaciones = function (){
 
-            $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/ubicaciones').success(function(ubicaciones){    
-                
-                console.log(ubicaciones);
-                $scope.ubicaciones = ubicaciones.data;
-                $scope.agregarAjuste();
-             
-            }).error(function(error){
-                console.log(error);
-            });        
-        }
+        $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/ubicaciones').success(function(ubicaciones){    
+            
+            console.log(ubicaciones);
+            $scope.ubicaciones = ubicaciones.data;
+            $scope.agregarAjuste();
+            
+        }).error(function(error){
+            console.log(error);
+        });        
+    }
 
         //no es necesario? ToDo
         $scope.agregarAjuste = function (){
 
             var ajuste ={
-                            nombre:'Ajuste',
-                            direccion:''
-                        }
+                nombre:'Ajuste',
+                direccion:''
+            }
 
             $scope.ubicaciones.push(ajuste);
         }
-    
-    $scope.getUbicaciones();
+        
+        $scope.getUbicaciones();
 
 
 
-            $scope.dtOptions = DTOptionsBuilder.newOptions()
-            .withDOM('<"html5buttons"B>lTfgitp')
-            .withButtons([
+        $scope.dtOptions = DTOptionsBuilder.newOptions()
+        .withDOM('<"html5buttons"B>lTfgitp')
+        .withButtons([
             /*{extend: 'copy', text: 'Copiar'},
             {extend: 'csv'},*/
             {extend: 'excel', title: 'Clientes'},
@@ -1942,24 +1846,24 @@ vm.login2 = function() {
 
             {extend: 'print',
             customize: function (win){
-               $(win.document.body).addClass('white-bg');
-               $(win.document.body).css('font-size', '10px');
+             $(win.document.body).addClass('white-bg');
+             $(win.document.body).css('font-size', '10px');
 
-               $(win.document.body).find('table')
-               .addClass('compact')
-               .css('font-size', 'inherit');
-           }, 
-           text: 'Imprimir'
-       }
-       ]);   
+             $(win.document.body).find('table')
+             .addClass('compact')
+             .css('font-size', 'inherit');
+         }, 
+         text: 'Imprimir'
+     }
+     ]);   
 
-            $scope.dtColumnDefs = [
-            DTColumnDefBuilder.newColumnDef(0).notVisible(),
-            DTColumnDefBuilder.newColumnDef(1),
-            DTColumnDefBuilder.newColumnDef(2),
-            DTColumnDefBuilder.newColumnDef(3),
-            DTColumnDefBuilder.newColumnDef(4).notSortable().withOption('sWidth', '20px'),
-            ]
+        $scope.dtColumnDefs = [
+        DTColumnDefBuilder.newColumnDef(0).notVisible(),
+        DTColumnDefBuilder.newColumnDef(1),
+        DTColumnDefBuilder.newColumnDef(2),
+        DTColumnDefBuilder.newColumnDef(3),
+        DTColumnDefBuilder.newColumnDef(4).notSortable().withOption('sWidth', '20px'),
+        ]
 
         $scope.modal={ //serian todos con el mismo wizz
             agregar : function (producto){
@@ -2072,16 +1976,16 @@ vm.login2 = function() {
 
             {extend: 'print',
             customize: function (win){
-               $(win.document.body).addClass('white-bg');
-               $(win.document.body).css('font-size', '10px');
+             $(win.document.body).addClass('white-bg');
+             $(win.document.body).css('font-size', '10px');
 
-               $(win.document.body).find('table')
-               .addClass('compact')
-               .css('font-size', 'inherit');
-           }, 
-           text: 'Imprimir'
-       }
-       ]);   
+             $(win.document.body).find('table')
+             .addClass('compact')
+             .css('font-size', 'inherit');
+         }, 
+         text: 'Imprimir'
+     }
+     ]);   
 
         $scope.dtColumnDefs = [
         DTColumnDefBuilder.newColumnDef(0).notVisible(),
@@ -2192,16 +2096,16 @@ vm.login2 = function() {
 
             {extend: 'print',
             customize: function (win){
-               $(win.document.body).addClass('white-bg');
-               $(win.document.body).css('font-size', '10px');
+             $(win.document.body).addClass('white-bg');
+             $(win.document.body).css('font-size', '10px');
 
-               $(win.document.body).find('table')
-               .addClass('compact')
-               .css('font-size', 'inherit');
-           }, 
-           text: 'Imprimir'
-       }
-       ]);   
+             $(win.document.body).find('table')
+             .addClass('compact')
+             .css('font-size', 'inherit');
+         }, 
+         text: 'Imprimir'
+     }
+     ]);   
 
     $scope.dtColumnDefs = [
     DTColumnDefBuilder.newColumnDef(0).notVisible(),
@@ -2224,7 +2128,7 @@ vm.login2 = function() {
             closeOnCancel: false },
             function (isConfirm) { 
                 if (isConfirm) {
-                                
+                    
                     $http.delete('http://blackhop-dessin1.rhcloud.com/api/admin/gasto/'+ident)
                     .success(function(){    
                         SweetAlert.swal("¡Eliminado!", "El gasto fue eliminado", "success");
@@ -2236,8 +2140,8 @@ vm.login2 = function() {
                     SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
                 }
             }
-        
-        );
+            
+            );
     };
 
     $scope.modal={
@@ -2322,25 +2226,25 @@ vm.login2 = function() {
 
 .controller('historialCtrl', ['$http','$scope','$log','$uibModal','$filter','DTOptionsBuilder','DTColumnDefBuilder', function($http,$scope,$log,$uibModal,$filter,DTOptionsBuilder,DTColumnDefBuilder){
 
-   
-   $scope.historial =[];
+ 
+ $scope.historial =[];
 
-   $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/historial')
-    .success(function(response){    
-        $scope.historial = response.data;
-        for(var i = 0; i < $scope.historial.length; i++){
-            $scope.historial[i].fecha=moment($scope.historial[i].fecha).locale('es').format('DD/MMM/YYYY');
+ $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/historial')
+ .success(function(response){    
+    $scope.historial = response.data;
+    for(var i = 0; i < $scope.historial.length; i++){
+        $scope.historial[i].fecha=moment($scope.historial[i].fecha).locale('es').format('DD/MMM/YYYY');
 
-            switch ($scope.historial[i].tipoHistorial){
-                case 'ingreso':
-                $scope.historial[i].icono= "text-success fa-arrow-circle-down";
-                break;
-                case 'venta':
-                $scope.historial[i].icono= "text-navy fa-cart-arrow-down";
-                break; 
-                case 'retiro':
-                $scope.historial[i].icono= "text-danger fa-arrow-circle-up";
-                break; 
+        switch ($scope.historial[i].tipoHistorial){
+            case 'ingreso':
+            $scope.historial[i].icono= "text-success fa-arrow-circle-down";
+            break;
+            case 'venta':
+            $scope.historial[i].icono= "text-navy fa-cart-arrow-down";
+            break; 
+            case 'retiro':
+            $scope.historial[i].icono= "text-danger fa-arrow-circle-up";
+            break; 
                 case 'Movimiento'://no se usa
                 $scope.historial[i].icono= "text-warning fa-arrow-circle-right";
                 break;
@@ -2351,9 +2255,9 @@ vm.login2 = function() {
         console.log(error);
     });
 
-$scope.dtOptions = DTOptionsBuilder.newOptions()
-.withDOM('<"html5buttons"B>lTfgitp')
-.withButtons([
+    $scope.dtOptions = DTOptionsBuilder.newOptions()
+    .withDOM('<"html5buttons"B>lTfgitp')
+    .withButtons([
             /*{extend: 'copy', text: 'Copiar'},
             {extend: 'csv'},*/
             {extend: 'excel', title: 'Gastos'},
@@ -2361,16 +2265,16 @@ $scope.dtOptions = DTOptionsBuilder.newOptions()
 
             {extend: 'print',
             customize: function (win){
-               $(win.document.body).addClass('white-bg');
-               $(win.document.body).css('font-size', '10px');
+             $(win.document.body).addClass('white-bg');
+             $(win.document.body).css('font-size', '10px');
 
-               $(win.document.body).find('table')
-               .addClass('compact')
-               .css('font-size', 'inherit');
-           }, 
-           text: 'Imprimir'
-       }
-       ]);   
+             $(win.document.body).find('table')
+             .addClass('compact')
+             .css('font-size', 'inherit');
+         }, 
+         text: 'Imprimir'
+     }
+     ]);   
 
         /*
         <th>ID</th>
@@ -2406,9 +2310,9 @@ $scope.dtOptions = DTOptionsBuilder.newOptions()
         console.log(error);
     });
 
-$scope.dtOptions = DTOptionsBuilder.newOptions()
-.withDOM('<"html5buttons"B>lTfgitp')
-.withButtons([
+    $scope.dtOptions = DTOptionsBuilder.newOptions()
+    .withDOM('<"html5buttons"B>lTfgitp')
+    .withButtons([
             /*{extend: 'copy', text: 'Copiar'},
             {extend: 'csv'},*/
             {extend: 'excel', title: 'Gastos'},
@@ -2416,21 +2320,21 @@ $scope.dtOptions = DTOptionsBuilder.newOptions()
 
             {extend: 'print',
             customize: function (win){
-               $(win.document.body).addClass('white-bg');
-               $(win.document.body).css('font-size', '10px');
+             $(win.document.body).addClass('white-bg');
+             $(win.document.body).css('font-size', '10px');
 
-               $(win.document.body).find('table')
-               .addClass('compact')
-               .css('font-size', 'inherit');
-           }, 
-           text: 'Imprimir'
-       }
-       ]);   
+             $(win.document.body).find('table')
+             .addClass('compact')
+             .css('font-size', 'inherit');
+         }, 
+         text: 'Imprimir'
+     }
+     ]);   
 
 
-$scope.dtColumnDefs = [
-DTColumnDefBuilder.newColumnDef(0).notVisible()
-]
+    $scope.dtColumnDefs = [
+    DTColumnDefBuilder.newColumnDef(0).notVisible()
+    ]
 }])
 
 .controller('historialCajaCtrl', ['$http','$scope','$log','$uibModal','$filter','DTOptionsBuilder','DTColumnDefBuilder', function($http,$scope,$log,$uibModal,$filter,DTOptionsBuilder,DTColumnDefBuilder){
@@ -2451,14 +2355,14 @@ DTColumnDefBuilder.newColumnDef(0).notVisible()
         console.log(error);
     });
 
-  
+    
 
 
 
-$scope.dtOptions = DTOptionsBuilder.newOptions()
-.withOption('order', [0, 'desc'])
-.withDOM('<"html5buttons"B>lTfgitp')
-.withButtons([
+    $scope.dtOptions = DTOptionsBuilder.newOptions()
+    .withOption('order', [0, 'desc'])
+    .withDOM('<"html5buttons"B>lTfgitp')
+    .withButtons([
             /*{extend: 'copy', text: 'Copiar'},
             {extend: 'csv'},*/
             {extend: 'excel', title: 'Gastos'},
@@ -2466,27 +2370,27 @@ $scope.dtOptions = DTOptionsBuilder.newOptions()
 
             {extend: 'print',
             customize: function (win){
-               $(win.document.body).addClass('white-bg');
-               $(win.document.body).css('font-size', '10px');
+             $(win.document.body).addClass('white-bg');
+             $(win.document.body).css('font-size', '10px');
 
-               $(win.document.body).find('table')
-               .addClass('compact')
-               .css('font-size', 'inherit');
-           }, 
-           text: 'Imprimir'
-       }
-       ]);   
+             $(win.document.body).find('table')
+             .addClass('compact')
+             .css('font-size', 'inherit');
+         }, 
+         text: 'Imprimir'
+     }
+     ]);   
 
 
-$scope.dtColumnDefs = [
-DTColumnDefBuilder.newColumnDef(0)
-]
+    $scope.dtColumnDefs = [
+    DTColumnDefBuilder.newColumnDef(0)
+    ]
 }])
 
 .controller('canillasCtrl', ['$http','$scope','$log','$uibModal','$filter','SweetAlert', function($http,$scope,$log,$uibModal,$filter,SweetAlert){
 
- $scope.ubicaciones =[
- {
+   $scope.ubicaciones =[
+   {
     id:0,
     nombre:'Local 1'
 },
@@ -2562,8 +2466,8 @@ $scope.cambiarProducto = function(idCanilla){
     */
     .controller('loginLista',['$scope','SweetAlert',function($scope,SweetAlert){ 
 
-       $scope.usuarios =[
-       {
+     $scope.usuarios =[
+     {
         id:0,
         nombre:'Miqueas',
         modo:'Caja'

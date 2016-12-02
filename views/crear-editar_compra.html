@@ -18,7 +18,7 @@
                         ng-options="proveedor.id as proveedor.nombre for proveedor in proveedores"
                         ng-model="prId"
                         ng-change="proveedorSelected(prId)"></select>
-                <h2 class="nopadding" ng-if="soloMostrar">{{compra.nombreProveedor}} </h2>
+                <h2 class="nopadding" ng-if="soloMostrar">{{proveedor.nombre}} </h2>
             </div>                    
         </div>
         <div class="col-lg-5">
@@ -37,42 +37,42 @@
         <div ng-if="prId" class="row nopadding animated fadeInDown">
             <div class="col-lg-1">            
             </div>
-            <div ng-if="cuitProveedor" class="col-lg-2">
+            <div ng-if="proveedor.cuit" class="col-lg-2">
                 <dl class="small nopadding">
                     <dt>CUIT</dt>
-                    <dd>{{cuitProveedor}}</dd>
+                    <dd>{{proveedor.cuit}}</dd>
                 </dl>
             </div>
-            <div ng-if="direccionProveedor" class="col-lg-3">
+            <div ng-if="proveedor.direccion" class="col-lg-3">
                 <dl class="small nopadding">
                     <dt>Direccion</dt>
-                    <dd>{{direccionProveedor}}</dd>
+                    <dd>{{proveedor.direccion}}</dd>
                 </dl>
             </div>
-            <div ng-if="!telefonoContactoProveedor&&telefonoProveedor" class="col-lg-2">
+            <div ng-if="!proveedor.telefonoContacto&&proveedor.telefono" class="col-lg-2">
                 <dl class="small nopadding">
                     <dt>Telefono</dt>
-                    <dd>{{telefonoProveedor}}</dd>
+                    <dd>{{proveedor.telefono}}</dd>
                 </dl>
             </div>
-            <div ng-if="telefonoProveedor" class="col-lg-3">
+            <div ng-if="proveedor.telefonoContacto" class="col-lg-3">
                 <dl class="small nopadding">
-                    <dt>Telefono<small> ( {{contactoProveedor}} )</small></dt>
-                    <dd>{{telefonoContactoProveedor}}</dd>
+                    <dt>Telefono<small> ( {{proveedor.contacto}} )</small></dt>
+                    <dd>{{proveedor.telefonoContacto}}</dd>
                 </dl>
             </div>
             <div class="col-lg-2">
             <span ng-if="soloMostrar" class="badge"  ng-class="compra.class">
-                {{compra.estado}} 
+                {{compra.estado.nombre}} 
             </span>    
             <div ng-if="!soloMostrar" class="btn-group"  uib-dropdown>
                 <button type="button" class="btn" ng-class="claseBotonEstado" uib-dropdown-toggle>
-                    {{compra.estado}} <span class="caret"></span>
+                    {{compra.estado.nombre}} <span class="caret"></span>
                 </button>
                 <ul role="menu" uib-dropdown-menu="">
-                    <li ng-repeat="estado in estadosCompras"><a ng-click="cambiarEstado(estado)">{{estado}}</a></li>
-                    <li class="divider"></li>
-                    <li class="m-b-sm m-l-sm"><span class="text-mutted">{{estadoAnterior}}:{{fechaAnterior}}</span></li>
+                    <li ng-repeat="estado in estadosCompras"><a ng-click="cambiarEstado(estado)">{{estado.nombre}}</a></li>
+                    <li ng-if="estadoAnterior" class="divider"></li>
+                    <li ng-if="estadoAnterior" class="m-b-sm m-l-sm"><span class="text-mutted">{{estadoAnterior}}:{{fechaAnterior}}</span></li>
                 </ul>
             </div>
         
@@ -85,8 +85,8 @@
 
             <div class="ibox">
                 <div class="ibox-title">
-                    <span class="pull-right">(<strong>{{compra.items.length}}</strong>) 
-                                        <ng-pluralize count="compra.items.length" 
+                    <span class="pull-right">(<strong>{{items.length}}</strong>) 
+                                        <ng-pluralize count="items.length" d
                                           when="{ 'one': ' item',
                                                   'other': ' items' }">
                                         </ng-pluralize></span>
@@ -98,27 +98,27 @@
                         <div class="table-responsive">
                             <table class="table shoping-cart-table agregar-lista-productos">
                                 <tbody>
-                                    <tr ng-repeat="item in compra.items">
+                                    <tr ng-repeat="item in items">
                                         <td class="text-center numeros-tabla" width="10" >
                                             {{item.id}}    
                                         </td>
                                         <td width="250" class="desc">
                                             <div ng-if="!soloMostrar" class="form-group nopadding">
                                                 <label for="seleccionar-producto" class="sr-only">Producto</label>
-                                                <select  id="seleccionar-producto"  
+                                                 <select  id="seleccionar-producto"  
                                                         class="form-control"  
-                                                        ng-options="producto.id as producto.nombre + ' ( ' + producto.marca + ' ) ' for producto in productos"
-                                                        ng-model="item.productoId"
-                                                        ng-change="productoSelected(item.productoId,item.id)"></select>
+                                                        ng-options="producto.id as producto.nombre + ' ( ' + producto.marca + ' ) ' for producto in productosFiltrados "
+                                                        ng-model="item.producto.id"
+                                                        ng-change="productoSelected(item.producto.id,item.id)"></select>
+                                                        {{producto.idProveedor}}
                                             </div>
                                             
-                                            <h2 class="" ng-if="soloMostrar">{{item.nombre}} </h2>
-                                            <p ng-if="item.descripcion"  class="small item-descripcion">
-                                                {{item.descripcion}}
+                                            <h2 class="" ng-if="soloMostrar">{{item.producto.nombre}} </h2>
+                                            <p ng-if="item.producto.descripcion"  class="small item-descripcion">
+                                                {{item.producto.descripcion}}
                                             </p> 
 
                                         </td>
-
                                         <td width="150">
                                             <div ng-if="!soloMostrar">
                                             <input type="text"  name="costo" touch-spin spin-options="spinSetupCosto" ng-model="item.costo">
@@ -139,7 +139,7 @@
                                         <td ng-if="!soloMostrar">
                                             <button  class="btn btn-primary btn-tiny" type="button" ng-click="agregarItem()"><i class="fa fa-plus"></i>
                                             </button>
-                                            <button ng-if="compra.items.length>1"  class="btn btn-danger btn-tiny" type="button" ng-click="quitarItem(item.id)"><i class="fa fa-minus"></i>
+                                            <button ng-if="items.length>1"  class="btn btn-danger btn-tiny" type="button" ng-click="quitarItem(item.id)"><i class="fa fa-minus"></i>
                                             </button>
                                         </td>
                                     </tr>

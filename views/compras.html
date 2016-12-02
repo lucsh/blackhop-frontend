@@ -37,7 +37,7 @@
                             <td>{{ compra.nombreProveedor }}</td>
                             <td>{{ compra.fecha }}</td>
                             <td>{{ compra.monto | currency:"$ "}}</td>
-                            <td><span class="badge {{ compra.class }}">{{ compra.estado }}</span>
+                            <td><span class="badge {{ compra.class }}">{{ compra.estado.nombre }}</span>
                                 <div class="tresde-right-container" > 
                                     <div class="{{isHover}}">
                                         <button class="btn btn-danger btn-xs" type="button" ng-click="modal.crear(compra,false)" tooltip-placement="top" uib-tooltip="Editar"><i class="fa fa-pencil"></i></button>

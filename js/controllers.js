@@ -2887,15 +2887,21 @@ function detalleAlquilerClienteCtrl ($scope,$log,$uibModalInstance,alquiler){
             }
         };
 
-        function crearEditarCompraCtrl ($scope,$log,$uibModalInstance,items,aCompra,soloMostrar){
+function crearEditarCompraCtrl ($http,$scope,$log,$uibModalInstance,items,aCompra,aProveedor,soloMostrar,productos,proveedores,estados){
 
+
+            console.log("$scope.compra");
+            console.log($scope.compra);
             $scope.soloMostrar=soloMostrar;
+            $scope.productos=productos;
+            $scope.proveedores=proveedores;
+            $scope.estadosCompras=estados;
 
             console.log($scope.soloMostrar);
 
             $scope.agregarItem = function(){
                 var newItem ={
-                    id:Number($scope.compra.items.length)+1,
+                    id:Number($scope.items.length)+1,
                     cantidad:1,
                     productoId:'',
                     costo:'',
@@ -2904,23 +2910,23 @@ function detalleAlquilerClienteCtrl ($scope,$log,$uibModalInstance,alquiler){
                     descripcion:'',
                     tipo:''
                 }
-                $scope.compra.items.push(newItem)
+                $scope.items.push(newItem)
 
             }
 
             $scope.quitarItem = function(id){
 
-                for(var i = 0; i < $scope.compra.items.length; i++){                        
-                    if ($scope.compra.items[i].id == id){                    
-                        $scope.compra.items.splice(i, 1); 
+                for(var i = 0; i < $scope.items.length; i++){                        
+                    if ($scope.items[i].id == id){                    
+                        $scope.items.splice(i, 1); 
                     } 
                 }
 
-                for(var i = 0; i < $scope.compra.items.length; i++){                        
-                    $scope.compra.items[i].id = i +1;
+                for(var i = 0; i < $scope.items.length; i++){                        
+                    $scope.items[i].id = i +1;
                 }
 
-                if($scope.compra.items.length==1 &&$scope.compra.items[0].productoId==""){
+                if($scope.items.length==1 &&$scope.items[0].productoId==""){
                     $scope.productoReady = false; 
                 }
 
@@ -2928,31 +2934,59 @@ function detalleAlquilerClienteCtrl ($scope,$log,$uibModalInstance,alquiler){
             }
 
             $scope.proveedorSelected= function(prId){
+                if($scope.proveedor){
+                    if(prId != $scope.proveedor.id){                    
+                        $scope.items=[
+                            {
+                                id:1,
+                                cantidad:1,
+                                productoId:'',
+                                costo:'',
+                                marca:'',
+                                nombre:'',
+                                descripcion:'',
+                                tipo:''
+                            }
+                        ];
+                        $scope.productoReady=false;
+
+                    }
+                }else{
+                    $scope.proveedor = {};
+                }
                 for(var index = 0; index < $scope.proveedores.length; index++){
                     if ($scope.proveedores[index].id == prId){                    
-                        $scope.compra.nombreProveedor= $scope.proveedores[index].nombre;
-                        $scope.compra.proveedorId= prId;
-                        $scope.direccionProveedor=$scope.proveedores[index].direccion;
-                        $scope.telefonoProveedor=$scope.proveedores[index].telefono;
-                        $scope.cuitProveedor=$scope.proveedores[index].cuit;
-                        $scope.contactoProveedor=$scope.proveedores[index].contacto;
-                        $scope.telefonoContactoProveedor=$scope.proveedores[index].telefonoContacto;
+                        $scope.proveedor.nombre= $scope.proveedores[index].nombre;
+                        $scope.proveedor.id = prId;
+                        $scope.proveedor.direccion=$scope.proveedores[index].direccion;
+                        $scope.proveedor.telefono=$scope.proveedores[index].telefono;
+                        $scope.proveedor.cuit=$scope.proveedores[index].cuit;
+                        $scope.proveedor.contacto=$scope.proveedores[index].contacto;
+                        $scope.proveedor.telefonoContacto=$scope.proveedores[index].telefonoContacto;
                         $scope.proveedorReady=true;
                     }
-                }            
+                }
+                $scope.productosFiltrados = [];
+                $scope.productos.forEach(function(producto,index,arreglo){
+                    if(producto.idProveedor == $scope.proveedor.id){
+                        $scope.productosFiltrados.push(producto);
+                    }
+                });
+                console.log('$scope.productosFiltrados');
+                console.log($scope.productosFiltrados);    
             }
 
             $scope.productoSelected= function (pId,iId){
                 for(var index = 0; index < $scope.productos.length; index++){
                     if ($scope.productos[index].id == pId){
-                        for(var i = 0; i < $scope.compra.items.length; i++){
-                            if ($scope.compra.items[i].id == iId){
-                                $scope.compra.items[i].costo= $scope.productos[index].costo;
-                                $scope.compra.items[i].marca= $scope.productos[index].marca;
-                                $scope.compra.items[i].nombre= $scope.productos[index].nombre;
-                                $scope.compra.items[i].descripcion= $scope.productos[index].descripcion;
-                                $scope.compra.items[i].tipo= $scope.productos[index].categoria;
-                                $scope.compra.items[i].unidad= $scope.productos[index].unidad;
+                        for(var i = 0; i < $scope.items.length; i++){
+                            if ($scope.items[i].id == iId){
+                                $scope.items[i].costo= $scope.productos[index].costo;
+                                $scope.items[i].marca= $scope.productos[index].marca;
+                                $scope.items[i].producto.nombre= $scope.productos[index].nombre;
+                                $scope.items[i].producto.descripcion= $scope.productos[index].descripcion;
+                                $scope.items[i].producto.tipo= $scope.productos[index].categoria;
+                                $scope.items[i].producto.unidad= $scope.productos[index].unidad;
                                 $scope.productoReady=true;
                             }
                         }
@@ -2985,7 +3019,7 @@ function detalleAlquilerClienteCtrl ($scope,$log,$uibModalInstance,alquiler){
                 verticaldownclass: 'fa fa-minus'
             };       
 
-            $scope.guardar = function(){
+$scope.guardar = function(){
 
         //verifico si ya existe (edicion vs creacion)
         var nuevaCompra=true;
@@ -3023,8 +3057,8 @@ $scope.cancel = function () {
 
 $scope.getTotal = function(){
     var total = 0;
-    for(var i = 0; i < $scope.compra.items.length; i++){
-        var item = $scope.compra.items[i];
+    for(var i = 0; i < $scope.items.length; i++){
+        var item = $scope.items[i];
         total += (item.costo * item.cantidad);
     }
     return total;
@@ -3037,7 +3071,7 @@ $scope.cambiarEstado = function(estado){
 
 }
 $scope.asignarClasesEstado = function(){
- switch ($scope.compra.estado){
+ switch ($scope.compra.estado.nombre){
     case 'Finalizado':
     $scope.compra.class= "badge-primary";
     $scope.claseBotonEstado="btn-primary";
@@ -3054,645 +3088,22 @@ $scope.asignarClasesEstado = function(){
 }
 
 $scope.toggleEditar = function() {
-    $scope.soloMostrar = $scope.soloMostrar === false ? true: false;
+    $scope.soloMostrar = $scope.soloMostrar === false ? true: false; //le da cancer al More
     console.log($scope.soloMostrar);
     $scope.asignarClasesEstado(); 
     $scope.compra.fecha=moment($scope.compra.fecha).locale('es').format('DD/MMM/YY');
 };
 
-$scope.estadosCompras=[
-'Pagado',
-'Finalizado',
-'Pedido'
-]
 
-$scope.proveedores=[
-{
-    identificador:1,
-    nombre:"Crafter",
-    direccion:"Ruta 151 km. 123",
-    telefono:"4412345",
-    email:"correo@direccion.com.ar",
-    mPago:"30 dias F. Factura",
-    cuit:"30-12345678/3",
-    contacto:"Luciano Marquez",
-    telefonoContacto:"2996041216",
-    imagen:"img/c1.jpg",
-    GIS:null   
-},
-{
-    identificador:2,
-    nombre:"Kalevala",
-    direccion:"San Martin 546",
-    telefono:"4412345",
-    email:"correo@direccion.com.ar",
-    mPago:"20 dias F. Factura",
-    cuit:"30-12345678/3",
-    contacto:"Antonio Rodriguez",
-    telefonoContacto:"2995433634",
-    imagen:"img/c2.jpg",
-    GIS:null   
-},
-{
-    identificador:3,
-    nombre:"Botellas SRL",
-    direccion:"Rosa de los Vientos 12",
-    telefono:"4412345",
-    email:"correo@direccion.com.ar",
-    mPago:"30 dias F. Factura",
-    cuit:"30-964542035/3",
-    contacto:"Fiorella Salas",
-    telefonoContacto:"2995691627",
-    imagen:"img/c3.png",
-    GIS:null   
-},
-{
-    identificador:4,
-    nombre:"Tapas SRL",
-    direccion:"Garganta de los Montes 455",
-    telefono:"4412345",
-    email:"correo@direccion.com.ar",
-    mPago:"Contado",
-    cuit:"30-456844328/3",
-    contacto:"Martin Moreira",
-    telefonoContacto:"2996888259",
-    imagen:"img/c1.jpg",
-    GIS:null   
-},
-{
-    identificador:5,
-    nombre:"Dessin",
-    direccion:"Constitución 26",
-    telefono:"4412345",
-    email:"correo@direccion.com.ar",
-    mPago:"90 dias F. Factura",
-    cuit:"30-362512386/3",
-    contacto:"Mafalda Barela",
-    telefonoContacto:"2996440850",
-    imagen:"img/c2.jpg",
-    GIS:null   
-},
-{
-    identificador:6,
-    nombre:"Quantum",
-    direccion:"Rivadavia 568",
-    telefono:"4412345",
-    email:"correo@direccion.com.ar",
-    mPago:"15 dias F. Factura",
-    cuit:"30-89653248/3",
-    contacto:"Liza Ortega",
-    telefonoContacto:"2995664192",
-    imagen:"img/c3.png",
-    GIS:null   
-},
-{
-    identificador:7,
-    nombre:"Antares",
-    direccion:"Ant Argentina 382",
-    telefono:"4412345",
-    email:"correo@direccion.com.ar",
-    mPago:"60 dias F. Factura",
-    cuit:"30-635441789/3",
-    contacto:"Juan Colón",
-    telefonoContacto:"2996646540",
-    imagen:"img/c1.jpg",
-    GIS:null   
-},
-{
-    identificador:8,
-    nombre:"Proveedor SA",
-    direccion:"Juan B. Justo 452",
-    telefono:"4412345",
-    email:"correo@direccion.com.ar",
-    mPago:"30 dias F. Factura",
-    cuit:"30-12345678/3",
-    contacto:"Ruben Pacheco",
-    telefonoContacto:"2995025237",
-    imagen:"img/c2.jpg",
-    GIS:null   
-},
-{
-    identificador:9,
-    nombre:"Etiquetas SRL",
-    direccion:"Independencia 823",
-    telefono:"4412345",
-    email:"correo@direccion.com.ar",
-    mPago:"30 dias F. Factura",
-    cuit:"30-789260684/3",
-    contacto:"Simon Garcia",
-    telefonoContacto:"2995123456",
-    imagen:"img/c1.jpg",
-    GIS:null   
-},
-{
-    identificador:10,
-    nombre:"Nuevo Origen",
-    direccion:"Rio Desaguadero 672",
-    telefono:"4412345",
-    email:"correo@direccion.com.ar",
-    mPago:"30 dias F. Factura",
-    cuit:"30-95612345/3",
-    contacto:"Roberto Estrada",
-    telefonoContacto:"2996950755",
-    imagen:"img/c3.png",
-    GIS:null   
-},
-{
-    identificador:11,
-    nombre:"La Papeleria",
-    direccion:"Constitución 456",
-    telefono:"4412345",
-    email:"correo@direccion.com.ar",
-    mPago:"30 dias F. Factura",
-    cuit:"30-76834532/3",
-    contacto:"Martin Moreira",
-    telefonoContacto:"2995184011",
-    imagen:"img/c1.jpg",
-    GIS:null   
-},
-{
-    identificador:12,
-    nombre:"Productos SA",
-    direccion:"Garganta de los Montes 455",
-    telefono:"4412345",
-    email:"correo@direccion.com.ar",
-    mPago:"30 dias F. Factura",
-    cuit:"30-76429823/3",
-    contacto:"Lionel Villar",
-    telefonoContacto:"2996188911",
-    imagen:"img/c2.jpg",
-    GIS:null               
-}]
-
-$scope.productos=[
-{
-    identificador:1,
-    proveedor:"Crafter",
-    marca:"Crafter",
-    nombre:"American IPA",
-    valor:75.00,
-    costo:45.00,
-    descripcion:"Una pale ale lupulada, moderadamente fuerte, con características consistentes con el uso de maltas, lúpulos y levadura inglesas.",                    
-            stock:100,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"Cervezas por Litro",//tipo
-            unidad:'lts.',
-            color:"#E8692E",
-            ibu:40,
-            alcohol:6,
-            origen:'Cipolletti'
-        },
-        {
-            identificador:2,
-            proveedor:"Blest",
-            marca:"Blest",
-            nombre:"Pilsen",
-            valor:75.00,
-            costo:45.00,
-            descripcion:"Una pale ale lupulada, moderadamente fuerte, con características consistentes con el uso de maltas, lúpulos y levadura inglesas.",                    
-            stock:100,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"Cervezas por Litro",//tipo
-            unidad:'lts.',
-            color:"#F6AC3F",
-            ibu:40,
-            alcohol:6,
-            origen:'Neuquen'
-        },
-        {
-            identificador:3,
-            proveedor:"Lowther",
-            marca:"Lowther",
-            nombre:"Ambar",
-            valor:75.00,
-            costo:45.00,
-            descripcion:"Una pale ale lupulada, moderadamente fuerte, con características consistentes con el uso de maltas, lúpulos y levadura inglesas.",                    
-            stock:100,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"Cervezas por Litro",//tipo
-            unidad:'lts.',
-            color:"#E08D3B",
-            ibu:40,
-            alcohol:6,
-            origen:'Bariloche'
-        },
-        {
-            identificador:4,
-            proveedor:"Nuevo Origen",
-            marca:"Nuevo Origen",
-            nombre:"Firenze",
-            valor:75.00,
-            costo:45.00,
-            descripcion:"Una pale ale lupulada, moderadamente fuerte, con características consistentes con el uso de maltas, lúpulos y levadura inglesas.",                    
-            stock:100,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"Cervezas por Litro",//tipo
-            unidad:'lts.',
-            color:"#E08D3B",
-            ibu:40,
-            alcohol:6,
-            origen:'La Pampa'
-        },
-        {
-            identificador:5,
-            proveedor:"Crafter",
-            marca:"Crafter",
-            nombre:"Honey",
-            valor:75.00,
-            costo:45.00,
-            descripcion:"Una pale ale lupulada, moderadamente fuerte, con características consistentes con el uso de maltas, lúpulos y levadura inglesas.",                    
-            stock:100,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"Cervezas por Litro",//tipo
-            unidad:'lts.',
-            color:"#E8692E",
-            ibu:40,
-            alcohol:6,
-            origen:'Cipolletti'
-        },
-        {
-            identificador:6,
-            proveedor:"Crafter",
-            marca:"Crafter",
-            nombre:"Blueberry",
-            valor:75.00,
-            costo:45.00,
-            descripcion:"Una pale ale lupulada, moderadamente fuerte, con características consistentes con el uso de maltas, lúpulos y levadura inglesas.",                    
-            stock:100,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"Cervezas por Litro",//tipo 
-            unidad:'lts.',
-            color:"#82171A",
-            ibu:40,
-            alcohol:6,
-            origen:'Cipolletti'
-        },
-        {
-            identificador:7,
-            proveedor:"Kalevala",
-            marca:"Kalevala",
-            nombre:"Bitter",
-            valor:75.00,
-            costo:45.00,
-            descripcion:"Una pale ale lupulada, moderadamente fuerte, con características consistentes con el uso de maltas, lúpulos y levadura inglesas.",                    
-            stock:100,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"Cervezas por Litro",//tipo
-            unidad:'lts.',
-            color:"#6B190F",
-            ibu:40,
-            alcohol:6,
-            origen:'Cipolletti'
-        },
-        {
-            identificador:8,
-            proveedor:"Nuevo Origen",
-            marca:"Nuevo Origen",
-            nombre:"Little Wing",
-            valor:75.00,
-            costo:45.00,
-            descripcion:"Una pale ale lupulada, moderadamente fuerte, con características consistentes con el uso de maltas, lúpulos y levadura inglesas.",                    
-            stock:100,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"Cervezas por Litro",//tipo
-            unidad:'lts.',
-            color:"#E08D3B",
-            ibu:40,
-            alcohol:6,
-            origen:'La Pampa'
-        },
-        {
-            identificador:9,
-            proveedor:"Nuevo Origen",
-            marca:"Nuevo Origen",
-            nombre:"Dorada Pampeana",
-            valor:75.00,
-            costo:45.00,
-            descripcion:"Una pale ale lupulada, moderadamente fuerte, con características consistentes con el uso de maltas, lúpulos y levadura inglesas.",                    
-            stock:100,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"Cervezas por Litro",//tipo
-            unidad:'lts.',
-            color:"#E8692E",
-            ibu:40,
-            alcohol:6,
-            origen:'La Pampa'
-        },
-        {
-            identificador:10,
-            proveedor:"Lowther",
-            marca:"Lowther",
-            nombre:"Brown Ale",
-            valor:75.00,
-            costo:45.00,
-            descripcion:"Una pale ale lupulada, moderadamente fuerte, con características consistentes con el uso de maltas, lúpulos y levadura inglesas.",                    
-            stock:100,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"Cervezas por Litro",//tipo
-            unidad:'lts.',
-            color:"#E8692E",
-            ibu:40,
-            alcohol:6,
-            origen:'Bariloche'
-        },
-        {
-            identificador:11,
-            proveedor:"Crafter",
-            marca:"Crafter",
-            nombre:"Scottish",
-            valor:75.00,
-            costo:45.00,
-            descripcion:"Una pale ale lupulada, moderadamente fuerte, con características consistentes con el uso de maltas, lúpulos y levadura inglesas.",                    
-            stock:100,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"Cervezas por Litro",//tipo 
-            unidad:'lts.',
-            color:"#82171A",
-            ibu:40,
-            alcohol:6,
-            origen:'Cipolletti'
-        },
-        {
-            identificador:12,
-            proveedor:"Crafter",
-            marca:"Crafter",
-            nombre:"Hazenut",
-            valor:75.00,
-            costo:45.00,
-            descripcion:"Una pale ale lupulada, moderadamente fuerte, con características consistentes con el uso de maltas, lúpulos y levadura inglesas.",                    
-            stock:100,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"Cervezas por Litro",//tipo 
-            unidad:'lts.',
-            color:"#E8692E",
-            ibu:40,
-            alcohol:6,
-            origen:'Cipolletti'
-        },
-        {
-            identificador:13,
-            proveedor:"Kalevala",
-            marca:"Kalevala",
-            nombre:"Irish Red Ale",
-            valor:75.00,
-            costo:45.00,
-            descripcion:"Una pale ale lupulada, moderadamente fuerte, con características consistentes con el uso de maltas, lúpulos y levadura inglesas.",                    
-            stock:100,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"Cervezas por Litro",//tipo 
-            unidad:'lts.',
-            color:"#E8692E",
-            ibu:40,
-            alcohol:6,
-            origen:'Cipolletti'
-        },
-        {
-            identificador:14,
-            proveedor:"Lowther",
-            marca:"Lowther",
-            nombre:"IPA",
-            valor:75.00,
-            costo:45.00,
-            descripcion:"Una pale ale lupulada, moderadamente fuerte, con características consistentes con el uso de maltas, lúpulos y levadura inglesas.",                    
-            stock:100,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"Cervezas por Litro",//tipo 
-            unidad:'lts.',
-            color:"#E08D3B",
-            ibu:40,
-            alcohol:6,
-            origen:'Bariloche'
-        },
-        {
-            identificador:15,
-            proveedor:"Blest",
-            marca:"Blest",
-            nombre:"Scotch",
-            valor:75.00,
-            costo:45.00,
-            descripcion:"Una pale ale lupulada, moderadamente fuerte, con características consistentes con el uso de maltas, lúpulos y levadura inglesas.",                    
-            stock:100,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"Cervezas por Litro",//tipo 
-            unidad:'lts.',
-            color:"#E8692E",
-            ibu:40,
-            alcohol:6,
-            origen:'Cipolletti'
-        },
-        {
-            identificador:16,
-            proveedor:"Distribuidor de bottellas",
-            marca:"Bottles",
-            nombre:"Growler",
-            valor:100.00,
-            costo:50.00,
-            descripcion:"Modelo Clasico",                    
-            stock:100,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"Envases",//tipo 
-            unidad:'lts.',
-        },
-        {
-            identificador:17,
-            proveedor:"Distribuidor de bottellas",
-            marca:"Bottles",
-            nombre:"Growler Led Zeppelin",
-            valor:100.00,
-            costo:50.00,
-            descripcion:"Modelo Led Zeppelin",                    
-            stock:200,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"Envases",//tipo  
-            unidad:'lts.',
-        },
-        {
-            identificador:18,
-            proveedor:"Distribuidor de bottellas",
-            marca:"Bottles",
-            nombre:"Growler Jimmy Hendrix",
-            valor:100.00,
-            costo:50.00,
-            descripcion:"Modelo Jimmy Hendrix",                    
-            stock:10,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"Envases",//tipo  
-            unidad:'lts.',
-        },
-        {
-            identificador:19,
-            proveedor:"Tapitas SRL",
-            marca:"Tapitas",
-            nombre:"Tapa Growler",
-            valor:8.00,
-            costo:5.00,
-            descripcion:"Tapa para growler de 2 lt",                    
-            stock:300,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"No vendible",//tipo 
-            unidad:'un.',
-        },
-        {
-            identificador:20,
-            proveedor:"Distribuidor de bottellas",
-            marca:"Bottles",
-            nombre:"Botella 1 lt",
-            valor:40.00,
-            costo:30.00,
-            descripcion:"Modelo Clasico",                    
-            stock:200,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"Envases",//tipo 
-            unidad:'lts.',
-        },
-        {
-            identificador:21,
-            proveedor:"Tapitas SRL",
-            marca:"Tapaitas",
-            nombre:"Tapa Botella",
-            valor:8.00,
-            costo:5.00,
-            descripcion:"Tapa para botella de 1 lt",                    
-            stock:200,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"No vendible",//tipo 
-            unidad:'un.',
-        },
-        {
-            identificador:22,
-            proveedor:"Nuevo Origen",
-            marca:"Nuevo Origen",
-            nombre:"Rocky",
-            valor:75.00,
-            costo:45.00,
-            descripcion:"Una pale ale lupulada, moderadamente fuerte, con características consistentes con el uso de maltas, lúpulos y levadura inglesas.",                    
-            stock:100,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"Cervezas por Litro",//tipo 
-            unidad:'lts.',
-            color:"#E8692E",
-            ibu:40,
-            alcohol:6,
-            origen:'La Pampa'
-        },
-        {
-            identificador:23,
-            proveedor:"Nuevo Origen",
-            marca:"Nuevo Origen",
-            nombre:"Boreal",
-            valor:75.00,
-            costo:45.00,
-            descripcion:"Una pale ale lupulada, moderadamente fuerte, con características consistentes con el uso de maltas, lúpulos y levadura inglesas.",                    
-            stock:100,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"Cervezas por Litro",//tipo  
-            unidad:'lts.',
-            color:"#E8692E",
-            ibu:40,
-            alcohol:6,
-            origen:'Cipolletti'
-        },
-        {
-            identificador:24,
-            proveedor:"Crafter",
-            marca:"Crafter",
-            nombre:"Porter",
-            valor:75.00,
-            costo:45.00,
-            descripcion:"Una pale ale lupulada, moderadamente fuerte, con características consistentes con el uso de maltas, lúpulos y levadura inglesas.",                    
-            stock:100,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"Cervezas por Litro",//tipo    
-            unidad:'lts.',
-            color:"#6B190F",
-            ibu:40,
-            alcohol:6,
-            origen:'Cipolletti'
-        },
-        {
-            identificador:25,
-            proveedor:"Blest",
-            marca:"Blest",
-            nombre:"Bock",
-            valor:75.00,
-            costo:45.00,
-            descripcion:"Una pale ale lupulada, moderadamente fuerte, con características consistentes con el uso de maltas, lúpulos y levadura inglesas.",                    
-            stock:100,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"Cervezas por Litro",//tipo 
-            unidad:'lts.',
-            color:"#6B190F",
-            ibu:40,
-            alcohol:6,
-            origen:'Cipolletti'
-        },
-        {
-            identificador:26,
-            proveedor:"Nuevo Origen",
-            marca:"Nuevo Origen",
-            nombre:"Dry Stout",
-            valor:75.00,
-            costo:45.00,
-            descripcion:"Una pale ale lupulada, moderadamente fuerte, con características consistentes con el uso de maltas, lúpulos y levadura inglesas.",                    
-            stock:100,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"Cervezas por Litro",//tipo  
-            unidad:'lts.',
-            color:"#5C1F0C",
-            ibu:40,
-            alcohol:6,
-            origen:'La Pampa'
-        },
-        {
-            identificador:27,
-            proveedor:"Nuevo Origen",
-            marca:"Nuevo Origen",
-            nombre:"Seasonal",
-            valor:75.00,
-            costo:45.00,
-            descripcion:"Una pale ale lupulada, moderadamente fuerte, con características consistentes con el uso de maltas, lúpulos y levadura inglesas.",                    
-            stock:100,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"Cervezas por Litro",//tipo 
-            unidad:'lts.',
-            color:"#E8692E",
-            ibu:40,
-            alcohol:6,
-            origen:'La Pampa'
-        },
-        {
-            identificador:29,
-            proveedor:"Black Hop",
-            marca:"Black Hop",
-            nombre:"Sin Growler",
-            valor:75.00,//valor por litro
-            costo:'',
-            descripcion:"Cupon para venta en barra sin growler",                    
-            stock:'-1',//infinito para los cupones
-            categoria:"Cupones",//tipo
-            unidad:'lts.',
-        },
-        {
-            identificador:31,
-            proveedor:"Distribuidor de gorras",
-            marca:"Gorra",
-            nombre:"Black Hop",
-            valor:100.00,
-            costo:50.00,
-            descripcion:"Negra",                    
-            stock:50,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"Merchandising",//tipo  
-            unidad:'un.',
-        },
-        {
-            identificador:32,
-            proveedor:"Distribuidor de bolsas",
-            marca:"Bolsa",
-            nombre:"Black Hop",
-            valor:100.00,
-            costo:50.00,
-            descripcion:"Negra",                    
-            stock:120,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"Merchandising",//tipo  
-            unidad:'un.',
-        },
-        {
-            identificador:33,
-            proveedor:"Quilmes",
-            marca:"Antares",
-            nombre:"Pale Ale",
-            valor:100.00,
-            costo:50.00,
-            descripcion:"Una pale ale lupulada, moderadamente fuerte, con características consistentes con el uso de maltas, lúpulos y levadura inglesas.",                    
-            stock:10,//se calcula con la suma de los stocks en todas las ubicaciones, en el caso del POS es la suma en la ubicacion de ese POS
-            categoria:"Cerveza en botella",//tipo
-            unidad:'lts.',
-            color:"#E8692E",
-            ibu:40,
-            alcohol:6,
-            origen:'La Pampa'
-        },
-
-        ]
-
+        console.log(items)
         if(!items){
+        console.log("nope")
+
             $scope.compra={}
             $scope.compra.id=Number($scope.compras.length)+1;
             $scope.compra.fecha=moment();
-            $scope.compra.items=[
+            $scope.compra.estado = {id:1,nombre:'Pedido'};
+            $scope.items=[
             {
                 id:1,
                 cantidad:1,
@@ -3702,24 +3113,50 @@ $scope.productos=[
                 nombre:'',
                 descripcion:'',
                 tipo:''
-            }]
-        }else{
-        //$scope.compra=aCompra; //con '=' son el mismo (no preguntes)
+            }];
 
-        $scope.compra = angular.copy(aCompra);
+            $scope.proveedorSelected($scope.proveedores[0].id);
+            $scope.prId = $scope.proveedores[0].id;
+            $scope.asignarClasesEstado();
+            console.log('$scope.compra');
+            console.log($scope.compra);
+        }else{
+        $scope.compra=aCompra; //con '=' son el mismo
+        //Seteo el proveedor
+        $scope.proveedor=aProveedor; //con '=' son el mismo
+        //Como setie el proveedor filtro los productos a seleccionar
+        $scope.productosFiltrados = [];
+        $scope.productos.forEach(function(producto,index,arreglo){
+           
+            if(producto.idProveedor == $scope.proveedor.id){
+                $scope.productosFiltrados.push(producto);
+            }
+        });
+        console.log('$scope.productosFiltrados');
+        console.log($scope.productosFiltrados);
+
+
+
         
-        $scope.estadoAnterior=$scope.compra.estado;
+        console.log($scope.compra);
+
+        //$scope.compra = angular.copy(aCompra);
+        
+        $scope.estadoAnterior=$scope.compra.estado.nombre;
         $scope.fechaAnterior=$scope.compra.fecha;
         
-        $scope.proveedorSelected($scope.compra.proveedorId);
-        $scope.prId=($scope.compra.proveedorId);
-        $scope.compra.items=items;        
-        $scope.pId=($scope.compra.productoId);
+        $scope.proveedorSelected($scope.compra.idProveedor);
+        $scope.prId=($scope.proveedor.id);
+        console.log($scope.proveedor.id);
+
+        $scope.items=items;   
+        console.log($scope.items);     
+        //$scope.pId=($scope.compra.productoId);
         $scope.productoReady=true;
             //$scope.soloMostrar=true;
             if($scope.compra.estado!='Finalizado'){
              $scope.permitirCambiarEstado=true;
-             $scope.compra.fecha=moment($scope.compra.fecha);
+             //$scope.compra.fecha=moment($scope.compra.fecha);
                    //$scope.soloMostrar=false;
 
                }
