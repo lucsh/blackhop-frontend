@@ -543,6 +543,10 @@ vm.login2 = function() {
                     }
                 }
             }).closed.then(function(datosCliente){
+                if($scope.clienteSeleccionado){
+                    $scope.resumen.nombreClienteSeleccionado = $scope.clienteSeleccionado.nombre + ' '+ $scope.clienteSeleccionado.apellido ;
+                }
+                console.log($scope.resumen)
                 if(flag){
                   $scope.modal.terminarVenta();
               }

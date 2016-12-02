@@ -1737,7 +1737,7 @@ function scanearCuponCtrl ($scope,$log,$uibModalInstance,$http){
                                     newCli.estado = 'Inactivo';
                                     $scope.clientes.push(newCli);
                                     $scope.datosCliente = datosCliente.data;
-                                    $scope.$parent.clienteSeleccionado = $scope.datosCliente;
+                                    $scope.$parent.clienteSeleccionado = $scope.datosCliente;                                    
                                     var nuevoCliente = datosCliente.data;
                                     $uibModalInstance.close($scope.datosCliente);
 
@@ -2426,7 +2426,9 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
         $scope.resumen.total=0.00;
         $scope.resumen.totalLitros=0;
         $scope.resumen.selected=-1;
-        $scope.clienteSeleccionado={};
+        $scope.clienteSeleccionado='';
+        $scope.resumen.nombreClienteSeleccionado='';
+        console.log($scope.resumen)
     }
     
     $scope.selectBtn = function(num){

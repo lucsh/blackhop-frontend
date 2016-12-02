@@ -3,6 +3,9 @@
         <div> 
             <div resumen-slim-scroll class="panel panel-default" >
                 <div class="panel-body">
+                
+                    <div ng-model="total" class="total-resumen" ng-if="resumen.nombreClienteSeleccionado"> Cliente:  {{ resumen.nombreClienteSeleccionado }}</div>
+                    <hr ng-if="resumen.nombreClienteSeleccionado">
                     <div id="listado">
                         <div  class="list-group producto-resumen">
                             <!-- aca va la lista de productos -->
@@ -24,8 +27,8 @@
 
                         </div>
                     </div>
-                    <hr>
-                    <div ng-model="total" class="total-resumen text-right" ng-if="resumen.total"> Total: $ {{ resumen.total }}</br><div ng-if="impuestos" class="total-impuestos">Impuestos: $ 0,00</div></div>
+                    <hr ng-if="resumen.total">
+                    <div ng-model="total" class="total-resumen text-right" ng-if="resumen.total"> Total: $ {{ resumen.total }}</br><div ng-if="impuestos" class="total-impuestos">Impuestos: $ 0,00</div></div>                    
             </div>
         </div>
     </div>
