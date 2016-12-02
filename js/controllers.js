@@ -2275,7 +2275,7 @@ function wizardProductoInvantarioCtrl ($http,$scope,$log,$uibModalInstance,Sweet
                                         arreglo[index] = response.data;
                                     }
                                 });
-                                SweetAlert.swal("¡Hecho!", "El ajuste fue aplicado", "success"); 
+                                SweetAlert.swal("¡Hecho!", "El cambio fue aplicado", "success"); 
                                 $uibModalInstance.close();
                                 
                             }).error(function(error){
