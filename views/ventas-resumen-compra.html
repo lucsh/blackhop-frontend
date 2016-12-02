@@ -25,7 +25,7 @@
                         </div>
                     </div>
                     <hr>
-                    <div ng-model="total" class="total-resumen text-right"> Total: $ {{ resumen.total }}</br><div class="total-impuestos">Impuestos: $ 0,00</div></div>
+                    <div ng-model="total" class="total-resumen text-right" ng-if="resumen.total"> Total: $ {{ resumen.total }}</br><div ng-if="impuestos" class="total-impuestos">Impuestos: $ 0,00</div></div>
             </div>
         </div>
     </div>
