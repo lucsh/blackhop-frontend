@@ -1650,7 +1650,7 @@ function scanearCuponCtrl ($scope,$log,$uibModalInstance,$http){
 
     };
 
-    function modalControler ($scope,$http,$log,$uibModalInstance,clientes){
+    function modalControler ($scope,$http,$log,$uibModalInstance,SweetAlert,clientes){
 
         $scope.clientes = clientes;       
         $scope.asd = moment('01/01/1985');
@@ -1700,36 +1700,63 @@ function scanearCuponCtrl ($scope,$log,$uibModalInstance,$http){
         var newCliFechaNacimiento=angular.element(document.querySelector('#fechaNacimiento')).val();
 
         newCliFechaNacimiento=moment().format("YYYY-MM-DD");
+//--
 
-        $http.post('http://blackhop-dessin1.rhcloud.com/api/pos/caja/cliente',{
-            nombre:newCliNombre,
-            apellido:newCliApellido,
-            dni:newCliDni,
-            telefono:newCliTelefono,
-            celular:newCliCelular,
-            email:newCliEmail,
-            fechaNacimiento:newCliFechaNacimiento,
-            direccion:newCliDireccion,
-            localidad:newCliLocalidad
-        }).success(function(datosCliente){    
-            var newCli = {};
-            newCli.nombre = datosCliente.data.nombre;
-            newCli.apellido = datosCliente.data.apellido;
-            newCli.dni = datosCliente.data.dni;
-            newCli.id = datosCliente.data.id;
-            newCli.direccion = datosCliente.data.direccion;
-            newCli.telefono = datosCliente.data.telefono;
-            newCli.estado = 'Inactivo';
-            $scope.clientes.push(newCli);
-            $scope.datosCliente = datosCliente.data;
-            $scope.$parent.clienteSeleccionado = $scope.datosCliente;
-            var nuevoCliente = datosCliente.data;
-            $uibModalInstance.close($scope.datosCliente);
 
-        }).error(function(error){
-            console.log(error);
-            $uibModalInstance.close();
-        });
+                    SweetAlert.swal({
+                        title: "¿Estas Seguro?",
+                        text: "Vas a agregar a <span style='color:#F8BB86; font-weight:600'>" + newCliNombre + " " +newCliApellido +"</span> <br> como nuevo cliente",
+                        type: "warning", 
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "¡Si, agregalo!",
+                        cancelButtonText: "¡No, cancelar!",
+                        closeOnConfirm: true,
+                        closeOnCancel: false,
+                        html: true },
+                        function (isConfirm) {
+                            if (isConfirm) {
+                                $http.post('http://blackhop-dessin1.rhcloud.com/api/pos/caja/cliente',{
+                                    nombre:newCliNombre,
+                                    apellido:newCliApellido,
+                                    dni:newCliDni,
+                                    telefono:newCliTelefono,
+                                    celular:newCliCelular,
+                                    email:newCliEmail,
+                                    fechaNacimiento:newCliFechaNacimiento,
+                                    direccion:newCliDireccion,
+                                    localidad:newCliLocalidad
+                                }).success(function(datosCliente){    
+                                    var newCli = {};
+                                    newCli.nombre = datosCliente.data.nombre;
+                                    newCli.apellido = datosCliente.data.apellido;
+                                    newCli.dni = datosCliente.data.dni;
+                                    newCli.id = datosCliente.data.id;
+                                    newCli.direccion = datosCliente.data.direccion;
+                                    newCli.telefono = datosCliente.data.telefono;
+                                    newCli.estado = 'Inactivo';
+                                    $scope.clientes.push(newCli);
+                                    $scope.datosCliente = datosCliente.data;
+                                    $scope.$parent.clienteSeleccionado = $scope.datosCliente;
+                                    var nuevoCliente = datosCliente.data;
+                                    $uibModalInstance.close($scope.datosCliente);
+
+                                }).error(function(error){
+                                    $uibModalInstance.close();
+                                    console.log(error);
+                                    SweetAlert.swal("ERROR", error.message, "error");
+                                });                                
+
+                            } else {
+                                SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
+                            }
+                        });
+
+
+
+
+//--
+
 
 
     }

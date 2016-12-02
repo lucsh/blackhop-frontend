@@ -536,6 +536,7 @@ vm.login2 = function() {
                 templateUrl: 'views/modal_abrir_cliente.html',
                 controller: modalControler,
                 windowClass: "animated fadeIn",
+                SweetAlert:SweetAlert,
                 resolve: {
                     clientes: function () {
                         return $scope.clientes;
