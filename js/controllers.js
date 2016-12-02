@@ -1597,7 +1597,7 @@ function scanearCuponCtrl ($scope,$log,$uibModalInstance,$http){
                 $scope.cupon.apellido=response.apellido;
 
                 if(response.cumple == "Hoy"){
-                    response.cumple='<i class="fa fa-birthday-cake" aria-hidden="true"></i> ¡¡¡Hoy!!!'
+                    response.cumple='¡¡¡Hoy!!!'
 
                 }
 
