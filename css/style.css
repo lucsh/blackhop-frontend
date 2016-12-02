@@ -8589,7 +8589,7 @@ body.md-skin {
 }
 .canilla-pos::after{
     content: ' a';
-    line-height: 35px;
+    line-height: 30px;
     background: transparent;
     -webkit-box-shadow:none;
     -moz-box-shadow:none;
@@ -8604,7 +8604,7 @@ body.md-skin {
 
 .canilla-pos .canilla-color {
     width: 20px;
-    height: 30px;
+    height: 24px;
     border-bottom-left-radius: 3px;
     border-top-left-radius: 3px;
 }
@@ -8612,21 +8612,21 @@ body.md-skin {
     color: whitesmoke;
     font-size: 11px;
     line-height: 20px;
-    padding: 5px 0;
+    padding: 3px 0;
     text-align: center;
     width: 20px;
 }
 .canilla-pos .canilla-nombre{
     background: white;
     font-size: 11px;
-    line-height: 24px;
+    line-height: 17px;
     text-align: left;
     width: 200px;
     padding-left: 2px;
     -webkit-box-shadow: 0px 6px 5px -5px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 6px 5px -5px rgba(0,0,0,0.75);
     box-shadow: 0px 6px 5px -5px rgba(0,0,0,0.75);
-    height: 30px;
+    height: 24px;
 }
 
 .font-huge{
