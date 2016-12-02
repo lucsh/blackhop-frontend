@@ -1905,6 +1905,9 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
                             files: ['js/plugins/moment/moment.min.js']
                         },
                         {
+                            files: ['js/plugins/QZ/rsvp-3.js','js/plugins/QZ/sha-256.js','js/plugins/QZ/qz-tray.js']
+                        },
+                        {
                             name: 'ngPrint',
                             files: ['js/plugins/ngPrint/ngPrint.min.js','css/plugins/ngPrint/ngPrint.css']
                         },
