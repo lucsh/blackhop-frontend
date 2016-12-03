@@ -270,7 +270,7 @@ vm.login2 = function() {
     
     $scope.getProductosBarra();
 
-        $scope.resumen={//quien lo llama?
+        $scope.resumen={
             display:'',
             numeroProductos:-1,
             productos:[],
