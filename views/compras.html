@@ -13,7 +13,7 @@
         </ol>
     </div>
     <div class="col-lg-2">
-            <h2><button ng-click="modal.crear()" class="btn btn-primary " type="button"><i class="fa fa-plus"></i>&nbsp;Agregar</button></h2>
+            <h2><button ng-click="modal.crear(true)" class="btn btn-primary " type="button"><i class="fa fa-plus"></i>&nbsp;Agregar</button></h2>
     </div>
 </div>
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -40,8 +40,8 @@
                             <td><span class="badge {{ compra.class }}">{{ compra.estado.nombre }}</span>
                                 <div class="tresde-right-container" > 
                                     <div class="{{isHover}}">
-                                        <button class="btn btn-danger btn-xs" type="button" ng-click="modal.crear(compra,false)" tooltip-placement="top" uib-tooltip="Editar"><i class="fa fa-pencil"></i></button>
-                                        <button class="btn btn-info btn-xs" type="button" ng-click="modal.crear(compra,true)" tooltip-placement="top" uib-tooltip="Detalle"><i class="fa fa-eye"></i></button>
+                                        <button class="btn btn-danger btn-xs" type="button" ng-click="modal.crear(false,compra,false)" tooltip-placement="top" uib-tooltip="Editar"><i class="fa fa-pencil"></i></button>
+                                        <button class="btn btn-info btn-xs" type="button" ng-click="modal.crear(false,compra,true)" tooltip-placement="top" uib-tooltip="Detalle"><i class="fa fa-eye"></i></button>
                                     </div>
                                 </div>                                     
                             </td>

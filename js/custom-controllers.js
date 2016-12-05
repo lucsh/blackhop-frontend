@@ -14,43 +14,6 @@ angular
     }).error(function(error){
         console.log(error);
     });
-/*
-  vm.ubicaciones =[
-  {
-    id:0,
-    nombre:'Local 1',
-    direccion:'illia 123'
-},
-{
-    id:1,
-    nombre:'Local 2',
-    direccion:'Otra Calle 343'        
-},
-{
-    id:2,
-    nombre:'Local 3',
-    direccion:'Otra Lugar 543'        
-}
-];
-
-vm.usuarios =[
-{
-    id:0,
-    nombre:'Miqueas',
-    modo:'Caja'
-},
-{
-    id:2,
-    nombre:'Gaston',
-    modo:'Barra 1'
-},
-{
-    id:3,
-    nombre:'Martin',
-    modo:'Barra 2'
-}
-];
-*/
 
 vm.saLoggout = function(id,nombre){ 
 
@@ -66,15 +29,7 @@ vm.saLoggout = function(id,nombre){
         closeOnCancel: false },
         function (isConfirm) {
             if (isConfirm) {
-                /*
-                for(var i = 0; i < vm.usuarios.length; i++){
 
-                    if (vm.usuarios[i].id == id){                    
-                        vm.usuarios.splice(i, 1);
-                        break;
-                    }
-                }
-                */
                 $http.get('http://blackhop-dessin1.rhcloud.com/api/v1/authenticate/full?sesion='+id).success(function(response){       
                     SweetAlert.swal("¡Hecho!", "La cuenta de "+ nombre + " fue cerrada", "success");
                     vm.login();
@@ -155,7 +110,7 @@ vm.login2 = function() {
 
                 //Crea el objeto credentials desde el form Login
                 var credentials = {
-                    email: vm.email,
+                    email: vm.name,
                     password: vm.password
                 }
 
@@ -370,7 +325,9 @@ vm.login2 = function() {
                                 $scope.resumen.total=0.00;
                                 $scope.resumen.totalLitros=0;
                                 $scope.resumen.selected=-1;
-                                $scope.clienteSeleccionado={};                                
+                                $scope.clienteSeleccionado='';
+                                $scope.cuponSeleccionado='';
+
 
                             } else {
                                 SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
@@ -521,11 +478,16 @@ vm.login2 = function() {
                             return $scope.resumen;
                         }
                     }
-                }).closed.then(function(){
-
                 });                   
-
-
+                modalInstance.result.then(function (dato) {
+                    console.log('dato');
+                    console.log(dato);
+                },function(dato){
+                    if(dato == 'ventaOK'){
+                        $scope.clienteSeleccionado = '';
+                    }
+                });
+            
             } else {                    
                 $scope.modal.abrir(true);
             }
@@ -564,6 +526,8 @@ vm.login2 = function() {
                         templateUrl: 'views/imprimir_turno.html',
                         controller: imprimirTurnoCtrl, 
                         windowClass: "animated flipInY"
+                    }).closed.then(function(){
+                        
                     });
                 } else {
                     $scope.modal.terminarVenta();
@@ -1043,7 +1007,7 @@ vm.login2 = function() {
 
     }])
 
-.controller('comprasCtrl', ['$http','$scope','$log','$uibModal','DTOptionsBuilder','DTColumnDefBuilder', function($http,$scope,$log,$uibModal,DTOptionsBuilder,DTColumnDefBuilder){
+.controller('comprasCtrl', ['$http','$scope','$log','$uibModal','DTOptionsBuilder','DTColumnDefBuilder','SweetAlert', function($http,$scope,$log,$uibModal,DTOptionsBuilder,DTColumnDefBuilder,SweetAlert){
 
     $scope.dtOptions = DTOptionsBuilder.newOptions()
     .withDOM('<"html5buttons"B>lTfgitp')
@@ -1139,15 +1103,19 @@ $scope.modal={
                     }
                 });
     },        
-    crear : function (compra,soloMostrar){
+    crear : function (flagNuevaCompra,compra,soloMostrar){
 
         $scope.getDatosCompra = function(){
-            
-           $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/compra/' + compra.id).success(function(response){    
+            $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/compra/' + compra.id).success(function(response){    
             $scope.compra = response.compra;
             $scope.itemsCompra = response.itemsCompra;
+            
+            $scope.itemsCompra.forEach(function(item,index){
+                item.id = index + 1;
+            });
+
             $scope.proveedor = response.proveedor;
-            $scope.compra.fecha=moment($scope.compra.fecha).locale('es').format('DD/MMM/YY');
+            $scope.compra.fecha=moment($scope.compra.fecha,'YYYY-MM-DD').locale('es').format('DD/MMM/YY');
             console.log($scope.compra);
 
 
@@ -1156,6 +1124,7 @@ $scope.modal={
                 templateUrl: 'views/crear-editar_compra.html',
                 controller: crearEditarCompraCtrl, 
                 scope:$scope,
+                SweetAlert:SweetAlert,
                 size:'lg',
                 //controler en controllers.js, no termino de entender porque no lo puedo armar como el resto y si o si tengo que poner una funcion                        
                 windowClass: "animated fadeIn",
@@ -1163,10 +1132,8 @@ $scope.modal={
                 keyboard  : false,
                 resolve: {
                     items: function () {
-                        console.log($scope.itemsCompra);
-
+                        //console.log($scope.itemsCompra);
                         return $scope.itemsCompra;
-
                     },
                     aCompra: function () {
                         return $scope.compra;
@@ -1185,6 +1152,9 @@ $scope.modal={
                     },
                     estados: function () {
                         return $scope.estados;
+                    },
+                    flagNuevaCompra: function () {
+                        return flagNuevaCompra;
                     }
                 }
             });
@@ -1207,18 +1177,14 @@ $scope.modal={
             backdrop  : 'static',
             keyboard  : false,
             resolve: {
-                items: function () {
-                  
-                   
-
-                    return $scope.itemsCompra;
-
+                items: function () {      
+                    return undefined;
                 },
                 aCompra: function () {
-                    return $scope.compra;
+                    return {};
                 },
                 aProveedor: function () {
-                    return $scope.proveedor;
+                    return {};
                 },
                 soloMostrar: function () {
                     return soloMostrar;
@@ -1231,6 +1197,9 @@ $scope.modal={
                 },
                 estados: function () {
                     return $scope.estados;
+                },
+                flagNuevaCompra: function () {
+                    return flagNuevaCompra;
                 }
             }
         });
@@ -1427,18 +1396,20 @@ $scope.modal={
 
         $scope.imprimir= function (cupon){
             console.log(cupon);
+
             var modalInstance = $uibModal.open({
                 templateUrl: 'views/imprimir_cupon.html',
-                controller: imprimirCuponCtrl, 
-                //controler en controllers.js:1675, no termino de entender porque no lo puedo armar como el resto y si o si tengo que poner una funcion 
-
+                controller: imprimirCuponCtrl,
                 windowClass: "animated flipInY",
                 resolve: {
                     cupon: function () {
                         return cupon;
                     }
                 }
+            }).closed.then(function(){
+                console.log('modal closed');
             });
+
         }
 
 

@@ -2,7 +2,8 @@
 
     <div class="row wrapper white-bg page-heading">
         <div class="col-lg-10">
-            <h1 class="">Compra n&ordm;: {{compra.id}}</h2>
+            <h1 ng-if="compra.id"class="">Compra n&ordm;: {{compra.id}}</h2>
+            <h1 ng-if="!compra.id"class="">Nueva Compra</h2>
 
         </div>
         <div class="col-lg-2">                
@@ -110,7 +111,8 @@
                                                         ng-options="producto.id as producto.nombre + ' ( ' + producto.marca + ' ) ' for producto in productosFiltrados "
                                                         ng-model="item.producto.id"
                                                         ng-change="productoSelected(item.producto.id,item.id)"></select>
-                                                        {{producto.idProveedor}}
+
+
                                             </div>
                                             
                                             <h2 class="" ng-if="soloMostrar">{{item.producto.nombre}} </h2>
@@ -172,9 +174,12 @@
                 </button>
         
         </div> 
-        <div class="col-md-9"></div>
+        <div class="col-md-2">
+            <button class=" btn btn-primary" ng-click="eliminar(compra.id)">Eliminar</button>
+        </div>
+        <div class="col-md-7"></div>        
         <div ng-if="productoReady && proveedorReady" class="col-md-2 animated pulse">
-            <button class=" btn btn-primary" ng-click="guardar()">Guardar</button>
+            <button class=" btn btn-primary" ng-click="guardar(flagNuevaCompra)">Guardar</button>
         </div>
 </div>
 

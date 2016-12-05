@@ -1742,9 +1742,10 @@ function scanearCuponCtrl ($scope,$log,$uibModalInstance,$http){
                                     $uibModalInstance.close($scope.datosCliente);
 
                                 }).error(function(error){
+                                    console.log(error.error);
+                                    SweetAlert.swal("ERROR", error.error, "error");
                                     $uibModalInstance.close();
-                                    console.log(error);
-                                    SweetAlert.swal("ERROR", error.message, "error");
+
                                 });                                
 
                             } else {
@@ -2006,14 +2007,27 @@ function crearGastoCtrl ($scope,$log,$uibModalInstance,gastos,gastoEdit){
 
     }
 
-    function terminarSesionCajaCtrl ($scope,$log,$uibModalInstance,SweetAlert,$state){
-
+    function terminarSesionCajaCtrl ($http,$scope,$log,$uibModalInstance,SweetAlert,$state){
+/*
         $scope.sesion={
             usuario:"Gaston",
             montoIni:"2500",
             ventasTotales:"6000",
             enCaja:"6500"
         }
+*/
+        $scope.sesion={}
+
+        $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/datossesion').success(function(response){    
+
+            $scope.sesion.usuario=response.usuario;
+            $scope.sesion.montoIni=response.inicial;
+            $scope.sesion.ventasTotales=response.total;
+            $scope.sesion.enCaja=response.caja;
+
+        }).error(function(error){
+            console.log(error);
+        })
 
         $scope.cerrarSesion = function (){ 
 
@@ -2038,7 +2052,14 @@ function crearGastoCtrl ($scope,$log,$uibModalInstance,gastos,gastoEdit){
                         timer: 3500,
                         showConfirmButton: false
                     });
-                    $state.go("auth");
+                    
+                    $http.get('http://blackhop-dessin1.rhcloud.com/api/v1/authenticate/logout').success(function(response){   
+
+                        $state.go("auth");
+
+                    }).error(function(error){
+                        console.log(error);
+                    })
                     
                 } else {}
             });
@@ -2046,12 +2067,23 @@ function crearGastoCtrl ($scope,$log,$uibModalInstance,gastos,gastoEdit){
 
     }
 
-    function terminarSesionBarraCtrl ($scope,$log,$uibModalInstance,SweetAlert,$state){
-
+    function terminarSesionBarraCtrl ($http,$scope,$log,$uibModalInstance,SweetAlert,$state){
+/*
         $scope.sesion={
             usuario:"Gaston",
             litrosVendidos:"200",
         }
+*/
+        $scope.sesion={}
+
+        $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/barra/datossesion').success(function(response){    
+
+            $scope.sesion.usuario=response.usuario;
+            $scope.sesion.litrosVendidos=response.litros;
+
+        }).error(function(error){
+            console.log(error);
+        })
 
         $scope.cerrarSesion = function (){ 
 
@@ -2076,7 +2108,13 @@ function crearGastoCtrl ($scope,$log,$uibModalInstance,gastos,gastoEdit){
                         timer: 3500,
                         showConfirmButton: false
                     });
-                    $state.go("auth");
+                    $http.get('http://blackhop-dessin1.rhcloud.com/api/v1/authenticate/logout').success(function(response){   
+
+                        $state.go("auth");
+
+                    }).error(function(error){
+                        console.log(error);
+                    })
                     
                 } else {}
             });
@@ -2427,6 +2465,7 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
         $scope.resumen.totalLitros=0;
         $scope.resumen.selected=-1;
         $scope.clienteSeleccionado='';
+        $scope.cuponSeleccionado='';
         $scope.resumen.nombreClienteSeleccionado='';
         console.log($scope.resumen)
     }
@@ -2444,7 +2483,7 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
     
     $scope.ok = function () {        
 
-        $uibModalInstance.close();
+        $uibModalInstance.dismiss('ventaOK');
         
         var totalLitrosCupones=0;
         
@@ -2482,24 +2521,7 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
                 cupon.fecha=response.fecha;
                 cupon.turnoNumero=response.turnoNumero;               
             }
-            $scope.borrarTodo();
-
-        }).error(function(){
-          console.log("error asd");
-      });
-        
-        if (totalLitrosCupones>0){
-
-
-                /*    qz.websocket.connect().then(function() {
-                      alert("Connected!");
-                    });
-                    qz.printers.getDefault().then(function(data) {
-                        alert(data);
-                        if (set) { setPrinter(data); }
-                    });*/
-
-
+                if (totalLitrosCupones>0){
                     cupon.litros=totalLitrosCupones;
 
                     var modalInstance = $uibModal.open({
@@ -2514,10 +2536,18 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
                         
                     });
                 } 
+            $scope.borrarTodo();
+            console.log($scope);
+
+        }).error(function(){
+          console.log("error asd");
+      });
+        
+
             };   
         }
 
-        function crearProductoCtrl ($http,$scope,$log,$uibModalInstance,productos,productoEdit){
+function crearProductoCtrl ($http,$scope,$log,$uibModalInstance,productos,productoEdit){
 
     //$scope.newProd = {};
     $scope.productos=productos;
@@ -2916,17 +2946,13 @@ function detalleAlquilerClienteCtrl ($scope,$log,$uibModalInstance,alquiler){
             }
         };
 
-function crearEditarCompraCtrl ($http,$scope,$log,$uibModalInstance,items,aCompra,aProveedor,soloMostrar,productos,proveedores,estados){
+function crearEditarCompraCtrl ($http,$scope,$log,$uibModalInstance,SweetAlert,items,aCompra,aProveedor,soloMostrar,productos,proveedores,estados,flagNuevaCompra){
 
-
-            console.log("$scope.compra");
-            console.log($scope.compra);
+            $scope.flagNuevaCompra = flagNuevaCompra;
             $scope.soloMostrar=soloMostrar;
             $scope.productos=productos;
             $scope.proveedores=proveedores;
             $scope.estadosCompras=estados;
-
-            console.log($scope.soloMostrar);
 
             $scope.agregarItem = function(){
                 var newItem ={
@@ -2939,7 +2965,8 @@ function crearEditarCompraCtrl ($http,$scope,$log,$uibModalInstance,items,aCompr
                     descripcion:'',
                     tipo:''
                 }
-                $scope.items.push(newItem)
+                $scope.items.push(newItem);
+                $scope.productoReady=false;
 
             }
 
@@ -2993,7 +3020,10 @@ function crearEditarCompraCtrl ($http,$scope,$log,$uibModalInstance,items,aCompr
                         $scope.proveedor.contacto=$scope.proveedores[index].contacto;
                         $scope.proveedor.telefonoContacto=$scope.proveedores[index].telefonoContacto;
                         $scope.proveedorReady=true;
+                        console.log('$scope.proveedorReady');
                     }
+                        console.log('for'+prId + " =  "+$scope.proveedores[index].id);
+
                 }
                 $scope.productosFiltrados = [];
                 $scope.productos.forEach(function(producto,index,arreglo){
@@ -3016,8 +3046,14 @@ function crearEditarCompraCtrl ($http,$scope,$log,$uibModalInstance,items,aCompr
                                 $scope.items[i].producto.descripcion= $scope.productos[index].descripcion;
                                 $scope.items[i].producto.tipo= $scope.productos[index].categoria;
                                 $scope.items[i].producto.unidad= $scope.productos[index].unidad;
+                                
                                 $scope.productoReady=true;
                             }
+                            console.log('$scope.productoReady');
+                            console.log($scope.productoReady);
+                            console.log('$scope.items[i].producto');
+                            console.log($scope.items[i].producto);
+                            $scope.productoReady = $scope.productoReady && $scope.items[i].producto;
                         }
                     }
                 }
@@ -3047,12 +3083,131 @@ function crearEditarCompraCtrl ($http,$scope,$log,$uibModalInstance,items,aCompr
                 verticalupclass: 'fa fa-plus',
                 verticaldownclass: 'fa fa-minus'
             };       
+$scope.eliminar = function(id){
 
-$scope.guardar = function(){
+          SweetAlert.swal({
+            title: "¿Estas Seguro?",
+            text: "¡No vas a poder recuperar los datos!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Si, eliminala!",
+            cancelButtonText: "No, cancelar!",
+            closeOnConfirm: false,
+            closeOnCancel: false },
+            function (isConfirm) {
+                if (isConfirm) {
 
+                    $http.delete('http://blackhop-dessin1.rhcloud.com/api/admin/compra/'+ id)
+                    .success(function(){    
+                        SweetAlert.swal("¡Eliminado!", "La compra fue eliminada", "success");
+                        $scope.compras.forEach(function(compra,index,arreglo){
+                            if(compra.id == id){
+                                arreglo.splice(index,1);
+                            }
+                        });
+
+                    }).error(function(error){
+                        SweetAlert.swal("¡Error!", "La compra no pudo ser eliminada", "error");
+                        console.log(error);
+                    });
+                    $uibModalInstance.close();
+
+                } else {
+                    SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
+                }
+            }
+            
+
+            );
+}
+
+$scope.guardar = function(flagNuevaCompra){
+console.log(flagNuevaCompra)
+console.log($scope)
+//morecapo
+//$scope.compra
+//$scope.items
+    
+    var itemsPost = [];
+    var total = $scope.getTotal();
+    $scope.items.forEach(function(item,index,arreglo){
+        var itemPost={};
+
+        itemPost.idProducto = item.producto.id;
+        itemPost.cantidad = item.cantidad;
+        itemPost.costo = item.costo;
+
+        itemsPost.push(itemPost);
+
+    });
+
+    //Es una nueva compra
+    if(flagNuevaCompra){
+
+
+
+
+        $http.post('http://blackhop-dessin1.rhcloud.com/api/admin/compra', {
+
+            idProveedor:$scope.proveedor.id,
+            fecha:moment($scope.compra.fecha).format('YYYY-MM-DD'),
+            monto:total,
+            estado:$scope.compra.estado.id,
+            itemsCompra: JSON.stringify(itemsPost)
+        }).success(function(response) {
+            
+            switch (response.data.estado.nombre){
+                case 'Finalizado':
+                response.data.class= "badge-primary";
+                break;
+                case 'Pagado':
+                response.data.class= "badge-success";
+                break; 
+                case 'Pedido':
+                response.data.class= "badge-info";
+                break;
+            }
+            $scope.compras.push(response.data);
+        }).error(function(error){
+          console.log(error);
+      });
+
+    }else{
+
+        $http.put('http://blackhop-dessin1.rhcloud.com/api/admin/compra/'+$scope.compra.id, {
+
+            idProveedor:$scope.proveedor.id,
+            fecha:moment($scope.compra.fecha).format('YYYY-MM-DD'),
+            monto:total,
+            estado:$scope.compra.estado.id,
+            itemsCompra: JSON.stringify(itemsPost)
+        }).success(function(response) {
+            $scope.compras.forEach(function(compra,index,arreglo){
+                if(compra.id == $scope.compra.id){
+                    arreglo.splice(index,1);
+                }
+            });
+            switch (response.data.estado.nombre){
+                case 'Finalizado':
+                response.data.class= "badge-primary";
+                break;
+                case 'Pagado':
+                response.data.class= "badge-success";
+                break; 
+                case 'Pedido':
+                response.data.class= "badge-info";
+                break;
+            }
+            $scope.compras.push(response.data);
+        }).error(function(error){
+          console.log(error);
+      });
+    }
+    /*
         //verifico si ya existe (edicion vs creacion)
         var nuevaCompra=true;
-        
+        console.log($scope);
         for(var index = 0; index < $scope.compras.length; index++){
          if ($scope.compras[index].id == $scope.compra.id){
              $scope.compra.fecha=moment($scope.compra.fecha).locale('es').format('DD/MMM/YY');
@@ -3072,8 +3227,10 @@ $scope.guardar = function(){
 
         $scope.compras.push($scope.compra);
     }
-
+    */
+    
     $uibModalInstance.close();
+    
 }    
 
 $scope.ok = function () {
@@ -3126,10 +3283,8 @@ $scope.toggleEditar = function() {
 
         console.log(items)
         if(!items){
-        console.log("nope")
-
             $scope.compra={}
-            $scope.compra.id=Number($scope.compras.length)+1;
+            //$scope.compra.id=Number($scope.compras.length)+1;
             $scope.compra.fecha=moment();
             $scope.compra.estado = {id:1,nombre:'Pedido'};
             $scope.items=[
@@ -3143,65 +3298,55 @@ $scope.toggleEditar = function() {
                 descripcion:'',
                 tipo:''
             }];
-
             $scope.proveedorSelected($scope.proveedores[0].id);
             $scope.prId = $scope.proveedores[0].id;
             $scope.asignarClasesEstado();
-            console.log('$scope.compra');
-            console.log($scope.compra);
         }else{
-        $scope.compra=aCompra; //con '=' son el mismo
-        //Seteo el proveedor
-        $scope.proveedor=aProveedor; //con '=' son el mismo
-        //Como setie el proveedor filtro los productos a seleccionar
-        $scope.productosFiltrados = [];
-        $scope.productos.forEach(function(producto,index,arreglo){
-           
-            if(producto.idProveedor == $scope.proveedor.id){
-                $scope.productosFiltrados.push(producto);
-            }
-        });
-        console.log('$scope.productosFiltrados');
-        console.log($scope.productosFiltrados);
+            $scope.compra=aCompra; //con '=' son el mismo
+            //Seteo el proveedor
+            $scope.proveedor=aProveedor; //con '=' son el mismo
+            //Como setie el proveedor filtro los productos a seleccionar
+            $scope.productosFiltrados = [];
+            //$scope.productos.forEach(function(producto,index,arreglo){
+            //$scope.compra = angular.copy(aCompra);
+            
+            $scope.estadoAnterior=$scope.compra.estado.nombre;
+            $scope.fechaAnterior=$scope.compra.fecha;
+            
+            $scope.proveedorSelected($scope.proveedor.id);
+            console.log('compra ');
+            console.log($scope.compra);
+            $scope.prId=($scope.proveedor.id);
 
-
-
-        
-        console.log($scope.compra);
-
-        //$scope.compra = angular.copy(aCompra);
-        
-        $scope.estadoAnterior=$scope.compra.estado.nombre;
-        $scope.fechaAnterior=$scope.compra.fecha;
-        
-        $scope.proveedorSelected($scope.compra.idProveedor);
-        $scope.prId=($scope.proveedor.id);
-        console.log($scope.proveedor.id);
-
-        $scope.items=items;   
-        console.log($scope.items);     
-        //$scope.pId=($scope.compra.productoId);
-        $scope.productoReady=true;
-            //$scope.soloMostrar=true;
+            $scope.items=items;   
+            console.log($scope.items);     
+            //$scope.pId=($scope.compra.productoId);
+            $scope.productoReady=true;
+                //$scope.soloMostrar=true;
             if($scope.compra.estado!='Finalizado'){
-             $scope.permitirCambiarEstado=true;
-             //$scope.compra.fecha=moment($scope.compra.fecha);
-                   //$scope.soloMostrar=false;
+                $scope.permitirCambiarEstado=true;
+                //$scope.compra.fecha=moment($scope.compra.fecha);
+                //$scope.soloMostrar=false;
 
-               }
-               $scope.asignarClasesEstado(); 
-           }
+            }
+            $scope.asignarClasesEstado(); 
+        }
+        console.log($scope)
 
-       };
+};
 
        function imprimirCuponCtrl ($scope,$log,$uibModalInstance,cupon){
 
         $scope.cupon=cupon; 
 
-        //var f = moment($scope.cupon.fecha);
-        var f = moment($scope.cupon.fecha);            
-        var vencimiento =f.clone().add(cupon.vigencia,'d');
-        $scope.vencimiento=moment(vencimiento).locale('es').format('DD/MMM/YYYY');
+        //var f = moment($scope.cupon.fecha);          
+        //var vencimiento =f.clone().add($scope.cupon.vigencia,'d');
+        $scope.vencimiento=moment($scope.cupon.fecha,'YYYY-MM-DD').add($scope.cupon.vigencia,'days').locale('es').format('DD/MMM/YYYY');
+
+
+        ///$scope.vencimiento=moment($scope.cupon.fecha).locale('es').format('DD/MMM/YYYY');
+        //$scope.vencimiento=$scope.vencimiento.clone().add($scope.cupon.vigencia,'d');
+
 
         $scope.barcodeType = 'EAN';
 
@@ -3226,13 +3371,13 @@ $scope.toggleEditar = function() {
             $scope.imagenSRC = angular.element(document.querySelector('.codigodebarras')).attr('src');
 
             qz.websocket.connect().then(function() { 
-          return qz.printers.find("58mm Series Printer")               // Pass the printer name into the next Promise
-      }).then(function(printer) {
-          var config = qz.configs.create(printer);       // Create a default config for the found printer
+                return qz.printers.find("58mm Series Printer")               // Pass the printer name into the next Promise
+            }).then(function(printer) {
+                var config = qz.configs.create(printer);       // Create a default config for the found printer
 
-          config.reconfigure({ 
-            scaleContent:false,
-            rasterize:false
+                config.reconfigure({ 
+                scaleContent:false,
+                rasterize:false
         });
 
           if($scope.cupon.litros>1){
@@ -3276,10 +3421,18 @@ $scope.toggleEditar = function() {
             +'</html>'
         }
         ];
-        return qz.print(config, printData);
+        return qz.print(config, printData).then(function() {
+          qz.websocket.disconnect().then(function() {
+                updateState('Inactive', 'default');
+                console.log('SUCCESS EN LA DESCONECCION DE LA IMPRESORA');
+            }).catch(function(){
+                console.log('ERROR EN LA DESCONECCION DE LA IMPRESORA');
+            });
+        });
     }).catch(function(e) { console.error(e); });
 
-
+$uibModalInstance.close('ok');
+console.log('SE CERRO imprimir cupon');
 }
 
 };
@@ -3308,6 +3461,7 @@ function imprimirTurnoCtrl ($scope,$http,$log,$uibModalInstance){
         };
 
         $scope.imprimirTurno = function () {
+
 
             qz.websocket.connect().then(function() { 
           return qz.printers.find("58mm Series Printer")               // Pass the printer name into the next Promise
@@ -3340,10 +3494,21 @@ function imprimirTurnoCtrl ($scope,$http,$log,$uibModalInstance){
             +'</html>'
         }
         ];
-        return qz.print(config, printData);
+        return qz.print(config, printData).then(function() {
+          qz.websocket.disconnect().then(function() {
+                updateState('Inactive', 'default');
+                console.log('SUCCESS EN LA DESCONECCION DE LA IMPRESORA');
+            }).catch(function(){
+                console.log('ERROR EN LA DESCONECCION DE LA IMPRESORA');
+            });
+        });
     }).catch(function(e) { console.error(e); });
 
+$uibModalInstance.close();
 }
+
+
+
 
 };
 
