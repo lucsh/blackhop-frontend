@@ -128,160 +128,172 @@
     // que esta almacenado
     // */
     .factory('authorization', ['$rootScope', '$state',
-    function($rootScope, $state) {
-      return {
-        //  authorize: function() {
-        //   console.log("authorizaction.autorize");
-        //   return principal.identity()
-        //     .then(function() {
-        //       var isAuthenticated = principal.isAuthenticated();
-        //       console.log('Authorize');
-        //       //console.log($rootScope.toState.data.roles);
-        //       //if ($rootScope.toState.data.roles && $rootScope.toState.data.roles.length > 0 && !principal.isInAnyRole($rootScope.toState.data.roles)) {
-        //         if (isAuthenticated){
-        //             console.log($rootScope.currentRole);
-        //             //$state.go('login');
-        //              switch($rootScope.currentRole){
-        //                   case 'Admin':
-        //                       $state.go('dashboards.dashboard_3');
-        //                       break;
-        //
-        //                   case 'Root':
-        //                       $state.go('dashboards.dashboard_2');
-        //                       break;
-        //               }// user is signed in but not authorized for desired state
-        //         }
-        //         else {
-        //           // user is not authenticated. stow the state they wanted before you
-        //           // send them to the signin state, so you can return them when you're done
-        //           //$rootScope.returnToState = $rootScope.toState;
-        //           //$rootScope.returnToStateParams = $rootScope.toStateParams;
-        //
-        //           // now, send them to the signin state so they can log in
-        //           $state.go('login');
-        //         }
-        //       //}
-        //     });
-        // },
-        validar: function($roles) {
-          $autenticado = false;
-          $roles.forEach(function (role) {
-            console.log(role + " " + $rootScope.currentRole);
-            if(role == $rootScope.currentRole){
-              $autenticado = true;
-            }
-          })
-          console.log($autenticado);
-          if(!$autenticado){
-            console.log("asd");
-            $state.go('login');
+        function($rootScope, $state) {
+              return {
+            //  authorize: function() {
+            //   console.log("authorizaction.autorize");
+            //   return principal.identity()
+            //     .then(function() {
+            //       var isAuthenticated = principal.isAuthenticated();
+            //       console.log('Authorize');
+            //       //console.log($rootScope.toState.data.roles);
+            //       //if ($rootScope.toState.data.roles && $rootScope.toState.data.roles.length > 0 && !principal.isInAnyRole($rootScope.toState.data.roles)) {
+            //         if (isAuthenticated){
+            //             console.log($rootScope.currentRole);
+            //             //$state.go('login');
+            //              switch($rootScope.currentRole){
+            //                   case 'Admin':
+            //                       $state.go('dashboards.dashboard_3');
+            //                       break;
+            //
+            //                   case 'Root':
+            //                       $state.go('dashboards.dashboard_2');
+            //                       break;
+            //               }// user is signed in but not authorized for desired state
+            //         }
+            //         else {
+            //           // user is not authenticated. stow the state they wanted before you
+            //           // send them to the signin state, so you can return them when you're done
+            //           //$rootScope.returnToState = $rootScope.toState;
+            //           //$rootScope.returnToStateParams = $rootScope.toStateParams;
+            //
+            //           // now, send them to the signin state so they can log in
+            //           $state.go('login');
+            //         }
+            //       //}
+            //     });
+            // },
+                validar: function($roles) {
+                    $autenticado = false;
+                    $roles.forEach(function (role) {
+                        console.log(role + " " + $rootScope.currentRole);
+                        if(role == $rootScope.currentRole){
+                            $autenticado = true;
+                        }
+                    })
+                    console.log($autenticado);
+                    if(!$autenticado){
+                        console.log("asd");
+                        $state.go('login');
 
-          }
+                    }
 
+                }
+            };
         }
-      };
-    }
     ])
     .run(['$rootScope', '$state', '$stateParams', 'authorization','$auth','$http',
-    function($rootScope, $state, $stateParams, authorization, $auth, $http) {
-      console.log($rootScope);
+        function($rootScope, $state, $stateParams, authorization, $auth, $http) {
+          console.log($rootScope);
       /*
       El StateChangeStart es para cuando se producen cambios de estado
       De esta forma puedo guardar el estado que la persona queria acceder
       llevarlo al login, para luego dejarlo en donde queria acceder, si es que tiene privilegio
       */
-      //$rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
-      //$rootScope.toState = toState;
-      //$rootScope.toStateParams = toStateParams;
-      //if (principal.isIdentityResolved()){
-      //  authorization.authorize();
-      //}
-      //});
+      $rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
+          $rootScope.toState = toState;
+          $rootScope.toStateParams = toStateParams;
+          /*
+          if (principal.isIdentityResolved()){
+             authorization.authorize();
+            }
+            */
+     });
 
-      //console.log($state);
-      //var a = $rootScope;
+      console.log($state);
+      var a = $rootScope;
       //console.log(authorization.getRole());
-      //console.log($rootScope.currentRole);
-     
+      console.log($rootScope.currentRole);
+
       
 
-      // $rootScope.$on('$stateChangeStart',
-      // function (event, next){
-      //   console.log("routeChangeStart");
-      //   console.log(next);
+      $rootScope.$on('$stateChangeStart',
+          function (event, next){
+            console.log("routeChangeStart");
+            console.log(next);
 
 
-      //   /*
-      //   * En Login no necesito hacer estas validaciones
-      //   */
-      //   if(next.url != "/login"){
+        /*
+        * En Login no necesito hacer estas validaciones
+        */
+        if(next.url != "/login"){
 
-      //       /*
-      //       * Chequeo si el Token es valido, en caso de que no limpio el Local Storage
-      //       */
-      //       $http.get('http://blackhop-dessin1.rhcloud.com/api/v1/authenticate/user').success(function(response){       
-      //           console.log('########################');
-      //           console.log(response.usuarioName);
-      //           console.log(response.usuarioRole);
-      //           console.log('########################');
-      //       })
-      //       .error(function(err){
-      //           console.log('ERROR DEL VERIFICAR TOKEN');
-      //           localStorage.removeItem('user');
-      //           localStorage.removeItem('role');
-      //       });
+            /*
+            * Chequeo si el Token es valido, en caso de que no limpio el Local Storage
+            */
+            $http.get('http://blackhop-dessin1.rhcloud.com/api/v1/authenticate/userservice').success(function(response){       
+                console.log('########################');
+                console.log(response.usuarioName);
+                console.log(response.usuarioRole);
+                console.log(response.modo);
+                console.log(response.mensaje);
+                console.log('########################');
 
-      //     //console.log(next);
+                var resUser = response.usuarioName;
+                var resRole = response.usuarioRole;
+                var resModo = response.modo;
+                var resMensaje = response.mensaje;
 
-      //     //console.log(next.data.autorized);
-      //     //console.log(localStorage);
-      //     //next.data.autorized.forEach(console.log(item));
+                console.log(next);
 
-      //     if(next.data.autorized.indexOf(localStorage.role) !== -1){
-      //       console.log("entra");
-      //     }else{
-      //       switch(localStorage.role){
-      //         case angular.undefined :
-      //           console.log('Case undefined');
-      //           event.preventDefault();
-      //           $state.go('auth');
-      //         break;
-      //         case "Root":
-      //         $state.go('dashboards.dashboard_2');
-      //         break;
-      //         case "Admin":
-      //         console.log("aaaaaaaa");
-      //         event.preventDefault();
+                
+                console.log(localStorage);
 
-      //         //$state.go('dashboards.dashboard_3');
-      //         break;
+                console.log('next.data.autorized');
+                console.log(next.data.autorized);
+                console.log('localStorage.role');
+                console.log(localStorage.role);
 
-      //         case "User":
+                if(next.data.autorized.indexOf(localStorage.role) !== -1){
+                    console.log("Encontre el rol en el autorized");
+                    
+                }else{
+                    if(localStorage.role != 'Admin'){
+                        if(resMensaje == 'openSesion'){
+                            if(resModo == 'barra'){
+                                console.log("ASD");
+                                $state.go('pos.point_of_sale_barra');
+                            }else if(resModo == 'caja'){
+                                $state.go('pos.point_of_sale');
+                            }
+                        }else{
+                            event.preventDefault();
+                            $state.go('auth');
+                        }
+                    }
+                    //if(localStorage.role != 'Admin'){
+                    //    event.preventDefault();
+                    //    $state.go('auth');
+                    //}
+                }
+            })
+            .error(function(err){
+                console.log('ERROR DEL VERIFICAR TOKEN');
+                localStorage.removeItem('user');
+                localStorage.removeItem('role');
+                event.preventDefault();
+                $state.go('auth');
+            });
 
-      //         break;
+        
+          
 
-      //         case "Anonimo":
+            
+        }else{
+            localStorage.clear();
+            localStorage.removeItem("satellizer_token");
+        }
+});
 
-      //         break;
-
-
-      //       }
-      //     }
-      //   }else{
-      //       localStorage.clear();
-      //       localStorage.removeItem("satellizer_token");
-      //   }
-      // });
-
-      // $rootScope.logout = function() {
-      //   $auth.logout().then(function() {
-      //     localStorage.removeItem('user');
-      //     localStorage.removeItem('role');
-      //     $rootScope.currentUser = null;
-      //     $state.go('login');
-      //   });
-      // };
-    }
+    $rootScope.logout = function() {
+        $auth.logout().then(function() {
+            localStorage.removeItem('user');
+            localStorage.removeItem('role');
+            $rootScope.currentUser = null;
+            $state.go('login');
+        });
+    };
+}
 
 
-    ]);
+]);

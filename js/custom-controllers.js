@@ -147,7 +147,7 @@ vm.login2 = function() {
 
                             console.log(localStorage.getItem('role'));
                             console.log(localStorage.getItem('user')); 
-
+                            console.log(response.modo);
                             //Elijo de adonde tengo que enviarlo dependiendo de la respuesta response.modo
                             switch(response.modo){
                                 case "admin":

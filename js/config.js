@@ -162,7 +162,10 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
         .state('dashboards_top.dashboard_4', {
             url: "/dashboard_4",
             templateUrl: "views/dashboard_4.html",
-            data: { pageTitle: 'Escritorio 4' },
+            data: { 
+                pageTitle: 'Escritorio 4' ,
+                autorized: ['Admin']
+            },
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
                     return $ocLazyLoad.load([
@@ -631,7 +634,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
         .state('historial.historial', {
             url: "/historial",
             templateUrl: "views/historial.html",
-            data: { pageTitle: 'Historial' },
+            data: { pageTitle: 'Historial' ,autorized: ['Admin']},
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
                     return $ocLazyLoad.load([
@@ -660,7 +663,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
         .state('historial.histBarra', {
             url: "/historial-barra",
             templateUrl: "views/historial-barra.html",
-            data: { pageTitle: 'Sesiones Barra' },
+            data: { pageTitle: 'Sesiones Barra' ,autorized: ['Admin']},
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
                     return $ocLazyLoad.load([
@@ -689,7 +692,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
         .state('historial.histCaja', {
             url: "/historial-caja",
             templateUrl: "views/historial-caja.html",
-            data: { pageTitle: 'Sesiones Caja' },
+            data: { pageTitle: 'Sesiones Caja' ,autorized: ['Admin']},
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
                     return $ocLazyLoad.load([
@@ -822,7 +825,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
         .state('app.canillas', {
             url: "/canillas",
             templateUrl: "views/canillas.html",
-            data: { pageTitle: 'Canillas' },
+            data: { pageTitle: 'Canillas', autorized: ['Admin','Usuario']},
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
                     return $ocLazyLoad.load([                        
@@ -840,7 +843,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
         .state('app.clients', {
             url: "/clientes",
             templateUrl: "views/clients.html",
-            data: { pageTitle: 'Clientes' },
+            data: { pageTitle: 'Clientes' ,autorized: ['Admin']},
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
                     return $ocLazyLoad.load([                        
@@ -891,7 +894,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
         .state('app.proveedores', {
             url: "/proveedores",
             templateUrl: "views/proveedores.html",
-            data: { pageTitle: 'Proveedores' },
+            data: { pageTitle: 'Proveedores' ,autorized: ['Admin']},
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
                     return $ocLazyLoad.load([                        
@@ -941,7 +944,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
         .state('app.alquilables', {
             url: "/alquilables",
             templateUrl: "views/alquilables.html",
-            data: { pageTitle: 'Alquilables' },
+            data: { pageTitle: 'Alquilables' ,autorized: ['Admin']},
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
                     return $ocLazyLoad.load([                        
@@ -994,7 +997,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
         .state('app.gastos', {
             url: "/gastos",
             templateUrl: "views/gastos.html",
-            data: { pageTitle: 'Gastos' },
+            data: { pageTitle: 'Gastos' ,autorized: ['Admin']},
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
                     return $ocLazyLoad.load([
@@ -1045,7 +1048,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
         .state('app.productos', {
             url: "/productos",
             templateUrl: "views/productos.html",
-            data: { pageTitle: 'Productos' },
+            data: { pageTitle: 'Productos' ,autorized: ['Admin']},
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
                     return $ocLazyLoad.load([
@@ -1097,7 +1100,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
         .state('app.inventario', {
             url: "/inventario",
             templateUrl: "views/productosInventario.html",
-            data: { pageTitle: 'Productos' },
+            data: { pageTitle: 'Productos' ,autorized: ['Admin']},
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
                     return $ocLazyLoad.load([                        
@@ -1751,7 +1754,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
             data: { 
                 pageTitle: 'Point of Sale', 
                 specialClass: 'canvas-menu' ,
-                autorized: ['Admin','User']
+                autorized: ['Admin','Usuario']
                   },    
 
         })
@@ -1762,7 +1765,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
             data: { 
                 pageTitle: 'POS - Barra', 
                 specialClass: 'canvas-menu' ,
-                autorized: ['Admin','User']
+                autorized: ['Admin','Usuario']
                   },
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
@@ -1806,7 +1809,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
         .state('sales.ventas', {
             url: "/ventas",
             templateUrl: "views/ventas.html",
-            data: { pageTitle: 'Ventas' },
+            data: { pageTitle: 'Ventas' ,autorized: ['Admin']},
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
                     return $ocLazyLoad.load([
@@ -1832,7 +1835,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
         .state('sales.compras', {
             url: "/compras",
             templateUrl: "views/compras.html",
-            data: { pageTitle: 'Compras' },
+            data: { pageTitle: 'Compras' ,autorized: ['Admin']},
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
                     return $ocLazyLoad.load([
@@ -1875,7 +1878,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
         .state('sales.alquileres', {
             url: "/alquileres",
             templateUrl: "views/alquileres.html",
-            data: { pageTitle: 'Alquileres' },
+            data: { pageTitle: 'Alquileres' ,autorized: ['Admin']},
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
                     return $ocLazyLoad.load([
@@ -1904,7 +1907,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
         .state('sales.cupones', {
             url: "/cupones",
             templateUrl: "views/cupones.html",
-            data: { pageTitle: 'Cupones' },
+            data: { pageTitle: 'Cupones' ,autorized: ['Admin']},
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
                     return $ocLazyLoad.load([                        
