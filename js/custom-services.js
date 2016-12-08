@@ -260,6 +260,17 @@
                             event.preventDefault();
                             $state.go('auth');
                         }
+                    }else{
+                        $state.go('dashboards.dashboard_5');
+                        //if(next.url == '/point_of_sale' && resMensaje == 'openSesion' && resModo == 'caja'){
+                            //go :D
+                        //}else{
+                        //    if(next.url == '/point_of_sale_barra' && resMensaje == 'openSesion' && resModo == 'barra'){
+                        //        //go :D
+                        //    }else{
+                        //        $state.go('dashboards.dashboard_5');
+                        //    }
+                        //}
                     }
                     //if(localStorage.role != 'Admin'){
                     //    event.preventDefault();
@@ -280,8 +291,39 @@
 
             
         }else{
-            localStorage.clear();
-            localStorage.removeItem("satellizer_token");
+
+            $http.get('http://blackhop-dessin1.rhcloud.com/api/v1/authenticate/userservice').success(function(response){       
+
+                var resUser = response.usuarioName;
+                var resRole = response.usuarioRole;
+                var resModo = response.modo;
+                var resMensaje = response.mensaje;
+
+                if(localStorage.role != 'Admin'){
+                    if(resMensaje == 'openSesion'){
+                        if(resModo == 'barra'){
+                            $state.go('pos.point_of_sale_barra');
+                        }else if(resModo == 'caja'){
+                            $state.go('pos.point_of_sale');
+                        }
+                    }else{
+                        event.preventDefault();
+                        $state.go('auth');
+                    }
+                }
+            })
+            .error(function(err){
+                console.log('ERROR DEL VERIFICAR TOKEN');
+                localStorage.removeItem('user');
+                localStorage.removeItem('role');
+                event.preventDefault();
+                $state.go('auth');
+            });
+
+
+
+
+            
         }
 });
 

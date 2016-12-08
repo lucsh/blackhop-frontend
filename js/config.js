@@ -1754,7 +1754,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
             data: { 
                 pageTitle: 'Point of Sale', 
                 specialClass: 'canvas-menu' ,
-                autorized: ['Admin','Usuario']
+                autorized: ['Usuario']
                   },    
 
         })
@@ -1765,7 +1765,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
             data: { 
                 pageTitle: 'POS - Barra', 
                 specialClass: 'canvas-menu' ,
-                autorized: ['Admin','Usuario']
+                autorized: ['Usuario']
                   },
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {

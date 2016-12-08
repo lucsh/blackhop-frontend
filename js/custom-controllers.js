@@ -152,7 +152,7 @@ vm.login2 = function() {
                             switch(response.modo){
                                 case "admin":
                                 if(response.usuarioRole == 'Admin'){
-                                    $state.go('dashboards.dashboard_2');
+                                    $state.go('dashboards.dashboard_5');
                                 }else{
                                     $state.go('auth');
                                 }
