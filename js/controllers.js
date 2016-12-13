@@ -1655,12 +1655,25 @@ function scanearCuponCtrl ($scope,$log,$uibModalInstance,$http){
         $scope.clientes = clientes;       
         $scope.asd = moment('01/01/1985');
         
-        $scope.seleccion={}
+        $scope.seleccion={};
+
+        $scope.flag = false;
+        $scope.idCliente = null;
 
         $scope.ok = function () {
-            $uibModalInstance.close();
-            $scope.$parent.clienteSeleccionado={};
-            $scope.$parent.clienteSeleccionado = $scope.datosCliente;
+            console.log('$scope.flag');
+            console.log($scope.flag);
+            if($scope.flag){
+                $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/cliente/' + $scope.idCliente).success(function(datosCliente){
+                    $scope.datosCliente = datosCliente.data;
+                    
+                    $scope.$parent.clienteSeleccionado={};
+                    $scope.$parent.clienteSeleccionado = $scope.datosCliente;
+                    $uibModalInstance.close();
+                }).error(function(error){
+                    console.log(error);
+                });
+            }
 
         };
 
@@ -1685,13 +1698,20 @@ function scanearCuponCtrl ($scope,$log,$uibModalInstance,$http){
         }
 
         $scope.seleccionarNuevo= function(id){
+            $scope.idCliente = id;
+            $scope.flag = true;
+            console.log(id);
             $scope.seleccion.clienteSeleccionado=id;
-            
+            /*
             $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/cliente/' + id).success(function(datosCliente){
-              $scope.datosCliente = datosCliente.data;
-          }).error(function(error){
-            console.log(error);
-        });        
+                $scope.datosCliente = datosCliente.data;
+            }).error(function(error){
+                console.log(error);
+            });
+    
+            $scope.datosCliente = cliente; 
+            */
+            //console.log(cliente);     
 
       }
 
