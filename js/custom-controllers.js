@@ -1463,7 +1463,7 @@ $scope.modal={
     ]
 
     $scope.modal={
-        abrir : function (producto){
+        abrir : function (producto){//ta al pedo esto
             console.log(producto);
             var modalInstance = $uibModal.open({
                 templateUrl: 'views/detalle_producto.html',
@@ -1503,7 +1503,8 @@ $scope.modal={
                 templateUrl: 'views/crear_producto.html',
                 controller: crearProductoCtrl, 
                     //controler en controllers.js, no termino de entender porque no lo puedo armar como el resto y si o si tengo que poner una funcion                        
-                    windowClass: "animated fadeIn",
+                    windowClass: "animated fadeIn",                    
+                    SweetAlert:SweetAlert,
                     resolve: {
                         productos: function () {
                             return $scope.productos;

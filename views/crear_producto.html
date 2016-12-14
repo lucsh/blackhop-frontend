@@ -80,11 +80,13 @@
                                 </div>
                                 <div ng-show="newProd.categoria.id=='1'">
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group"><label class="col-sm-2 control-label">Color:</label>
-                                        <div class="col-sm-2"><a colorpicker ng-model="newProd.color"><span class="cerveza-color-left" style="background-color:{{newProd.color || '#000'}};"></span></a></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">SRM:</label>
+                                        <div class="col-sm-3">
+                                        <input type="text" touch-spin spin-options="tSpin" ng-model="newProd.srm"></div>
                                         <label class="col-sm-1 control-label">IBU:</label>
                                         <div class="col-sm-2"><input ng-model="newProd.ibu" type="text" class="form-control" placeholder="40"></div>
-                                        <label class="col-sm-2 control-label">Alcohol:</label>
+                                        <label class="col-sm-1 control-label">ABV:</label>
                                         <div class="col-sm-3"><div class="input-group m-b"><input ng-model="newProd.alcohol" type="text" placeholder="4" class="form-control"><span class="input-group-addon">%</span></div></div>
                                     </div>
                                     <div class="form-group"><label class="col-sm-2 control-label">Origen:</label>

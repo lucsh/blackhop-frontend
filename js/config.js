@@ -1091,6 +1091,9 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
                             serie: true,
                             name: 'datatables.buttons',
                             files: ['js/plugins/dataTables/angular-datatables.buttons.min.js']
+                        },
+                        {
+                            files: ['css/plugins/touchspin/jquery.bootstrap-touchspin.min.css', 'js/plugins/touchspin/jquery.bootstrap-touchspin.min.js']
                         }
                     ]);
                 }
