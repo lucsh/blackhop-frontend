@@ -13,57 +13,16 @@
                 <!--<span class="m-r-sm text-muted welcome-message">Welcome to QUANTUM+ Admin Theme.</span>-->
             <!--</li>-->
             
-            <li uib-dropdown>
-                <a class="count-info" href uib-dropdown-toggle>
-                    <i class="fa fa-envelope"></i> <span class="label label-warning">16</span>
-                </a>
-                <ul class="dropdown-messages" uib-dropdown-menu>
-                    <li>
-                        <div class="dropdown-messages-box">
-                            
-
-                            <div>
-                              <strong>Martin Moreira</strong> alquiló 3 barriles ayer. <br>
-                                <small class="text-muted">299 155713033 - Alderete 1421, Neuquen</small>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <div class="dropdown-messages-box">
-                           
-
-                            <div>
-                                
-                                <strong>Alejo Yornet</strong> alquiló 1 barril ayer. <br>
-                                <small class="text-muted">299 155123456 - Independecia 899, Neuquen</small>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <div class="dropdown-messages-box">
-                            
-                            <div>
-                                <strong>Matias Del Pozzi</strong> alquiló 2 barriles ayer. <br>
-                                <small class="text-muted">299 155456789 - San Martin 456, Neuquen</small>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <div class="text-center link-block">
-                            <a ui-sref="#">
-                                <i class="fa fa-envelope"></i> <strong>Leer todos los mensajes</strong>
-                            </a>
-                        </div>
-                    </li>
-                </ul>
-            </li>
             <li>
                 <!--<a ui-sref="login">-->
-                <a>
+                <a ui-sref="cerrar-sesion">
                     <i class="fa fa-sign-out"></i> Cerrar sesión
+                </a>
+            </li>
+            
+            <li>
+                <a ng-click="logout()">
+                    <i class="fa fa-sign-out"></i> Cerrar sesiónasd
                 </a>
             </li>
 

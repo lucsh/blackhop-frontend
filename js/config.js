@@ -68,6 +68,12 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
             
         })
 */
+        .state('cerrar-sesion', {
+            url: "/cerrar-sesion",
+            templateUrl: "views/cerrar-sesion.html",
+            data: { pageTitle: 'Cerrando Sesion', specialClass: 'gray-bg', autorized: ['Admin','Usuario'] }            
+        })
+
         .state('dashboards', {
             abstract: true,
             url: "/dashboards",

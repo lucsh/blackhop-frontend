@@ -88,11 +88,19 @@ vm.login = function(){
                     return false;
                 } 
 
+                //validación
+
                 if (inputValue === "") {
                     swal.showInputError("Debes ingresar el monto incial en Caja!");
                     return false
+                }    
+
+                if (isNaN(inputValue)){
+                    swal.showInputError("Debes ingresar un numero!");
+                    return false
                 }
-                swal("Nice!", "You wrote: " + inputValue, "success");
+
+                swal("Monto incial", "Abris la caja con: " + inputValue, "success");
                 vm.valorInicial = inputValue;
                 vm.login2();
             });
@@ -189,7 +197,17 @@ vm.login2 = function() {
         }//Fin del function login
 //codigo de iphone de Fede --> 619794
 }])
+.controller('cerrarSesionCtrl', ['$scope', '$state','$http', function($scope, $state,$http){
+    
+    
+   
+        console.log('asdasdasdasd1234');
+        localStorage.removeItem('user');
+        localStorage.removeItem('role');    
 
+    $state.go("auth"); 
+
+}])
 //--------    NUEVO POS BARRA CTRL    --------
 
 .controller('posBarraCtrl', ['$scope', '$state','$log','$uibModal','$http','SweetAlert', function($scope, $state,$log,$uibModal,$http,SweetAlert){
