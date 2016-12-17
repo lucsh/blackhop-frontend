@@ -78,7 +78,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
             abstract: true,
             url: "/dashboards",
             templateProvider: function( $templateFactory){              
-                  if(localStorage.role == 'admin'){
+                  if(localStorage.role == 'Admin'){
                     return $templateFactory.fromUrl('views/common/content-admin.html');
                   } else {
                     return $templateFactory.fromUrl('views/common/content_top_navigation.html');
@@ -228,7 +228,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
             templateUrl: "views/dashboard_5.html",
             data: { 
                 pageTitle: 'Escritorio',
-                autorized: ['Root']                
+                autorized: ['Admin']                
             },
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {

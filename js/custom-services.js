@@ -244,11 +244,35 @@
                 console.log('localStorage.role');
                 console.log(localStorage.role);
 
+                console.log('next.url');
+                console.log(next.url);
+
+
+
                 if(next.data.autorized.indexOf(localStorage.role) !== -1){
-                    console.log("Encontre el rol en el autorized");
+                    console.log('encontre el usuario en autorized');
+                    if(next.url == '/point_of_sale_barra'){
+                        console.log('el next.url es pointofsalebarra');
+                        if(resModo == 'caja'){
+                            $state.go('pos.point_of_sale');
+                        }else if(resModo == undefined){
+                            event.preventDefault();
+                            $state.go('auth');
+                        }
+                    }else if(next.url == '/point_of_sale'){
+                        console.log('el next.url es pointofsalecaja');
+                        if(resModo == 'barra'){
+                            console.log('el resModo es barra');
+                            event.preventDefault();
+                            $state.go('pos.point_of_sale_barra');
+                        }else if(resModo == undefined){
+                            event.preventDefault();
+                            $state.go('auth');
+                        }
+                    }
                     
                 }else{
-                    if(localStorage.role != 'Admin'){
+                    if(resRole != 'Admin'){
                         if(resMensaje == 'openSesion'){
                             if(resModo == 'barra'){
                                 console.log("ASD");
@@ -262,20 +286,7 @@
                         }
                     }else{
                         $state.go('dashboards.dashboard_5');
-                        //if(next.url == '/point_of_sale' && resMensaje == 'openSesion' && resModo == 'caja'){
-                            //go :D
-                        //}else{
-                        //    if(next.url == '/point_of_sale_barra' && resMensaje == 'openSesion' && resModo == 'barra'){
-                        //        //go :D
-                        //    }else{
-                        //        $state.go('dashboards.dashboard_5');
-                        //    }
-                        //}
                     }
-                    //if(localStorage.role != 'Admin'){
-                    //    event.preventDefault();
-                    //    $state.go('auth');
-                    //}
                 }
             })
             .error(function(err){
@@ -299,7 +310,7 @@
                 var resModo = response.modo;
                 var resMensaje = response.mensaje;
 
-                if(localStorage.role != 'Admin'){
+                if(resRole != 'Admin'){
                     if(resMensaje == 'openSesion'){
                         if(resModo == 'barra'){
                             $state.go('pos.point_of_sale_barra');
