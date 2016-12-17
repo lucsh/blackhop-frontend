@@ -296,6 +296,8 @@ vm.login2 = function() {
 
                 $scope.getProductosBarra();
 
+                var codigoCupon = $scope.cuponSeleccionado.numero;
+
                 if($scope.cuponSeleccionado.litros > $scope.resumen.totalLitros){
                     SweetAlert.swal("Error", "El cupon tiene mas litros de los cargados!", "error")
                 }else{
@@ -345,28 +347,29 @@ vm.login2 = function() {
                                             if (isConfirm) {
                                                 $http.post('http://blackhop-dessin1.rhcloud.com/api/pos/barra/venta', {
                                                     flag: 'true',
-                                                    codigo:$scope.cuponSeleccionado.numero,
+                                                    codigo:codigoCupon,
                                                     itemsVenta: JSON.stringify(itemsVenta),
                                                 }).success(function(response) {
-                                                    $scope.borrarTodo();
+                                                    //$scope.borrarTodo();
+                                                    SweetAlert.swal("¡Realizado!", "Venta realizada", "success");
+                                                    $scope.resumen.display='';
+                                                    $scope.resumen.numeroProductos=-1;
+                                                    $scope.resumen.productos=[];
+                                                    $scope.resumen.total=0.00;
+                                                    $scope.resumen.totalLitros=0;
+                                                    $scope.resumen.selected=-1;
+                                                    $scope.clienteSeleccionado='';
+                                                    $scope.cuponSeleccionado='';
                                                 }).error(function(error){
                                                     console.log(error);
                                                 });              
-                                                SweetAlert.swal("¡Realizado!", "Venta realizada", "success");
-                                                $scope.resumen.display='';
-                                                $scope.resumen.numeroProductos=-1;
-                                                $scope.resumen.productos=[];
-                                                $scope.resumen.total=0.00;
-                                                $scope.resumen.totalLitros=0;
-                                                $scope.resumen.selected=-1;
-                                                $scope.clienteSeleccionado='';
-                                                $scope.cuponSeleccionado='';
+                                                
                                             } else {
                                                 SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
                                             }
                                         });
                                     }
-                                    $scope.borrarTodo();
+                                    //$scope.borrarTodo();
                                 }).error(function(error){
                                     console.log(error);
                                 });              
