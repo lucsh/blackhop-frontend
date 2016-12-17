@@ -77,7 +77,14 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
         .state('dashboards', {
             abstract: true,
             url: "/dashboards",
-            templateUrl: "views/common/content.html",
+            templateProvider: function( $templateFactory){              
+                  if(localStorage.role == 'admin'){
+                    return $templateFactory.fromUrl('views/common/content-admin.html');
+                  } else {
+                    return $templateFactory.fromUrl('views/common/content_top_navigation.html');
+                  }              
+            }
+            //templateUrl: "views/common/content.html",
         })
         .state('dashboards.dashboard_1', {
             url: "/dashboard_1",
@@ -635,7 +642,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
         .state('historial', {
             abstract: true,
             url: "/app",
-            templateUrl: "views/common/content.html",
+            templateUrl: "views/common/content-admin.html",
         })
         .state('historial.historial', {
             url: "/historial",
@@ -727,8 +734,15 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
     
         .state('app', {
             abstract: true,
-            url: "/app",
-            templateUrl: "views/common/content.html",
+            url: "/app",            
+            templateProvider: function( $templateFactory){              
+                  if(localStorage.role == 'admin'){
+                    return $templateFactory.fromUrl('views/common/content-admin.html');
+                  } else {
+                    return $templateFactory.fromUrl('views/common/content_top_navigation.html');
+                  }              
+            }
+            //templateUrl: "views/common/content-admin.html",
         })
         .state('app.contacts', {
             url: "/contacts",
@@ -1799,7 +1813,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
         .state('sales', {
             abstract: true,
             url: "/sales",
-            templateUrl: "views/common/sales-content.html",
+            templateUrl: "views/common/content-admin.html",
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
                     return $ocLazyLoad.load([
