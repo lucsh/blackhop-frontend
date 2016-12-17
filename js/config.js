@@ -736,9 +736,16 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
             abstract: true,
             url: "/app",            
             templateProvider: function( $templateFactory){              
-                  if(localStorage.role == 'admin'){
+                  if(localStorage.role == 'Admin'){
+                    console.log(localStorage.role)
+                    console.log("admin template")
+
                     return $templateFactory.fromUrl('views/common/content-admin.html');
                   } else {
+                    console.log(localStorage.role)
+
+                    console.log("user template")
+
                     return $templateFactory.fromUrl('views/common/content_top_navigation.html');
                   }              
             }
