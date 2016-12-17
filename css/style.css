@@ -522,9 +522,9 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     margin-top: 0;
 }
 .top-navigation .navbar-brand {
-    background: #1ab394;
+    /* background: #1ab394; */
     color: #fff;
-    padding: 15px 25px;
+    padding: 10px 35px;
 }
 .top-navigation .navbar-top-links li:last-child {
     margin-right: 0;
@@ -8825,7 +8825,7 @@ body.md-skin {
     border-radius: 50%;
 }
 .canilla .product-box{
-    min-height: 200px;
+    min-height: 210px;
 }
 .canilla .cerveza-color {
     position: absolute;

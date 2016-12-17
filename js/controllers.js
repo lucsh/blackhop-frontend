@@ -1655,12 +1655,25 @@ function scanearCuponCtrl ($scope,$log,$uibModalInstance,$http){
         $scope.clientes = clientes;       
         $scope.asd = moment('01/01/1985');
         
-        $scope.seleccion={}
+        $scope.seleccion={};
+
+        $scope.flag = false;
+        $scope.idCliente = null;
 
         $scope.ok = function () {
-            $uibModalInstance.close();
-            $scope.$parent.clienteSeleccionado={};
-            $scope.$parent.clienteSeleccionado = $scope.datosCliente;
+            console.log('$scope.flag');
+            console.log($scope.flag);
+            if($scope.flag){
+                $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/cliente/' + $scope.idCliente).success(function(datosCliente){
+                    $scope.datosCliente = datosCliente.data;
+                    
+                    $scope.$parent.clienteSeleccionado={};
+                    $scope.$parent.clienteSeleccionado = $scope.datosCliente;
+                    $uibModalInstance.close();
+                }).error(function(error){
+                    console.log(error);
+                });
+            }
 
         };
 
@@ -1685,13 +1698,20 @@ function scanearCuponCtrl ($scope,$log,$uibModalInstance,$http){
         }
 
         $scope.seleccionarNuevo= function(id){
+            $scope.idCliente = id;
+            $scope.flag = true;
+            console.log(id);
             $scope.seleccion.clienteSeleccionado=id;
-            
+            /*
             $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/cliente/' + id).success(function(datosCliente){
-              $scope.datosCliente = datosCliente.data;
-          }).error(function(error){
-            console.log(error);
-        });        
+                $scope.datosCliente = datosCliente.data;
+            }).error(function(error){
+                console.log(error);
+            });
+    
+            $scope.datosCliente = cliente; 
+            */
+            //console.log(cliente);     
 
       }
 
@@ -2547,7 +2567,17 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
             };   
         }
 
-function crearProductoCtrl ($http,$scope,$log,$uibModalInstance,productos,productoEdit){
+function crearProductoCtrl ($http,$scope,$log,$uibModalInstance,SweetAlert,productos,productoEdit){
+
+    $scope.tSpin = {
+        min: 1,
+        max: 40,
+        step: 1,
+        decimals: 0,
+        boostat: 5,
+        maxboostedstep: 10,
+        verticalbuttons: true
+    };
 
     //$scope.newProd = {};
     $scope.productos=productos;
@@ -2599,9 +2629,11 @@ function crearProductoCtrl ($http,$scope,$log,$uibModalInstance,productos,produc
         console.log(error);
     });  
 
+
+
     
     $scope.cargarNuevo = function(){
-
+       
 
         $uibModalInstance.dismiss('cancel');
         if($scope.flagNuevaMarca){
@@ -2621,7 +2653,7 @@ function crearProductoCtrl ($http,$scope,$log,$uibModalInstance,productos,produc
                 proveedor:$scope.newProd.proveedor.id,
                 marca:$scope.newProd.marca,
                 unidad:$scope.newProd.unidad.id,
-                color:$scope.newProd.color,
+                color:$scope.newProd.srm,
                 ibu:$scope.newProd.ibu,
                 origen:$scope.newProd.origen,
                 alcohol:$scope.newProd.alcohol,
@@ -2650,7 +2682,7 @@ function crearProductoCtrl ($http,$scope,$log,$uibModalInstance,productos,produc
                 proveedor:$scope.newProd.proveedor.id,
                 marca:$scope.newProd.marca,
                 unidad:$scope.newProd.unidad.id,
-                color:$scope.newProd.color,
+                color:$scope.newProd.srm,
                 ibu:$scope.newProd.ibu,
                 origen:$scope.newProd.origen,
                 alcohol:$scope.newProd.alcohol,

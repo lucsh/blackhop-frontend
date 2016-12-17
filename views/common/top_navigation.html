@@ -4,60 +4,20 @@
             <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
                 <i class="fa fa-reorder"></i>
             </button>
-            <a href="#" class="navbar-brand">Inspinia</a>
+            <a href="#" class="navbar-brand"><img alt="image" class="asd-logo" src="img/blackhop-isologo-chico.png"/></a>
         </div>
         <div class="navbar-collapse collapse" id="navbar">
             <ul class="nav navbar-nav">
-                <li class="active">
-                    <a ui-sref="layouts" href="#" > Back to main Layout page </a>
-
-                </li>
-                <li uib-dropdown>
-                    <a href uib-dropdown-toggle> Menu item <span class="caret"></span></a>
-                    <ul role="menu" uib-dropdown-menu>
-                        <li><a href="#">Menu item</a></li>
-                        <li><a href="#">Menu item</a></li>
-                        <li><a href="#">Menu item</a></li>
-                        <li><a href="#">Menu item</a></li>
-                    </ul>
-                </li>
-                <li uib-dropdown>
-                    <a href uib-dropdown-toggle> Menu item <span class="caret"></span></a>
-                    <ul role="menu" uib-dropdown-menu>
-                        <li><a href="#">Menu item</a></li>
-                        <li><a href="#">Menu item</a></li>
-                        <li><a href="#">Menu item</a></li>
-                        <li><a href="#">Menu item</a></li>
-                    </ul>
-                </li>
-                <li uib-dropdown>
-                    <a  href uib-dropdown-toggle> Menu item <span class="caret"></span></a>
-                    <ul role="menu" uib-dropdown-menu>
-                        <li><a href="#">Menu item</a></li>
-                        <li><a href="#">Menu item</a></li>
-                        <li><a href="#">Menu item</a></li>
-                        <li><a href="#">Menu item</a></li>
-                    </ul>
-                </li>
-                <li uib-dropdown>
-                    <a href uib-dropdown-toggle> Menu item <span class="caret"></span></a>
-                    <ul role="menu" uib-dropdown-menu>
-                        <li><a href="#">Menu item</a></li>
-                        <li><a href="#">Menu item</a></li>
-                        <li><a href="#">Menu item</a></li>
-                        <li><a href="#">Menu item</a></li>
-                    </ul>
-                </li>
-
-
-
-            </ul>
-            <ul class="nav navbar-top-links navbar-right">
-                <li>
-                    <a href="login.html">
-                        <i class="fa fa-sign-out"></i> Log out
-                    </a>
-                </li>
+                <li ui-sref-active="active">
+                <a ui-sref="pos.point_of_sale"><i class="fa fa-calculator"></i> <span class="nav-label">Punto de Venta</span> </a>
+            </li>
+             <li ui-sref-active="active">
+                <a ui-sref="pos.point_of_sale_barra"><i class="fa fa-calculator"></i> <span class="nav-label">POS - Barra</span> </a>
+            </li>
+            
+            <li ui-sref-active="active">
+                <a ui-sref="app.canillas"><i class="fa fa-beer"></i><span class="nav-label">Canillas</span> </a>
+            </li>
             </ul>
         </div>
     </nav>
