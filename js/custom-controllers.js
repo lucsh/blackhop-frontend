@@ -308,15 +308,50 @@ vm.login2 = function() {
                             if (isConfirm) {
 
                                 $http.post('http://blackhop-dessin1.rhcloud.com/api/pos/barra/venta', {
-
                                     codigo:$scope.cuponSeleccionado.numero,
                                     itemsVenta: JSON.stringify(itemsVenta),
                                 }).success(function(response) {
+                                    if(response.error == 'error'){
+                                        SweetAlert.swal({
+                                        title: "Hay un problema",
+                                        text: response.mensaje,
+                                        type: "warning",
+                                        showCancelButton: true,
+                                        confirmButtonColor: "#DD6B55",
+                                        confirmButtonText: "¡Si, realizarlo!",
+                                        cancelButtonText: "¡No, cancelar!",
+                                        closeOnConfirm: false,
+                                        closeOnCancel: false,
+                                        html: true },
+                                        function (isConfirm) {
+                                            if (isConfirm) {
+                                                $http.post('http://blackhop-dessin1.rhcloud.com/api/pos/barra/venta', {
+                                                    flag: 'true',
+                                                    codigo:$scope.cuponSeleccionado.numero,
+                                                    itemsVenta: JSON.stringify(itemsVenta),
+                                                }).success(function(response) {
+                                                    $scope.borrarTodo();
+                                                }).error(function(error){
+                                                    console.log(error);
+                                                });              
+                                                SweetAlert.swal("¡Realizado!", "Venta realizada", "success");
+                                                $scope.resumen.display='';
+                                                $scope.resumen.numeroProductos=-1;
+                                                $scope.resumen.productos=[];
+                                                $scope.resumen.total=0.00;
+                                                $scope.resumen.totalLitros=0;
+                                                $scope.resumen.selected=-1;
+                                                $scope.clienteSeleccionado='';
+                                                $scope.cuponSeleccionado='';
+                                            } else {
+                                                SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
+                                            }
+                                        });
+                                    }
                                     $scope.borrarTodo();
-
                                 }).error(function(error){
-                                  console.log(error);
-                              });              
+                                    console.log(error);
+                                });              
                                 SweetAlert.swal("¡Realizado!", "Venta realizada", "success");
 
                                 $scope.resumen.display='';
