@@ -258,7 +258,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
             templateUrl: "views/layouts.html",
             data: { pageTitle: 'Layouts' },
         })
-        .state('charts', {
+        /*.state('charts', {
             abstract: true,
             url: "/charts",
             templateUrl: "views/common/content.html",
@@ -638,7 +638,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
                     ]);
                 }
             }
-        })
+        })*/
         .state('historial', {
             abstract: true,
             url: "/app",
@@ -751,7 +751,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
             }
             //templateUrl: "views/common/content-admin.html",
         })
-        .state('app.contacts', {
+/*        .state('app.contacts', {
             url: "/contacts",
             templateUrl: "views/contacts.html",
             data: { pageTitle: 'Contacts' }
@@ -848,7 +848,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
             url: "/issue_tracker",
             templateUrl: "views/issue_tracker.html",
             data: { pageTitle: 'Issue Tracker' }
-        })
+        })*/
         .state('app.canillas', {
             url: "/canillas",
             templateUrl: "views/canillas.html",
@@ -1170,7 +1170,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
                 }
             }
         })
-    
+    /*
         .state('app.teams_board', {
             url: "/teams_board",
             templateUrl: "views/teams_board.html",
@@ -1722,7 +1722,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
                     ]);
                 }
             }
-        })
+        })*/
     
         .state('pos', {
             abstract: true,
@@ -1992,7 +1992,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
                 }
             }
         })
-        .state('commerce.products_grid', {
+       /* .state('commerce.products_grid', {
             url: "/products_grid",
             templateUrl: "views/ecommerce_products_grid.html",
             data: { pageTitle: 'E-commerce grid'},
@@ -2142,7 +2142,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
             url: "/off_canvas",
             templateUrl: "views/off_canvas.html",
             data: { pageTitle: 'Off canvas menu', specialClass: 'canvas-menu' }
-        });
+        });*/
 
 }
 angular

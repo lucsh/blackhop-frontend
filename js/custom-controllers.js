@@ -14,117 +14,97 @@ angular
     }).error(function(error){
         console.log(error);
     });
-
-vm.saLoggout = function(id,nombre){ 
-
-    SweetAlert.swal({
-        title: "¿Estas Seguro?",
-        text: "¡"+nombre+" no va a poder seguir operando!",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Si, cerra la cuenta!",
-        cancelButtonText: "No, cancelar!",
-        closeOnConfirm: false,
-        closeOnCancel: false },
-        function (isConfirm) {
-            if (isConfirm) {
-
-                $http.get('http://blackhop-dessin1.rhcloud.com/api/v1/authenticate/full?sesion='+id).success(function(response){       
-                    SweetAlert.swal("¡Hecho!", "La cuenta de "+ nombre + " fue cerrada", "success");
-                    vm.login();
-                })
-                .error(function(){
-                    SweetAlert.swal("¡Hecho!", "La cuenta de "+ nombre + " NO fue cerrada", "error");
-                    $state.reload();    
-                });
-                
-                    //HACER POST PARA DESLOGUEAR UNA SESION E INICIAR SESION
-
-                    
+    vm.saLoggout = function(id,nombre){ 
+        SweetAlert.swal({
+            title: "¿Estas Seguro?",
+            text: "¡"+nombre+" no va a poder seguir operando!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Si, cerra la cuenta!",
+            cancelButtonText: "No, cancelar!",
+            closeOnConfirm: false,
+            closeOnCancel: false },
+            function (isConfirm) {
+                if (isConfirm) {
+                    $http.get('http://blackhop-dessin1.rhcloud.com/api/v1/authenticate/full?sesion='+id).success(function(response){       
+                        SweetAlert.swal("¡Hecho!", "La cuenta de "+ nombre + " fue cerrada", "success");
+                        vm.login();
+                    })
+                    .error(function(){
+                        SweetAlert.swal("¡Hecho!", "La cuenta de "+ nombre + " NO fue cerrada", "error");
+                        $state.reload();    
+                    });
+                        //HACER POST PARA DESLOGUEAR UNA SESION E INICIAR SESION
                 } else {
                     SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
                     console.log('GO TO AUTH');
                     $state.reload();    
                 }
             });
-};
+    };
 
-
-
-vm.loginError = false;
-vm.loginErrorText;
-
-
-vm.full = false;
-console.log('vm.full = ' + vm.full);
-
-vm.valorInicial = 0;
-
-vm.login = function(){
-     /*
-    * VALIDACIONES AGREGAR CAMPOS EN LA VISTA A MOSTRAR DESDE ACA!
-    */
-    if(vm.modo == undefined || vm.ubicacion.selected == undefined){
-        $state.go('auth');
-        console.log('########## ERROR ############');
-        console.log('      Modo No seteado ');
-        console.log('#############################');
-    }else{
-        if(vm.modo == 'caja'){
-            SweetAlert.swal({
-                title: "Bienvenido!",
-                text: "Monto inicial en Caja:",
-                type: "input",
-                showCancelButton: true,
-                closeOnConfirm: false,
-                animation: "slide-from-top",
-                inputPlaceholder: "Monto Inicial"
-            },
-            function(inputValue){
-                if (inputValue === false){
-                    console.log("CANCEL");
-                    $state.reload(); 
-                    return false;
-                } 
-
-                //validación
-
-                if (inputValue === "") {
-                    swal.showInputError("Debes ingresar el monto incial en Caja!");
-                    return false
-                }    
-
-                if (isNaN(inputValue)){
-                    swal.showInputError("Debes ingresar un numero!");
-                    return false
-                }
-
-                swal("Monto incial", "Abris la caja con: " + inputValue, "success");
-                vm.valorInicial = inputValue;
-                vm.login2();
-            });
+    vm.loginError = false;
+    vm.loginErrorText;
+    vm.full = false;
+    console.log('vm.full = ' + vm.full);
+    vm.valorInicial = 0;
+    vm.login = function(){
+         /*
+        * VALIDACIONES AGREGAR CAMPOS EN LA VISTA A MOSTRAR DESDE ACA!
+        */
+        if(vm.modo == undefined || vm.ubicacion.selected == undefined){
+            $state.go('auth');
+            console.log('########## ERROR ############');
+            console.log('      Modo No seteado ');
+            console.log('#############################');
         }else{
-            //ESTO ES POR LO ASYNCRONO
-            vm.login2();
+            if(vm.modo == 'caja'){
+                SweetAlert.swal({
+                    title: "Bienvenido!",
+                    text: "Monto inicial en Caja:",
+                    type: "input",
+                    showCancelButton: true,
+                    closeOnConfirm: false,
+                    animation: "slide-from-top",
+                    inputPlaceholder: "Monto Inicial"
+                },
+                function(inputValue){
+                    if (inputValue === false){
+                        console.log("CANCEL");
+                        $state.reload(); 
+                        return false;
+                    } 
+                    //validación
+                    if (inputValue === "") {
+                        swal.showInputError("Debes ingresar el monto incial en Caja!");
+                        return false
+                    }    
+                    if (isNaN(inputValue)){
+                        swal.showInputError("Debes ingresar un numero!");
+                        return false
+                    }
+                    swal("Monto incial", "Abris la caja con: " + inputValue, "success");
+                    vm.valorInicial = inputValue;
+                    vm.login2();
+                });
+            }else{
+                //ESTO ES POR LO ASYNCRONO
+                vm.login2();
+            }
         }
     }
-}
 
 
 vm.login2 = function() {
-
     console.log(vm.ubicacion.selected)
-
                 //Crea el objeto credentials desde el form Login
                 var credentials = {
                     email: vm.name,
                     password: vm.password
                 }
-
                 //Funcion de Satellizer para generar el token
                 $auth.login(credentials).then(function() {
-
                     //Hace un get con el Token ya seteado para retornar el nombre del usuario, el rol y crear la sesion en
                     // caso de requerirlo (NO ADMIN)
                     $http.get('http://blackhop-dessin1.rhcloud.com/api/v1/authenticate/user', {
@@ -134,8 +114,6 @@ vm.login2 = function() {
                             valorInicial: vm.valorInicial
                         }
                     }).success(function(response){       
-
-
                         if(response.modo != 'limite'){
                             //Seteo de Variables en Local Storage
                             localStorage.setItem('user', response.usuarioName);
@@ -147,7 +125,6 @@ vm.login2 = function() {
                                 SweetAlert.swal("Error!", "No tienes permiso de Administrador!", "error");
                                 $state.reload(); 
                             }
-
                             console.log(response.mensaje);
                             if(response.mensaje == 'openSesion'){
                                 swal("Ups!", "Usted tiene una sesion abierta en "+response.modo+", sera redirigido!", "error");
