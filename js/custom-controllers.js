@@ -8,7 +8,7 @@ angular
     var vm = this;
     vm.ubicacion={};
 
-    $http.get('http://blackhop-dessin1.rhcloud.com/api/info/ubicacion').success(function(ubicaciones){    
+    $http.get('http://45.55.160.227/api/info/ubicacion').success(function(ubicaciones){    
         console.log(ubicaciones);
         vm.ubicaciones = ubicaciones.data;
     }).error(function(error){
@@ -27,7 +27,7 @@ angular
             closeOnCancel: false },
             function (isConfirm) {
                 if (isConfirm) {
-                    $http.get('http://blackhop-dessin1.rhcloud.com/api/v1/authenticate/full?sesion='+id).success(function(response){       
+                    $http.get('http://45.55.160.227/api/v1/authenticate/full?sesion='+id).success(function(response){       
                         SweetAlert.swal("¡Hecho!", "La cuenta de "+ nombre + " fue cerrada", "success");
                         vm.login();
                     })
@@ -107,7 +107,7 @@ vm.login2 = function() {
                 $auth.login(credentials).then(function() {
                     //Hace un get con el Token ya seteado para retornar el nombre del usuario, el rol y crear la sesion en
                     // caso de requerirlo (NO ADMIN)
-                    $http.get('http://blackhop-dessin1.rhcloud.com/api/v1/authenticate/user', {
+                    $http.get('http://45.55.160.227/api/v1/authenticate/user', {
                         params: {
                             modo:vm.modo,
                             ubicacion: vm.ubicacion.selected.id,
@@ -181,6 +181,7 @@ vm.login2 = function() {
         console.log('asdasdasdasd1234');
         localStorage.removeItem('user');
         localStorage.removeItem('role');    
+        localStorage.removeItem('satellizer_token');    
 
     $state.go("auth"); 
 
@@ -196,7 +197,7 @@ vm.login2 = function() {
 
     $scope.getProductosBarra = function (){
 
-        $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/barra/producto').success(function(productos){    
+        $http.get('http://45.55.160.227/api/pos/barra/producto').success(function(productos){    
             console.log(productos);
             $scope.ventaProductos = productos.data;
             for(var i = 0; i < $scope.ventaProductos.length; i++){
@@ -304,7 +305,7 @@ vm.login2 = function() {
                         function (isConfirm) {
                             if (isConfirm) {
 
-                                $http.post('http://blackhop-dessin1.rhcloud.com/api/pos/barra/venta', {
+                                $http.post('http://45.55.160.227/api/pos/barra/venta', {
                                     codigo:$scope.cuponSeleccionado.numero,
                                     itemsVenta: JSON.stringify(itemsVenta),
                                 }).success(function(response) {
@@ -322,7 +323,7 @@ vm.login2 = function() {
                                         html: true },
                                         function (isConfirm) {
                                             if (isConfirm) {
-                                                $http.post('http://blackhop-dessin1.rhcloud.com/api/pos/barra/venta', {
+                                                $http.post('http://45.55.160.227/api/pos/barra/venta', {
                                                     flag: 'true',
                                                     codigo:codigoCupon,
                                                     itemsVenta: JSON.stringify(itemsVenta),
@@ -335,8 +336,8 @@ vm.login2 = function() {
                                                     $scope.resumen.total=0.00;
                                                     $scope.resumen.totalLitros=0;
                                                     $scope.resumen.selected=-1;
-                                                    $scope.clienteSeleccionado='';
-                                                    $scope.cuponSeleccionado='';
+                                                    $scope.clienteSeleccionado=null;
+                                                    $scope.cuponSeleccionado=null;
                                                 }).error(function(error){
                                                     console.log(error);
                                                 });              
@@ -382,7 +383,7 @@ vm.login2 = function() {
 
 .controller('posCtrlCaja', ['$scope', '$state','$log','$uibModal','$http','SweetAlert', function($scope, $state,$log,$uibModal,$http,SweetAlert){
 
-    $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/canilla').success(function(canillas){    
+    $http.get('http://45.55.160.227/api/pos/caja/canilla').success(function(canillas){    
         console.log(canillas);
         $scope.canillas = canillas.data;
     }).error(function(error){
@@ -396,7 +397,7 @@ vm.login2 = function() {
 
 
     $scope.getProductos = function (){
-        $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/producto').success(function(productos){    
+        $http.get('http://45.55.160.227/api/pos/caja/producto').success(function(productos){    
             console.log(productos);
             $scope.ventaProductos = productos.data;
             for(var i = 0; i < $scope.ventaProductos.length; i++){
@@ -412,7 +413,7 @@ vm.login2 = function() {
 
     $scope.getProductos();
 
-    $http.get('http://blackhop-dessin1.rhcloud.com/api/pos/caja/cliente').success(function(clientes){    
+    $http.get('http://45.55.160.227/api/pos/caja/cliente').success(function(clientes){    
         console.log(clientes);
         $scope.clientes = clientes.data;
     }).error(function(error){
@@ -517,7 +518,7 @@ vm.login2 = function() {
                     console.log(dato);
                 },function(dato){
                     if(dato == 'ventaOK'){
-                        $scope.clienteSeleccionado = '';
+                        $scope.clienteSeleccionado = null;
                     }
                 });
             
@@ -537,7 +538,9 @@ vm.login2 = function() {
                         return $scope.clientes;
                     }
                 }
-            }).closed.then(function(datosCliente){
+            });
+            modalInstance.result.then(function (dato) {
+                $scope.clienteSeleccionado = dato;
                 if($scope.clienteSeleccionado){
                     $scope.resumen.nombreClienteSeleccionado = $scope.clienteSeleccionado.nombre + ' '+ $scope.clienteSeleccionado.apellido ;
                 }
@@ -545,7 +548,19 @@ vm.login2 = function() {
                 if(flag){
                   $scope.modal.terminarVenta();
               }
-          });
+            });
+            /*.closed.then(function(datosCliente){
+                console.log('#########');
+                console.log($scope.clienteSeleccionado);
+                console.log('#########');
+                if($scope.clienteSeleccionado){
+                    $scope.resumen.nombreClienteSeleccionado = $scope.clienteSeleccionado.nombre + ' '+ $scope.clienteSeleccionado.apellido ;
+                }
+                console.log($scope.resumen)
+                if(flag){
+                  $scope.modal.terminarVenta();
+              }
+          });*/
 
         },
 
@@ -583,12 +598,12 @@ vm.login2 = function() {
 
     $scope.getClienteDerecha = function(id){
 
-        $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/cliente/'+id).success(function(clienteDer){    
+        $http.get('http://45.55.160.227/api/admin/cliente/'+id).success(function(clienteDer){    
             //console.log(clienteDer);
             $scope.clienteDer = clienteDer.data;
             $scope.clienteDer.fechaNacimiento=moment($scope.clienteDer.fechaNacimiento).locale('es').format('DD/MMM/YYYY');
 
-            $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/clienteactividad/'+id).success(function(actividad){    
+            $http.get('http://45.55.160.227/api/admin/clienteactividad/'+id).success(function(actividad){    
                 
                 $scope.actividadDer = actividad.data;
                 $scope.actividadDer.forEach(function(acti){
@@ -608,7 +623,7 @@ vm.login2 = function() {
 
     $scope.getClientes = function (){
 
-        $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/cliente').success(function(cliente){    
+        $http.get('http://45.55.160.227/api/admin/cliente').success(function(cliente){    
             //console.log(cliente);
             $scope.clientes = cliente.data;
             var idClienteDerecha= $scope.clientes[0].id;
@@ -655,7 +670,7 @@ vm.login2 = function() {
             function (isConfirm) {
                 if (isConfirm) {
 
-                    $http.delete('http://blackhop-dessin1.rhcloud.com/api/admin/cliente/'+id).success(function(response){    
+                    $http.delete('http://45.55.160.227/api/admin/cliente/'+id).success(function(response){    
 
 
                         SweetAlert.swal("¡Eliminado!", "El cliente ha sido eliminado", "success");
@@ -705,7 +720,7 @@ vm.login2 = function() {
 
         $scope.clienteDer.fechaNacimiento = fechaFinal;
         
-        $http.put('http://blackhop-dessin1.rhcloud.com/api/admin/cliente/'+id,{
+        $http.put('http://45.55.160.227/api/admin/cliente/'+id,{
             telefono:$scope.clienteDer.telefono,
             nombre:$scope.clienteDer.nombre,
             apellido:$scope.clienteDer.apellido,
@@ -806,11 +821,11 @@ vm.login2 = function() {
 
     $scope.getProveedorDerecha = function(id){
 
-        $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/proveedor/'+id).success(function(proveedorDer){    
+        $http.get('http://45.55.160.227/api/admin/proveedor/'+id).success(function(proveedorDer){    
             //console.log(proveedorDer);
             $scope.proveedorDer = proveedorDer.data;
 
-            $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/proveedoractividad/'+id).success(function(actividad){    
+            $http.get('http://45.55.160.227/api/admin/proveedoractividad/'+id).success(function(actividad){    
                 
                 $scope.actividadDer = actividad.data;
                 $scope.actividadDer.forEach(function(acti){
@@ -832,7 +847,7 @@ vm.login2 = function() {
 
     $scope.getProveedores = function (){
 
-        $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/proveedor').success(function(proveedor){    
+        $http.get('http://45.55.160.227/api/admin/proveedor').success(function(proveedor){    
             //console.log(cliente);
             $scope.proveedores = proveedor.data;
             var idProveedorDerecha= $scope.proveedores[0].id;
@@ -861,7 +876,7 @@ vm.login2 = function() {
             function (isConfirm) {
                 if (isConfirm) {
 
-                    $http.delete('http://blackhop-dessin1.rhcloud.com/api/admin/proveedor/'+id).success(function(response){    
+                    $http.delete('http://45.55.160.227/api/admin/proveedor/'+id).success(function(response){    
 
 
                         SweetAlert.swal("¡Eliminado!", "El proveedor ha sido eliminado", "success");
@@ -889,7 +904,7 @@ vm.login2 = function() {
 
     $scope.onUpdate= function(id){
         
-        $http.put('http://blackhop-dessin1.rhcloud.com/api/admin/proveedor/'+id,{
+        $http.put('http://45.55.160.227/api/admin/proveedor/'+id,{
             nombre:$scope.proveedorDer.nombre,
             direccion:$scope.proveedorDer.direccion,
             telefono:$scope.proveedorDer.telefono,
@@ -974,7 +989,7 @@ vm.login2 = function() {
          * ventas  morecapo
          */
 
-         $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/venta').success(function(response){    
+         $http.get('http://45.55.160.227/api/admin/venta').success(function(response){    
             $scope.ventas = response.data;
         }).error(function(error){
             console.log(error);
@@ -1075,7 +1090,7 @@ vm.login2 = function() {
          */
 
          $scope.getCompras = function(){
-           $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/compra').success(function(response){    
+           $http.get('http://45.55.160.227/api/admin/compra').success(function(response){    
             $scope.compras = response.data;
             for(var i = 0; i < $scope.compras.length; i++){
                 $scope.compras[i].fecha=moment($scope.compras[i].fecha).locale('es').format('DD/MMM/YY');
@@ -1099,7 +1114,7 @@ vm.login2 = function() {
     $scope.getCompras();
 
     $scope.getDatosCompras = function(){
-       $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/compradatos').success(function(response){
+       $http.get('http://45.55.160.227/api/admin/compradatos').success(function(response){
         $scope.productos = response.productos;
         $scope.proveedores = response.proveedores;
         $scope.estados = response.estados;
@@ -1139,7 +1154,7 @@ $scope.modal={
     crear : function (flagNuevaCompra,compra,soloMostrar){
 
         $scope.getDatosCompra = function(){
-            $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/compra/' + compra.id).success(function(response){    
+            $http.get('http://45.55.160.227/api/admin/compra/' + compra.id).success(function(response){    
             $scope.compra = response.compra;
             $scope.itemsCompra = response.itemsCompra;
             
@@ -1283,7 +1298,7 @@ $scope.modal={
         /**
          * cupones 
          */
-         $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/cupon').success(function(response){    
+         $http.get('http://45.55.160.227/api/admin/cupon').success(function(response){    
             
             $scope.cupones = response.data;
 
@@ -1387,7 +1402,7 @@ $scope.modal={
                 //$scope.cupones[i-1].fecha= moment().toString();
                 //console.log($scope.cupones[i-1]);
                 //$scope.calcularEstado(i-1);
-                $http.put('http://blackhop-dessin1.rhcloud.com/api/admin/extendercupon/'+i)
+                $http.put('http://45.55.160.227/api/admin/extendercupon/'+i)
                 .success(function(response){    
                    $scope.cupones.forEach(function(cupon,index,arreglo){
                     if(cupon.id == response.data.id){
@@ -1405,7 +1420,7 @@ $scope.modal={
                 //$scope.cupones[i-1].vigencia=0;
                 //console.log($scope.cupones[i-1]);
                 //$scope.calcularEstado(i-1);
-                $http.put('http://blackhop-dessin1.rhcloud.com/api/admin/invalidarcupon/'+i)
+                $http.put('http://45.55.160.227/api/admin/invalidarcupon/'+i)
                 .success(function(response){    
                    $scope.cupones.forEach(function(cupon,index,arreglo){
                     if(cupon.id == response.data.id){
@@ -1454,7 +1469,7 @@ $scope.modal={
     $scope.productos = [];
     $scope.getProductos = function (){
 
-        $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/producto').success(function(productos){    
+        $http.get('http://45.55.160.227/api/admin/producto').success(function(productos){    
             //console.log(cliente);
             $scope.productos = productos.data;
 
@@ -1803,7 +1818,7 @@ $scope.modal={
 
     $scope.getProductosInventario = function (){
 
-        $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/inventarios').success(function(productos){    
+        $http.get('http://45.55.160.227/api/admin/inventarios').success(function(productos){    
             
             console.log(productos);
             $scope.productosInventario = productos.data;
@@ -1820,7 +1835,7 @@ $scope.modal={
     
     $scope.getUbicaciones = function (){
 
-        $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/ubicaciones').success(function(ubicaciones){    
+        $http.get('http://45.55.160.227/api/admin/ubicaciones').success(function(ubicaciones){    
             
             console.log(ubicaciones);
             $scope.ubicaciones = ubicaciones.data;
@@ -2080,7 +2095,7 @@ $scope.modal={
 
     $scope.getGastos = function(){
         $scope.gastos = [];
-        $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/gasto')
+        $http.get('http://45.55.160.227/api/admin/gasto')
         .success(function(response){    
             $scope.gastos = response.data;
             /// Dejalo asi Formatea lo que manda Laravel
@@ -2139,7 +2154,7 @@ $scope.modal={
             function (isConfirm) { 
                 if (isConfirm) {
                     
-                    $http.delete('http://blackhop-dessin1.rhcloud.com/api/admin/gasto/'+ident)
+                    $http.delete('http://45.55.160.227/api/admin/gasto/'+ident)
                     .success(function(){    
                         SweetAlert.swal("¡Eliminado!", "El gasto fue eliminado", "success");
                         $scope.getGastos();
@@ -2174,7 +2189,7 @@ $scope.modal={
 
             modalInstance.result.then(function (gasto) {
 
-                $http.post('http://blackhop-dessin1.rhcloud.com/api/admin/gasto',{
+                $http.post('http://45.55.160.227/api/admin/gasto',{
                     descripcion:gasto.descripcion,
                     monto:gasto.monto,
                     fecha:gasto.fecha
@@ -2186,7 +2201,7 @@ $scope.modal={
                 });
 
 /*
-            $http.put('http://blackhop-dessin1.rhcloud.com/api/admin/canilla/'+idCanilla,{
+            $http.put('http://45.55.160.227/api/admin/canilla/'+idCanilla,{
                 idInventario:idPS
             }).success(function(){    
                         $scope.getCanillas(); 
@@ -2219,7 +2234,7 @@ $scope.modal={
 
             modalInstance.result.then(function (gasto) {
 
-                $http.put('http://blackhop-dessin1.rhcloud.com/api/admin/gasto/'+gasto.identificador,{
+                $http.put('http://45.55.160.227/api/admin/gasto/'+gasto.identificador,{
                     descripcion:gasto.descripcion,
                     monto:gasto.monto,
                     fecha:gasto.fecha
@@ -2239,7 +2254,7 @@ $scope.modal={
  
  $scope.historial =[];
 
- $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/historial')
+ $http.get('http://45.55.160.227/api/admin/historial')
  .success(function(response){    
     $scope.historial = response.data;
     for(var i = 0; i < $scope.historial.length; i++){
@@ -2308,7 +2323,7 @@ $scope.modal={
 
     $scope.historialBarra = [];
 
-    $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/historialbarra')
+    $http.get('http://45.55.160.227/api/admin/historialbarra')
     .success(function(response){    
         $scope.historialBarra = response.data;
         for(var i = 0; i < $scope.historialBarra.length; i++){
@@ -2353,7 +2368,7 @@ $scope.modal={
 
     $scope.historialCaja = [];
 
-    $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/historialcaja')
+    $http.get('http://45.55.160.227/api/admin/historialcaja')
     .success(function(response){    
         $scope.historialCaja = response.data;
         for(var i = 0; i < $scope.historialCaja.length; i++){
@@ -2414,7 +2429,7 @@ $scope.canillas =[];
 
 
 $scope.getCanillas = function (){
-    $http.get('http://blackhop-dessin1.rhcloud.com/api/admin/canilla').success(function(canillas){    
+    $http.get('http://45.55.160.227/api/admin/canilla').success(function(canillas){    
         console.log(canillas);
         $scope.canillas = canillas.data;
     }).error(function(error){
@@ -2439,7 +2454,7 @@ $scope.cambiarProducto = function(idCanilla){
                     });
         modalInstance.result.then(function (idPS) { //callback modal
 
-            $http.put('http://blackhop-dessin1.rhcloud.com/api/admin/canilla/'+idCanilla,{
+            $http.put('http://45.55.160.227/api/admin/canilla/'+idCanilla,{
                 idInventario:idPS
             }).success(function(){    
                 $scope.getCanillas(); 
