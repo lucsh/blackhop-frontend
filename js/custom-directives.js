@@ -73,7 +73,12 @@ angular
             $scope.selectorProducto = function(){
 
                 if($scope.producto.categoria == "Alquilables"){
-                    console.log("Puto");
+                    console.log("Clic en Alquilable");
+                                        
+                    //ToDo : Preguntar si deudor y mostrar modal para que el cajero decida
+                    //        (Obliga a seleccionar cliente previo a elejir el Alquilable)
+
+                // Mostrar modal con calendario
                     
                 }else {
                     $scope.addProduct();
