@@ -23,6 +23,7 @@
                 <table class="alquileres center-block">
                     <thead>
                         <tr>
+                        <th width="100px"></th>
                         <th>L</th>
                         <th>M</th>
                         <th>X</th>
@@ -49,8 +50,10 @@
                     
                     <tbody ng-init="mostrarDia=false">
                         <tr ng-repeat="alquilable in alquilables" >
+                            <td>{{alquilable.nombre}}</td>
                             <td ng-repeat="dia in alquilable.dias" 
                             style="{{dia.hover}}"
+                            ng-if="dia.id < 22"
                             ng-mouseenter="calculateClass(alquilable.id,dia.id);mostrarDia=true"
                             ng-mouseleave="calculateClassAnterior(alquilable.id,dia.id);mostrarDia=false"
                             ><span ng-show="mostrarDia">{{dia.diaFecha}}</td>

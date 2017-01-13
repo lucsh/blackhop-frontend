@@ -27,11 +27,13 @@ body {
 }
 
 .alquileres td {
+    min-height: 30px;
+    min-width: 30px;
     height: 30px;
     width: 30px;
     border: solid 1px #e7eaec;
     line-height: 1.42857;
-    transition: background-color 350ms;
+    transition: all 350ms;
     background-color: #fff; 
     font-size: 13px;
     color: #676a6c;    
@@ -39,7 +41,13 @@ body {
     text-align: center;
     color:#fff;
 }
-
+.alquileres td:hover {
+ 
+}
+.alquileres td:nth-child(1){
+    color:#676a6c;
+    min-width: 100px;
+}
 .alquileres .ok {
     background-color: #0f0;
 }
