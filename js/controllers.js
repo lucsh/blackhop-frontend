@@ -50,7 +50,7 @@
 
 
 
-function calendarioAlquiler ($scope,$log,$uibModalInstance,$http){
+function calendarioAlquiler ($scope,$log,$uibModalInstance,$http,SweetAlert){
     var disponible = 'background-color: #fff;';
     var nope = 'background-color: #ed5565';
     var warning ='background-color: #f0ad4e;';
@@ -99,7 +99,22 @@ $scope.alquiler={}
             }
     }
     $scope.guardarAlquiler = function(){
-            $uibModalInstance.close();//devolver el alquilable y las fechas
+
+        SweetAlert.swal({
+            title: "Ingresar Estilo/s",
+            text: "¿Que estilos te gustaria?",
+            type: "input",
+            showCancelButton: true,
+            closeOnConfirm: true,
+            animation: "slide-from-top",
+            inputPlaceholder: "IPA / Scotish / Negra"
+        },
+        function(inputValue){
+            console.log("inputValue")
+            console.log(inputValue)
+            $uibModalInstance.close();//devolver el alquilable y las fechas y los estilos                    
+        });
+
     }
 
     $scope.calculateClassAnterior = function(alquilable,dia){
