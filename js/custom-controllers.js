@@ -400,11 +400,33 @@ vm.login2 = function() {
         $http.get('http://45.55.160.227/api/pos/caja/producto').success(function(productos){    
             console.log(productos);
             $scope.ventaProductos = productos.data;
-            for(var i = 0; i < $scope.ventaProductos.length; i++){
 
-                if($scope.ventaProductos[i].categoria=='Alquilables'){
+            //Agrego producto alquilable
+
+            var alquilable = {
+                categoria : 'Alquiler',
+                valor : '',//el valor vuelve de el modal, cuando selecciono el producto
+                marca : 'Blackhop',
+                nombre : 'Alquiler',
+                stock : -1,
+                unidad : {
+                    abr : 'Un.',
+                    id : 2,
+                    plural : 'Unidades',
+                    singular : 'Unidad'
+                }
+            };
+
+            $scope.ventaProductos.push(alquilable);
+            
+            
+            
+            for(var i = 0; i < $scope.ventaProductos.length; i++){
+                /*
+                if($scope.ventaProductos[i].categoria=='Alquiler'){
                     $scope.ventaProductos[i].stock=-1;
                 }
+                */
             };
         }).error(function(error){
             console.log(error);

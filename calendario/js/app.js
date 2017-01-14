@@ -43,9 +43,9 @@ myApp.controller('myController',['$scope',function($scope){
 
 
 
-			desde = dia -4
+			desde = dia - 2;
 		 	desdeFecha =moment(alquilable.dias[dia-1].fecha);
-		 	hasta = dia;
+		 	hasta = dia + 1;
 		 	hastaFecha=moment(alquilable.dias[dia].fecha);
 		 	
 		 	//
@@ -79,9 +79,9 @@ myApp.controller('myController',['$scope',function($scope){
 			
 			alquilable.dias[dia-1].hover = hoy;
 
-		    if(dia!=21 && alquilable.dias[hasta+3].estado == "alquilado"){//si no es el ultimo domingo
+		    if(dia!=21 && alquilable.dias[hasta].estado == "alquilado"){//si no es el ultimo domingo
 		    		alquilable.dias[dia-1].hover = warning;
-		    		for (var i = 1; i < 3; i++) {
+		    		for (var i = -2; i < 1; i++) {
 		    			alquilable.dias[hasta+i].hover = warning;
 		    		}
 					
@@ -96,8 +96,8 @@ myApp.controller('myController',['$scope',function($scope){
 
 	alquilable.dias[dia-1].claseAnterior=alquilable.dias[dia-1].hover;
 			
-			if (alquilable.dias[dia-1].fecha.isBefore(moment().startOf('date').add(2,'days'))){
-				//antes de hoy +3
+			if (alquilable.dias[dia-1].fecha.isBefore(moment().startOf('date').add(0,'days'))){
+				//1 antes de hoy
 				alquilable.dias[dia-1].hover=nope;				
 				$scope.alquiler.desde="";
 				$scope.alquiler.hasta="";
@@ -121,8 +121,11 @@ myApp.controller('myController',['$scope',function($scope){
 				alquilable.dias[dia-1].hover=nope;				
 				$scope.alquiler.desde="";
 				$scope.alquiler.hasta="";
-			} else if(alquilable.dias[dia].estado == "alquilado" || (alquilable.dias[dia+1].estado == "alquilado") || (alquilable.dias[dia+2].estado == "alquilado")){
+			//} else if(alquilable.dias[dia].estado == "alquilado" || (alquilable.dias[dia+1].estado == "alquilado") || (alquilable.dias[dia+2].estado == "alquilado")){
 					   //mañana o pasado alquilado 
+			
+			} else if(alquilable.dias[dia].estado == "alquilado" ){
+					   //mañana alquilado 
 				alquilable.dias[dia-1].hover=nope;				
 				$scope.alquiler.desde="";
 				$scope.alquiler.hasta="";
@@ -137,9 +140,9 @@ myApp.controller('myController',['$scope',function($scope){
 			//	$scope.alquiler.hasta="";
 			//}
 			//
-			else if (alquilable.dias[dia-3] && alquilable.dias[dia-3].estado != "alquilado"){
+			else if (alquilable.dias[dia-2] && alquilable.dias[dia-2].estado != "alquilado"){
 				marcar();
-			} else if (!alquilable.dias[dia-3] && alquilable.dias[dia-2].estado != "alquilado"){
+			} else if (!alquilable.dias[dia-2] && alquilable.dias[dia-1].estado != "alquilado"){
 				marcar();	
 			} else {
 				alquilable.dias[dia-1].hover = nope;
@@ -474,7 +477,7 @@ myApp.controller('myController',['$scope',function($scope){
 		},
 		{
 			id:4,
-			estado:"disponible",//jueves
+			estado:"alquilado",//jueves
 		},
 		{
 			id:5,

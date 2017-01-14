@@ -60,7 +60,7 @@ angular
     }
 })
 
-.directive('iboxProduct', function($compile, $uibModal){
+.directive('iboxProduct', function($compile, $uibModal,SweetAlert){
     return {
         restrict: 'A',
         scope: {
@@ -72,13 +72,29 @@ angular
         controller: function ($scope, $element) {
             $scope.selectorProducto = function(){
 
-                if($scope.producto.categoria == "Alquilables"){
+                if($scope.producto.categoria == "Alquiler"){
                     console.log("Clic en Alquilable");
                                         
                     //ToDo : Preguntar si deudor y mostrar modal para que el cajero decida
                     //        (Obliga a seleccionar cliente previo a elejir el Alquilable)
 
                 // Mostrar modal con calendario
+                 var modalInstance = $uibModal.open({//LUCAS LUCAS
+                    templateUrl: 'views/modal-calendario_alquiler.html',
+                    controller: calendarioAlquiler, 
+                    //controler en controllers.js, no termino de entender porque no lo puedo armar como el resto y si o si tengo que poner una funcion                        
+                    windowClass: "animated fadeIn",
+                    size: "calendario",
+                    //scope:$scope,
+                    SweetAlert:SweetAlert,
+                    /*
+                    resolve:{
+                        gastoNuevo:function () {
+                            return '';
+                        }
+                    }
+                    */
+                });
                     
                 }else {
                     $scope.addProduct();
