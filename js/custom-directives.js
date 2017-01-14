@@ -96,9 +96,7 @@ angular
                             */
                         }); 
                         //cuando vuelve, darle forma al $scope.producto
-                        modalInstance.result.then(function () {
-
-                        }
+                        
                         
                 }else {
                     $scope.addProduct();

@@ -67,14 +67,33 @@ function calendarioAlquiler ($scope,$log,$uibModalInstance,$http){
 
 $scope.alquiler={}
 
+    $scope.limpiarClases = function(alquilable){
+        alquilable=$scope.alquilables[alquilable-1];
+        for (var i = 0; i < 20; i++) {
+            alquilable.dias[i].hover = alquilable.dias[i].claseOriginal
+        }
+    }
+
     $scope.seleccionarBarril = function(barril){
+        
+
         console.log ("barril seleccionado")
         console.log (barril)
 
             if($scope.alquiler.desde){
                 $scope.barrilSeleccionado = barril;
                 $scope.barrilSeleccionado.desde = $scope.alquiler.desde
+                $scope.barrilSeleccionado.desdeDiaId = $scope.alquiler.desdeDiaId
                 $scope.barrilSeleccionado.hasta = $scope.alquiler.hasta
+                $scope.barrilSeleccionado.hastaDiaId = $scope.alquiler.hastaDiaId
+
+                //LIMPIO LAS CLASES DE LOS OTROS BARRILES, EN CASO QUE HAYA CAMBIADO LA SELECCION
+                for (var i = 0, len = $scope.alquilables.length; i < len; i++) {
+                    if(barril.id != (i+1)){
+                      $scope.limpiarClases(i+1)
+                    }
+                }
+
             } else{
                 $scope.barrilSeleccionado = undefined
             }
@@ -87,9 +106,25 @@ $scope.alquiler={}
 
     alquilable=this.$parent.alquilables[alquilable-1];
 
-        for (var i = dia+4; i >= 0; i--) {//limpia para adelante (de onda, no le digas a nadie)
-            if (i>20) i=20;
-            alquilable.dias[i].hover = alquilable.dias[i].claseAnterior
+        for (var i = 0; i < 21; i++) { //LIMPIO LA LINEA COMPLETA, EN CASO QUE HAYA CAMBIADO LA SELECCION
+
+            if($scope.barrilSeleccionado && $scope.barrilSeleccionado.id == alquilable.id){
+
+                if(alquilable.dias[i].id > $scope.barrilSeleccionado.desdeDiaId+1 && alquilable.dias[i].id <= $scope.barrilSeleccionado.hastaDiaId ){
+               
+                    //EN REALIDAD NO HAGO NADA ACA
+
+                }else{
+                    alquilable.dias[i].hover = alquilable.dias[i].claseOriginal
+ 
+                }
+            } else{
+                alquilable.dias[i].hover = alquilable.dias[i].claseOriginal
+            }
+
+            if(alquilable.dias[i].hover == hoy){
+                alquilable.dias[i].hover = ok
+            }
         }
         dia.hover=dia.claseAnterior
     }
@@ -144,8 +179,8 @@ $scope.alquiler={}
             alquilable.dias[dia-1].hover = hoy;
 
             if(dia!=21 && alquilable.dias[hasta].estado == "alquilado"){//si no es el ultimo domingo
-                    alquilable.dias[dia-1].hover = warning;
-                    for (var i = -2; i < 1; i++) {
+                    //alquilable.dias[dia-1].hover = warning;
+                    for (var i = 0; i < 1; i++) {
                         alquilable.dias[hasta+i].hover = warning;
                     }
                     
@@ -154,8 +189,9 @@ $scope.alquiler={}
 
             
             $scope.alquiler.hasta=moment(hastaFecha).locale('es').format('dddd DD MMMM').toUpperCase();
+            $scope.alquiler.hastaDiaId=hasta;
             $scope.alquiler.desde=moment(desdeFecha).locale('es').format('dddd DD MMMM').toUpperCase();
-        
+            $scope.alquiler.desdeDiaId=desde;
     }
 
     alquilable.dias[dia-1].claseAnterior=alquilable.dias[dia-1].hover;
@@ -164,7 +200,9 @@ $scope.alquiler={}
                 //1 antes de hoy
                 alquilable.dias[dia-1].hover=nope;              
                 $scope.alquiler.desde="";
+                $scope.alquiler.desdeDiaId="";
                 $scope.alquiler.hasta="";
+                $scope.alquiler.hastaDiaId="";
             } else if (alquilable.dias[dia].estado=="vencido"){
                 //nada, no hay hover porque el barril no fue devuelto
             }
@@ -175,7 +213,9 @@ $scope.alquiler={}
             //          //domingo||lunes
             //  alquilable.dias[dia-1].hover=nope;              
             //  $scope.alquiler.desde="";
+            //    $scope.alquiler.desdeDiaId="";
             //  $scope.alquiler.hasta="";
+            //   $scope.alquiler.hastaDiaId="";
             //} 
             //
             //
@@ -184,7 +224,9 @@ $scope.alquiler={}
                        //hoy alquilado  
                 alquilable.dias[dia-1].hover=nope;              
                 $scope.alquiler.desde="";
+                $scope.alquiler.desdeDiaId="";
                 $scope.alquiler.hasta="";
+                $scope.alquiler.hastaDiaId="";
             //} else if(alquilable.dias[dia].estado == "alquilado" || (alquilable.dias[dia+1].estado == "alquilado") || (alquilable.dias[dia+2].estado == "alquilado")){
                        //mañana o pasado alquilado 
             
@@ -192,7 +234,9 @@ $scope.alquiler={}
                        //mañana alquilado 
                 alquilable.dias[dia-1].hover=nope;              
                 $scope.alquiler.desde="";
+                $scope.alquiler.desdeDiaId="";
                 $scope.alquiler.hasta="";
+                $scope.alquiler.hastaDiaId="";
             }
             //
             //  Solo en caso de domingo y lunes no laboral
@@ -201,7 +245,9 @@ $scope.alquiler={}
             //          //!ultimo sabado & sabado && martes alquilado   
             //  alquilable.dias[dia-1].hover=nope;
             //  $scope.alquiler.desde="";
+            //    $scope.alquiler.desdeDiaId="";
             //  $scope.alquiler.hasta="";
+            //    $scope.alquiler.hastaDiaId="";
             //}
             //
             else if (alquilable.dias[dia-2] && alquilable.dias[dia-2].estado != "alquilado"){
@@ -211,7 +257,9 @@ $scope.alquiler={}
             } else {
                 alquilable.dias[dia-1].hover = nope;
                 $scope.alquiler.desde="";
+                $scope.alquiler.desdeDiaId="";
                 $scope.alquiler.hasta="";
+                $scope.alquiler.hastaDiaId="";
             }
         }
 
@@ -759,10 +807,12 @@ for (var i = 0; i <  $scope.alquilables.length; i++) {
     for ( j = 0; j <  $scope.alquilables[i].dias.length; j++) {
         $scope.alquilables[i].dias[j].hover=disponible;
         $scope.alquilables[i].dias[j].claseAnterior=disponible;
+        $scope.alquilables[i].dias[j].claseOriginal=disponible;
         
         if ($scope.alquilables[i].dias[j].estado=="vencido"){
             $scope.alquilables[i].dias[j].hover = vencido;
             $scope.alquilables[i].dias[j].claseAnterior = vencido;
+            $scope.alquilables[i].dias[j].claseOriginal = vencido;
         }
         //
         //Pinto domingos && lunes
@@ -776,6 +826,7 @@ for (var i = 0; i <  $scope.alquilables.length; i++) {
         if ($scope.alquilables[i].dias[j].estado == "alquilado"){
             $scope.alquilables[i].dias[j].hover = nope;
             $scope.alquilables[i].dias[j].claseAnterior = nope
+            $scope.alquilables[i].dias[j].claseOriginal = nope
         }
         
         
