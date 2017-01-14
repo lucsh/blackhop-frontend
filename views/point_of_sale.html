@@ -15,6 +15,13 @@
                     </a>
                 </li>
             </ul>
+            <ul  class="nav navbar-top-links navbar-left">
+                <li ng-if="$parent.$state.current.name=='pos.point_of_sale'">
+                    <a class="text-warning" ng-click="devolverAlqulier()">
+                        <i class="fa fa-database"></i> Devolucion de Alquiler
+                    </a>
+                </li>
+            </ul>
             <ul class="nav navbar-top-links navbar-left">
                 <li>                 
                     <!-- Ver el tema del menú (cargar otro para los que estan en sesion)-->

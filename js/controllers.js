@@ -1137,59 +1137,84 @@ function detalleVentaCtrl ($http,$scope,$log,$uibModalInstance,venta){
    
 };
 
-function crearAlquilableCtrl ($scope,$log,$uibModalInstance,alquilables,alquilableEdit){
-    $scope.alquilables=alquilables;
-    $scope.alquilableEdit=alquilableEdit;
-    
-    $scope.ubicaciones=[
-    {
-        id:1,
-        nombre:'Local Illia',
-        direccion:'Illia 123'
-    },
-    {
-        id:2,
-        nombre:'Local 3',
-        direccion:'Avenida 988'
-    },
-    {
-        id:3,
-        nombre:'Local 2',
-        direccion:'Calle 53'
-    },
-    {
-        id:4,
-        nombre:'Ajuste',
-        direccion:''
-    }
-    ]
+function devolucionAlquilerCtrl ($scope,$log,$uibModalInstance,SweetAlert,clientes){
 
-    $scope.guardar = function (alquilableEdit){
+        $scope.seleccion={};
+        $scope.clienteElegido=false;
 
-        var found = jQuery.inArray(alquilableEdit, $scope.$parent.alquilables);
 
-        if (found == -1) { 
-            alquilableEdit.id=$scope.alquilables.length+1;
-            alquilableEdit.estado='Disponible';
-            alquilableEdit.class='badge-primary';                            
-            $scope.$parent.alquilables.push(alquilableEdit);
+        $scope.clientesFiltrados = function (filteredData) {          
 
-        } else {
-            $scope.$parent.alquilables.splice(found, 1);                                   
-            $scope.$parent.alquilables.push(alquilableEdit);
+            if (filteredData.length == 1) {
+
+                if ($scope.seleccion.clienteSeleccionado!=filteredData[0].id){
+                    $scope.seleccionarNuevo(filteredData[0].id);
+                }
+
+                return filteredData;
+
+            } else{
+                return filteredData;
+            }
+            
         }
 
-        $uibModalInstance.dismiss('cancel');
-    }
 
-    $scope.ok = function () {
-        $uibModalInstance.close();
-    };
+        $scope.seleccionarNuevo= function(cliente){
+            //borrar tabla y mantener seleccion            
+            $scope.clienteElegido=true
+            $scope.seleccion.clienteSeleccionado=cliente;
 
-    $scope.cancel = function () {
-        $uibModalInstance.dismiss('cancel');
-    };
-    
+            //mostrar alquileres del cliente (si tiene)            
+            $scope.alquileresCliente=[
+                {
+                id:1,
+                nombre: "9 lts. No˚01"
+                },
+                {
+                id:2,
+                nombre: "9 lts. No˚03"
+                }
+            ]
+
+        }
+        $scope.chkChange = function(alquileresCliente){
+
+            $scope.okParaGuardar=false
+
+            for (var i = 0; i < alquileresCliente.length; i++) {
+                if (alquileresCliente[i].chk == true){
+                    $scope.okParaGuardar=true
+                }
+            }
+
+        }
+        $scope.ok = function () {
+                    $uibModalInstance.close();
+
+/*
+            
+            if($scope.flag){
+                $http.get('http://45.55.160.227/api/pos/caja/cliente/' + $scope.idCliente).success(function(datosCliente){
+                    $scope.datosCliente = datosCliente.data;
+                    
+                    $scope.$parent.clienteSeleccionado={};
+                    $scope.$parent.clienteSeleccionado = $scope.datosCliente;
+                    //$scope.$parent.resumen.nombreClienteSeleccionado = $scope.$parent.clienteSeleccionado.nombre + ' '+ $scope.$parent.clienteSeleccionado.apellido ;
+                    console.log($scope.$parent.clienteSeleccionado);
+                    $uibModalInstance.close($scope.datosCliente);
+                }).error(function(error){
+                    console.log(error);
+                });
+            }
+*/
+        };
+
+        $scope.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
+
+
 }
 
 function crearGastoCtrl ($scope,$log,$uibModalInstance,gastos,gastoEdit){
@@ -1842,7 +1867,203 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
 
             };   
         }
+function asdasdasdasdasd ($scope,$log,$uibModalInstance,alquilables,alquilableEdit){
+    $scope.alquilables=alquilables;
+    $scope.alquilableEdit=alquilableEdit;
+    
+    $scope.ubicaciones=[
+    {
+        id:1,
+        nombre:'Local Illia',
+        direccion:'Illia 123'
+    },
+    {
+        id:2,
+        nombre:'Local 3',
+        direccion:'Avenida 988'
+    },
+    {
+        id:3,
+        nombre:'Local 2',
+        direccion:'Calle 53'
+    },
+    {
+        id:4,
+        nombre:'Ajuste',
+        direccion:''
+    }
+    ]
 
+    $scope.guardar = function (alquilableEdit){
+
+        var found = jQuery.inArray(alquilableEdit, $scope.$parent.alquilables);
+
+        if (found == -1) { 
+            alquilableEdit.id=$scope.alquilables.length+1;
+            alquilableEdit.estado='Disponible';
+            alquilableEdit.class='badge-primary';                            
+            $scope.$parent.alquilables.push(alquilableEdit);
+
+        } else {
+            $scope.$parent.alquilables.splice(found, 1);                                   
+            $scope.$parent.alquilables.push(alquilableEdit);
+        }
+
+        $uibModalInstance.dismiss('cancel');
+    }
+
+    $scope.ok = function () {
+        $uibModalInstance.close();
+    };
+
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+    
+}
+
+function crearAlquilableCtrl ($http,$scope,$log,$uibModalInstance,SweetAlert,alquilables,alquilableEdit){
+
+   
+
+    //$scope.newProd = {};
+    $scope.alquilables=alquilables;
+    $scope.alquilableEdit=alquilableEdit;
+    $scope.newAlquilable = angular.copy(alquilableEdit);
+    $scope.flagEditar=false;
+
+
+    /* Nueva Marca init */
+    $scope.tresdeStartVisibleClass = 'tresde-up-first-visible ';
+    $scope.tresdeStartHiddenClass = 'tresde-up-second-hidden ';
+    $scope.flagNuevaMarca=false;
+    /*
+    $http.get('http://45.55.160.227/api/admin/productodatos').success(function(datos){    
+        //console.log(cliente);
+        $scope.categorias = datos.categorias;
+        $scope.unidades = datos.unidades;
+        $scope.marcas = datos.marcas;
+        $scope.proveedores = datos.proveedores;
+
+        //console.log($scope.newProd);
+        if ($scope.newProd.nombre != undefined){
+
+            $scope.flagEditar=true;
+
+            $scope.categorias.forEach(function(categoria){
+                if(categoria.nombre == $scope.newProd.categoria){
+                    $scope.newProd.categoria = categoria;
+                }
+            });
+            $scope.unidades.forEach(function(unidad){
+                if(unidad.plural == $scope.newProd.unidad.plural){
+                    $scope.newProd.unidad = unidad;
+                }
+            });
+            $scope.marcas.forEach(function(marca){
+                if(marca.nombre == $scope.newProd.marca){
+                    $scope.newProd.marca = marca;
+                }
+            });
+            $scope.proveedores.forEach(function(proveedor){
+                if(proveedor.nombre == $scope.newProd.proveedor){
+                    $scope.newProd.proveedor = proveedor;
+                }
+            });
+        }
+
+    }).error(function(error){
+        console.log(error);
+    });  
+*/
+
+
+    
+    $scope.cargarNuevo = function(){
+       
+
+        $uibModalInstance.dismiss('cancel');
+        if($scope.flagNuevaMarca){
+            $scope.newProd.marca = $scope.newProd.marcaNueva;
+        } else {
+            $scope.newProd.marca = $scope.newProd.marca.id;
+        }
+        console.log($scope.flagEditar);
+        if ($scope.flagEditar){
+/*
+            $http.put('http://45.55.160.227/api/admin/producto/'+$scope.newProd.id,{
+                nombre:$scope.newProd.nombre,
+                categoria:$scope.newProd.categoria.id,
+                valor:$scope.newProd.valor,
+                costo:$scope.newProd.costo,
+                descripcion:$scope.newProd.descripcion,
+                proveedor:$scope.newProd.proveedor.id,
+                marca:$scope.newProd.marca,
+                unidad:$scope.newProd.unidad.id,
+                color:$scope.newProd.srm,
+                ibu:$scope.newProd.ibu,
+                origen:$scope.newProd.origen,
+                alcohol:$scope.newProd.alcohol,
+                flagMarca:$scope.flagNuevaMarca
+            }).success(function(response){    
+                $scope.productos.forEach(function(producto,index,arreglo){
+                    if(producto.id == response.data.id){
+                        arreglo[index] = response.data;
+                    }
+                });
+                SweetAlert.swal("Producto Editado", "El producto fue editado", "success");
+            }).error(function(error){
+             SweetAlert.swal("Error", error.message, "error");
+             console.log(error);
+         });
+*/
+        } else{
+/*
+            $http.post('http://45.55.160.227/api/admin/producto', {
+
+                nombre:$scope.newProd.nombre,
+                categoria:$scope.newProd.categoria.id,
+                valor:$scope.newProd.valor,
+                costo:$scope.newProd.costo,
+                descripcion:$scope.newProd.descripcion,
+                proveedor:$scope.newProd.proveedor.id,
+                marca:$scope.newProd.marca,
+                unidad:$scope.newProd.unidad.id,
+                color:$scope.newProd.srm,
+                ibu:$scope.newProd.ibu,
+                origen:$scope.newProd.origen,
+                alcohol:$scope.newProd.alcohol,
+                flagMarca:$scope.flagNuevaMarca
+            }).success(function(response) {
+                $scope.productos.push(response.data);
+
+                SweetAlert.swal("Producto Agregado", "El producto fue agregado", "success");
+            }).error(function(error){
+             SweetAlert.swal("Error", error.message, "error");
+             console.log(error);
+         });
+         */
+        }
+
+
+    };
+
+    /* 3D select marca */
+    
+    $scope.doOcultar=function(){
+        $scope.tresdeStartVisibleClass = 'tresde-up-first-visible ';
+        $scope.tresdeStartHiddenClass = 'tresde-up-second-hidden ';
+        $scope.flagNuevaMarca=false;
+    };
+    
+    $scope.doMostrar=function(){
+        $scope.tresdeStartVisibleClass = 'tresde-up-first-hidden ';
+        $scope.tresdeStartHiddenClass = 'tresde-up-second-visible ';
+        $scope.flagNuevaMarca=true;
+    };
+    
+    
+}
 function crearProductoCtrl ($http,$scope,$log,$uibModalInstance,SweetAlert,productos,productoEdit){
 
     $scope.tSpin = {

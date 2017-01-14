@@ -1,0 +1,60 @@
+<div class="modal-body">
+    <div class="">
+        <div class="panel-body">
+            <row>       
+                <fieldset>
+                    <h3 class="m-t-none m-b">Devolucion Alquiler</h3>
+                    <div class="col-sm-12 ">
+                        <p>Por Nombre o Apellido o DNI</p>
+                        <form role="form">
+                            <div class="form-group" ng-if="!clienteElegido">
+                                <div><input type="text" ng-model="query"  placeholder="Buscar" class="form-control"></div>
+                                <table class="table table-hover" >
+                                    <tbody ng-if="query.length > 3">
+                                        <tr class="cursor-pointer"  
+                                        ng-repeat="cliente in clientesFiltrados((clientes | 
+                                        filter: query | 
+                                        orderBy: 'nombre'),false) ">
+                                        <td> <input type="radio"
+                                            name="clientesRadio"
+                                            ng-model="seleccion.clienteSeleccionado" 
+                                            ng-value="{{cliente.id}}"
+                                            />
+                                        </td>
+                                        <td ng-click="seleccionarNuevo(cliente)" >{{cliente.nombre}} {{cliente.apellido}}</td>
+                                        <td>{{cliente.dni}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>             
+                    </form>
+                </div>
+            </fieldset>
+        </row>
+        <div class="row">
+        <h5 ng-if="clienteElegido">Cliente: {{seleccion.clienteSeleccionado.nombre}} {{seleccion.clienteSeleccionado.apellido}}</h5>
+            <table class="table table-hover" >
+                <tbody ng-if="clienteElegido">
+                    <tr class="cursor-pointer"  
+                    ng-repeat="alquiler in alquileresCliente ">
+                    <td> <input type="checkbox"
+                        ng-model="alquiler.chk"
+                        ng-change="chkChange(alquileresCliente)" 
+                        />
+                    </td>
+                    <td>{{alquiler.nombre}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pull-right">
+        <button type="button" class="btn btn-white" ng-click="cancel()">Cerrar</button>
+        <button ng-class="{'btn-outline btn-default':!okParaGuardar, 'btn-primary': okParaGuardar}" type="button" class="btn  " ng-click="ok()" ng-disabled="!okParaGuardar">Guardar</button>
+    </div>
+
+</div>
+
+
+
+</div>

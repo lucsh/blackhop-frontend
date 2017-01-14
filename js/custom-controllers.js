@@ -496,6 +496,25 @@ vm.login2 = function() {
                         }
                     }
                 });
+    }    
+
+    $scope.devolverAlqulier=function(){
+
+        $scope.bajar='';                
+
+        var modalInstance = $uibModal.open({
+            templateUrl: 'views/modal-devolucion_alquiler.html',
+            controller: devolucionAlquilerCtrl, 
+                    //controler en controllers.js, no termino de entender porque no lo puedo armar como el resto y si o si tengo que poner una funcion                        
+                    windowClass: "animated fadeIn",
+                    scope:$scope,
+                    SweetAlert:SweetAlert,
+                    resolve: {
+                        clientes: function () {
+                            return $scope.clientes;
+                        }
+                    }
+                });
     }
 
     $scope.terminarSesionCaja=function(){
@@ -1550,7 +1569,6 @@ $scope.modal={
                 });
         },
         crear : function (){
-            console.log();
             var modalInstance = $uibModal.open({
                 templateUrl: 'views/crear_producto.html',
                 controller: crearProductoCtrl, 
@@ -2079,7 +2097,7 @@ $scope.modal={
         $scope.modal={
             crear : function (){
                 var modalInstance = $uibModal.open({
-                    templateUrl: 'views/crear_alquilable.html',
+                    templateUrl: 'views/modal-crear_alquilable.html',
                     controller: crearAlquilableCtrl, 
                     //controler en controllers.js, no termino de entender porque no lo puedo armar como el resto y si o si tengo que poner una funcion                        
                     windowClass: "animated fadeIn",
