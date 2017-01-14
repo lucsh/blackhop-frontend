@@ -1625,6 +1625,8 @@ $scope.modal={
         /**
          * alquileres 
          */
+
+         //ToDO traer listado de alquileres
          $scope.alquileres = [
          {
             id: '1',
@@ -1974,7 +1976,7 @@ $scope.modal={
 .controller('alquilablesCtrl', ['$scope','$log','$uibModal','$filter','DTOptionsBuilder','DTColumnDefBuilder','SweetAlert', function($scope,$log,$uibModal,$filter,DTOptionsBuilder,DTColumnDefBuilder,SweetAlert){
 
         //recibo 0 para alquilado y 1 para disponible
-        
+        //ToDo traer listado alquilables
         $scope.alquilables =[
         {
             identificador:1,

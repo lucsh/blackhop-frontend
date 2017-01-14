@@ -78,24 +78,28 @@ angular
                     //ToDo : Preguntar si deudor y mostrar modal para que el cajero decida
                     //        (Obliga a seleccionar cliente previo a elejir el Alquilable)
 
-                // Mostrar modal con calendario
-                 var modalInstance = $uibModal.open({//LUCAS LUCAS
-                    templateUrl: 'views/modal-calendario_alquiler.html',
-                    controller: calendarioAlquiler, 
-                    //controler en controllers.js, no termino de entender porque no lo puedo armar como el resto y si o si tengo que poner una funcion                        
-                    windowClass: "animated fadeIn",
-                    size: "calendario",
-                    //scope:$scope,
-                    SweetAlert:SweetAlert,
-                    /*
-                    resolve:{
-                        gastoNuevo:function () {
-                            return '';
+                        // Mostrar modal con calendario
+                         var modalInstance = $uibModal.open({//ToDo preparar el nuevo "producto"
+                            templateUrl: 'views/modal-calendario_alquiler.html',
+                            controller: calendarioAlquiler, 
+                            //controler en controllers.js, no termino de entender porque no lo puedo armar como el resto y si o si tengo que poner una funcion                        
+                            windowClass: "animated fadeIn",
+                            size: "calendario",
+                            //scope:$scope,
+                            SweetAlert:SweetAlert,
+                            /*
+                            resolve:{
+                                gastoNuevo:function () {
+                                    return '';
+                                }
+                            }
+                            */
+                        }); 
+                        //cuando vuelve, darle forma al $scope.producto
+                        modalInstance.result.then(function () {
+
                         }
-                    }
-                    */
-                });
-                    
+                        
                 }else {
                     $scope.addProduct();
                 }

@@ -80,7 +80,7 @@ $scope.alquiler={}
             }
     }
     $scope.guardarAlquiler = function(){
-
+            $uibModalInstance.close();//devolver el alquilable y las fechas
     }
 
     $scope.calculateClassAnterior = function(alquilable,dia){
