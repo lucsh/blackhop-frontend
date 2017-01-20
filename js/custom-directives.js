@@ -503,6 +503,8 @@ angular
                     $scope.resumen.display = '';
                     if($scope.producto.stock>0 && $scope.$parent.cuponSeleccionado.litros>$scope.resumen.totalLitros){//agregar verificar cantidad de litros cupon
                         console.log("agreganbdo")
+                        //verificar que no lo supere por +1l)
+
                         if($scope.resumen.productos.length==0){
                             $scope.resumen.total+=Number($scope.valorProducto);                        
                             $scope.resumen.numeroProductos=0;
@@ -529,9 +531,22 @@ angular
                                 //console.log(orden);
                                 if(producto.identificador==$scope.producto.id){
                                     //console.info("existe producto");
+
                                     esta = 1;
-                                    producto.cantidad++;
-                                    $scope.producto.stock--;
+
+                                    /*** nuevo ***/
+
+                                    var diffLitros = $scope.$parent.cuponSeleccionado.litros-$scope.resumen.totalLitros;
+                                    
+
+                                    if(diffLitros<1){
+                                        producto.cantidad = Number(producto.cantidad) + diffLitros;//aca
+                                        $scope.producto.stock = Number($scope.producto.stock) - diffLitros;//y aca
+                                    }else{
+                                        producto.cantidad++;
+                                        $scope.producto.stock--; 
+                                    }
+
                                     producto.valorTotal=producto.valor * producto.cantidad;
                                 }                        
                             });
