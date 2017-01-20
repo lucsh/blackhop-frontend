@@ -8582,13 +8582,48 @@ body.md-skin {
     transition: transform 1s cubic-bezier(0.26, 0.86, 0.44, 0.985) 0s, opacity 0.3s cubic-bezier(0.26, 0.86, 0.44, 0.985) 0s;
 
 }
+
+.canillas-left-container{
+    -webkit-perspective: 100px;
+    perspective: 100px;
+    position: relative; 
+    display: block;
+
+}
+
+.canillas-left-right:hover {
+    opacity: 1;    
+    -webkit-transform: rotate3d(0, 1, 0,0deg) translate3d(50px,0, 2px);
+    transform: rotate3d(0, 1, 0,0deg) translate3d(50px,0, 2px);
+    -webkit-transition: -webkit-transform 0.7s cubic-bezier(0.26, 0.86, 0.44, 0.985);
+    transition: transform 1s cubic-bezier(0.26, 0.86, 0.44, 0.985);
+}
+
+.canillas-left-right  {
+    cursor: default;
+    width: 50px;
+    z-index: 9999;
+    position: fixed;
+    left: -80px;
+    top: 20px;
+    opacity: 1;
+    display: inline;
+    -webkit-transform: rotate3d(0, 1, 0,-2deg) translate3d(-115px,0, 0);
+    transform: rotate3d(0, 1, 0,-2deg) translate3d(-115px,0, 0);
+    -webkit-transition: -webkit-transform 1s cubic-bezier(0.26, 0.86, 0.44, 0.985) 0s, opacity 0.3s cubic-bezier(0.26, 0.86, 0.44, 0.985) 0s;
+    transition: transform 1s cubic-bezier(0.26, 0.86, 0.44, 0.985) 0s, opacity 0.3s cubic-bezier(0.26, 0.86, 0.44, 0.985) 0s;
+
+}
+
+
+
 .canilla-pos{
     display: inline-flex;    
     background: transparent;
     white-space: nowrap;
 }
-.canilla-pos::after{
-    content: ' a';
+.canilla-pos::before{
+    content: 'a';
     line-height: 30px;
     background: transparent;
     -webkit-box-shadow:none;
@@ -8601,12 +8636,17 @@ body.md-skin {
     margin-bottom: 0;
     width: 168px;
 }
-
+.canilla-pos .barra-birra {
+transform: rotate(180deg);
+float: right;
+}
 .canilla-pos .canilla-color {
     width: 20px;
     height: 24px;
-    border-bottom-left-radius: 3px;
-    border-top-left-radius: 3px;
+    /*border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;*/
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 3px;
 }
 .canilla-pos .canilla-numero{
     color: whitesmoke;
@@ -8619,10 +8659,15 @@ body.md-skin {
 .canilla-pos .canilla-nombre{
     background: white;
     font-size: 11px;
-    line-height: 17px;
-    text-align: left;
     width: 200px;
-    padding-left: 2px;
+    line-height: 17px;
+
+    /*text-align: left;*/
+    text-align: right;
+
+    /*padding-left: 2px;*/
+    padding-right: 10px;
+
     -webkit-box-shadow: 0px 6px 5px -5px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 6px 5px -5px rgba(0,0,0,0.75);
     box-shadow: 0px 6px 5px -5px rgba(0,0,0,0.75);

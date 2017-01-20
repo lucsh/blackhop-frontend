@@ -59,12 +59,14 @@
             </div>
         </div>
 
-        <div class="canillas-right-container">
-            <div class="canillas-right-left">
+        <div class="canillas-left-container">
+            <div class="canillas-left-right">
                 <div ng-repeat="canilla in canillas">
-                    <span class="canilla-pos"><div class="canilla-color" style="background-color:{{canilla.productoColor || '#aaa'}};"><div class="canilla-numero">{{canilla.numero|number}}</div></div><div class="canilla-nombre">{{canilla.productoNombre}} - {{canilla.productoMarca}}
+                    <span class="canilla-pos"><div class="canilla-nombre">{{canilla.productoMarca}} - {{canilla.productoNombre}}
                         <br><uib-progressbar class="barra-birra" value="(canilla.productoStock/300*100)" type="{{canilla.productoStock<10 && 'danger' || canilla.productoStock<50 && 'warning' || ''}}"></uib-progressbar>    
-                    </div></span>
+                    </div><div class="canilla-color" style="background-color:{{canilla.productoColor || '#aaa'}};"><div class="canilla-numero">{{canilla.numero|number}}</div></div>
+
+                    </span>
                 </div>    
 
 
