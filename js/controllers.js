@@ -1843,6 +1843,7 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
             idCliente:$scope.clienteSeleccionado.id,
             monto: $scope.resumen.total,
             itemsVenta: JSON.stringify(itemsVenta),
+            pagoTarjeta: $scope.flagPagoTarjeta,
         }).success(function(response) {
             cupon.codigo=response.codigo;
             if(cupon.codigo!="OK"){ //no genero cupon porque no es necesario (ie. vendí antares)
