@@ -3081,22 +3081,16 @@ function canillaCambiarProductoCtrl ($http,$scope,$log,$uibModalInstance,idCanil
 
 
         $scope.guardar = function (idPS){
+        console.log(idPS)
          $uibModalInstance.close(idPS);  
 
      }
 
 
      $scope.vaciar = function (){
-        $scope.$parent.canillas[idCanilla].idInventario='';
-        $scope.$parent.canillas[idCanilla].productoMarca='';
-        $scope.$parent.canillas[idCanilla].productoNombre='';
-        $scope.$parent.canillas[idCanilla].productoColor='';
-        $scope.$parent.canillas[idCanilla].productoStock='';
-        $scope.$parent.canillas[idCanilla].productoIbu='';
-        $scope.$parent.canillas[idCanilla].productoAlcohol='';
-        $uibModalInstance.close();
-                //cambiar a put
-            }
+        $scope.guardar(undefined);
+        $uibModalInstance.close();  
+        }
 
 
 
