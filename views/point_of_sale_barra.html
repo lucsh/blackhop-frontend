@@ -39,9 +39,9 @@
                 <div class="filtro-right-left">
 
                     <div  ng-repeat="marca in marcasCervezas">
-                        <button class="btn btn-lg" ng-class="{'btn-primary text-primary': filtros.query == marca,'btn-white text-muted': filtros.query != marca }" type="button" ng-click="filtros.query=marca">{{ marca | limitTo:2}}</button>
+                        <button class="btn btn-lg" ng-class="{'btn-primary text-white': filtros.query == marca,'btn-white text-muted': filtros.query != marca }" type="button" ng-click="filtros.query=marca">{{ marca | limitTo:2}}</button>
                     </div>
-                    <button class="btn  btn-lg" type="button" ng-class="{'btn-primary text-primary': filtros.query == '','btn-white ': filtros.query != '' }" ng-click="filtros.query=''">
+                    <button class="btn  btn-lg" type="button" ng-class="{'btn-primary text-white': filtros.query == '','btn-white ': filtros.query != '' }" ng-click="filtros.query=''">
                        * 
                    </button>
                </div>
