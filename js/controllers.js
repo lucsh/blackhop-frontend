@@ -1764,6 +1764,7 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
 
     $scope.resumen=resumen;
     $scope.clienteSeleccionado=clienteSeleccionado;
+    $scope.flagPagoTarjeta = false;
     
     console.log($scope);
 
@@ -1775,6 +1776,13 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
             $scope.resumen.paga = $scope.resumen.paga.substring(0, $scope.resumen.paga.length-1);
             $scope.resumen.paga = Number($scope.resumen.paga);
         }
+        
+    }
+    $scope.pagoTarjeta= function(){
+
+        $scope.resumen.paga=$scope.resumen.total;
+
+        $scope.flagPagoTarjeta = true; //ToDo Laravel More
         
     }
     
@@ -1802,7 +1810,7 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
         $uibModalInstance.dismiss('cancel');
     };
     
-    $scope.ok = function () {        
+    $scope.ok = function () {    // ToDo, mandarle el flag a Laravel para que sepa que la venta fue con tarjeta     
 
         $uibModalInstance.dismiss('ventaOK');
         
@@ -1867,7 +1875,7 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
 
             };   
         }
-function asdasdasdasdasd ($scope,$log,$uibModalInstance,alquilables,alquilableEdit){
+function asdasdasdasdasd ($scope,$log,$uibModalInstance,alquilables,alquilableEdit){ // ToDo Borrar esto despues de hacer los alquileres
     $scope.alquilables=alquilables;
     $scope.alquilableEdit=alquilableEdit;
     

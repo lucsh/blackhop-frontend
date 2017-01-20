@@ -27,13 +27,16 @@
                                         <button class="btn btn-white btn-lg" type="button" ng-click="selectBtn(8)">8</button>
                                         <button class="btn btn-white btn-lg" type="button" ng-click="selectBtn(9)">9</button>
                                         <button class="btn btn-white btn-lg btn-70 btn-text-mutted" type="button" ng-click="resumen.paga=resumen.paga+500"><small>+</small>500</i></button>
-                                </div>
-                                <div class="row nopadding">
-                                    <button class="btn btn-white btn-lg" type="button" ng-click="resumen.paga=0">C</button>
-                                    <button class="btn btn-white btn-lg" type="button" ng-click="selectBtn(0)">0</button>
-                                    <button class="btn btn-white btn-lg" type="button" ng-click="">&nbsp;,</button>
-                                    <button class="btn btn-white btn-lg btn-70 " type="button" ng-click="borrarPaga()"><i class="fa fa-caret-square-o-left"></i></button>
-                                </div>
+                                    </div>
+                                    <div class="row nopadding">
+                                        <button class="btn btn-white btn-lg" type="button" ng-click="resumen.paga=0">C</button>
+                                        <button class="btn btn-white btn-lg" type="button" ng-click="selectBtn(0)">0</button>
+                                        <button class="btn btn-white btn-lg" type="button" ng-click="">&nbsp;,</button>
+                                        <button class="btn btn-white btn-lg btn-70 " type="button" ng-click="borrarPaga()"><i class="fa fa-caret-square-o-left"></i></button>
+                                    </div>
+                            </div>
+                            <div style="margin-top: 10px;" class="row">
+                                <button class="btn btn-white btn-block" type="button" ng-click="pagoTarjeta()"><i class="fa fa-credit-card"></i> Pago con tarjeta</button>
                             </div>
                         </div>
                     </div>
