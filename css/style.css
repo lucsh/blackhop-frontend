@@ -8583,36 +8583,44 @@ body.md-skin {
 
 }
 
-.canillas-left-container{
+.canillas-bottom-container {
     -webkit-perspective: 100px;
     perspective: 100px;
-    position: relative; 
+    position: fixed;
     display: block;
-
+    height: 170px;
+    width: 100%;
+    overflow: hidden;
+    left: -20px;
 }
 
-.canillas-left-right:hover {
-    opacity: 1;    
-    -webkit-transform: rotate3d(0, 1, 0,0deg) translate3d(50px,0, 2px);
-    transform: rotate3d(0, 1, 0,0deg) translate3d(50px,0, 2px);
+@media screen and (max-height: 701px) {
+
+    .canillas-bottom-container {bottom: -639px}
+}
+@media screen and (min-height: 701px) {
+    .canillas-bottom-container {bottom: -749px}
+}
+
+.canillas-bottom-top:hover {
+    opacity: 1;
+    -webkit-transform: rotate3d(1, 0, 0,0) rotate(-90deg) translate3d(-10px,0, 1px);
+    transform: rotate3d(1, 0, 0,0) rotate(-90deg) translate3d(-10px,0, 1px);
     -webkit-transition: -webkit-transform 0.7s cubic-bezier(0.26, 0.86, 0.44, 0.985);
     transition: transform 1s cubic-bezier(0.26, 0.86, 0.44, 0.985);
 }
 
-.canillas-left-right  {
+.canillas-bottom-top {
     cursor: default;
-    width: 50px;
     z-index: 9999;
     position: fixed;
-    left: -80px;
-    top: 20px;
+    left: 40px;
     opacity: 1;
     display: inline;
-    -webkit-transform: rotate3d(0, 1, 0,-2deg) translate3d(-115px,0, 0);
-    transform: rotate3d(0, 1, 0,-2deg) translate3d(-115px,0, 0);
+    -webkit-transform: rotate3d(3, 0, 1, -1deg) rotate(-90deg) translate3d(-100px,-30px, 0);
+    transform: rotate3d(3, 0, 1, -1deg) rotate(-90deg) translate3d(-100px,-30px, 0);
     -webkit-transition: -webkit-transform 1s cubic-bezier(0.26, 0.86, 0.44, 0.985) 0s, opacity 0.3s cubic-bezier(0.26, 0.86, 0.44, 0.985) 0s;
     transition: transform 1s cubic-bezier(0.26, 0.86, 0.44, 0.985) 0s, opacity 0.3s cubic-bezier(0.26, 0.86, 0.44, 0.985) 0s;
-
 }
 
 
@@ -8621,6 +8629,8 @@ body.md-skin {
     display: inline-flex;    
     background: transparent;
     white-space: nowrap;
+    /**/
+    transform: rotate(30deg);
 }
 .canilla-pos::before{
     content: 'a';

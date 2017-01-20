@@ -59,8 +59,8 @@
             </div>
         </div>
 
-        <div class="canillas-left-container">
-            <div class="canillas-left-right">
+        <div class="canillas-bottom-container">
+            <div class="canillas-bottom-top">
                 <div ng-repeat="canilla in canillas">
                     <span class="canilla-pos"><div class="canilla-nombre">{{canilla.productoMarca}} - {{canilla.productoNombre}}
                         <br><uib-progressbar class="barra-birra" value="(canilla.productoStock/300*100)" type="{{canilla.productoStock<10 && 'danger' || canilla.productoStock<50 && 'warning' || ''}}"></uib-progressbar>    
