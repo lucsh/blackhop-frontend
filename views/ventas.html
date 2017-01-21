@@ -26,6 +26,7 @@
                             <th>Cliente</th>
                             <th>Fecha</th>
                             <th>Monto</th>
+                            <th>Forma de Pago</th>
                             <th>Ubicacion</th>
                         </tr>
                         </thead>
@@ -35,6 +36,7 @@
                             <td>{{ venta.cliente }}</td>
                             <td>{{ venta.fecha }}</td>
                             <td>{{ venta.monto | currency:"$ "}}</td>
+                            <td>{{ venta.tipopago }}</td>
                             <td>{{ venta.ubicacion }}
                             <div class="tresde-right-container" > 
                                     <div class="{{isHover}}">
