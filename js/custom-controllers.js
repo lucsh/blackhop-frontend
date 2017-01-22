@@ -390,7 +390,7 @@ vm.login2 = function() {
         console.log(error);
     }) 
 
-
+    $scope.alturaVentana = document.getElementById('page-top').clientHeight;
 
     $scope.ventaProductos =[];
 

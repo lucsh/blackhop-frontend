@@ -8587,24 +8587,18 @@ body.md-skin {
     perspective: 100px;
     position: fixed;
     display: block;
-    height: 170px;
+    height: 160px;
     width: 100%;
     overflow: hidden;
-    left: -20px;
-}
-
-@media screen and (max-height: 701px) {
-
-    .canillas-bottom-container {bottom: -639px}
-}
-@media screen and (min-height: 701px) {
-    .canillas-bottom-container {bottom: -749px}
+    left: -30px;
+    bottom: 0px;
+    /*transform: translate(-80px,-190px);*/
 }
 
 .canillas-bottom-top:hover {
     opacity: 1;
-    -webkit-transform: rotate3d(1, 0, 0,0) rotate(-90deg) translate3d(-10px,0, 1px);
-    transform: rotate3d(1, 0, 0,0) rotate(-90deg) translate3d(-10px,0, 1px);
+    -webkit-transform: rotate3d(1, 0, 0,0) rotate(-90deg) translate3d(105px,160px, 0px);
+    transform: rotate3d(1, 0, 0,0) rotate(-90deg) translate3d(105px,160px, 0px);
     -webkit-transition: -webkit-transform 0.7s cubic-bezier(0.26, 0.86, 0.44, 0.985);
     transition: transform 1s cubic-bezier(0.26, 0.86, 0.44, 0.985);
 }
@@ -8612,12 +8606,11 @@ body.md-skin {
 .canillas-bottom-top {
     cursor: default;
     z-index: 9999;
-    position: fixed;
-    left: 40px;
+    position: fixed;    
     opacity: 1;
     display: inline;
-    -webkit-transform: rotate3d(3, 0, 1, -1deg) rotate(-90deg) translate3d(-100px,-30px, 0);
-    transform: rotate3d(3, 0, 1, -1deg) rotate(-90deg) translate3d(-100px,-30px, 0);
+    -webkit-transform: rotate3d(3, 0, 1, -1deg) rotate(-90deg) translate3d(10px,120px, -10px);
+    transform: rotate3d(3, 0, 1, -1deg) rotate(-90deg) translate3d(10px,120px, -10px);
     -webkit-transition: -webkit-transform 1s cubic-bezier(0.26, 0.86, 0.44, 0.985) 0s, opacity 0.3s cubic-bezier(0.26, 0.86, 0.44, 0.985) 0s;
     transition: transform 1s cubic-bezier(0.26, 0.86, 0.44, 0.985) 0s, opacity 0.3s cubic-bezier(0.26, 0.86, 0.44, 0.985) 0s;
 }
