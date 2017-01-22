@@ -13,7 +13,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
     IdleProvider.timeout(120); // in seconds
     $authProvider.withCredentials = false;
     //$authProvider.httpInterceptor = false;
-    $authProvider.loginUrl = 'http://45.55.160.227/api/v1/authenticate';
+    $authProvider.loginUrl = 'http://blackhop.api.dessin.com.ar/api/v1/authenticate';
     $urlRouterProvider.otherwise("login");
 
     $ocLazyLoadProvider.config({

@@ -8,7 +8,7 @@ angular
     var vm = this;
     vm.ubicacion={};
 
-    $http.get('http://45.55.160.227/api/info/ubicacion').success(function(ubicaciones){    
+    $http.get('http://blackhop.api.dessin.com.ar/api/info/ubicacion').success(function(ubicaciones){    
         console.log(ubicaciones);
         vm.ubicaciones = ubicaciones.data;
     }).error(function(error){
@@ -75,7 +75,7 @@ vm.saLoggout = function(id,nombre){
                     }
                 }
                 */
-                $http.get('http://45.55.160.227/api/v1/authenticate/full?sesion='+id).success(function(response){       
+                $http.get('http://blackhop.api.dessin.com.ar/api/v1/authenticate/full?sesion='+id).success(function(response){       
                         SweetAlert.swal("¡Hecho!", "La cuenta de "+ nombre + " fue cerrada", "success");
                         vm.login();
                     })
@@ -160,7 +160,7 @@ vm.login2 = function() {
 
                     //Hace un get con el Token ya seteado para retornar el nombre del usuario, el rol y crear la sesion en
                     // caso de requerirlo (NO ADMIN)
-                    $http.get('http://45.55.160.227/api/v1/authenticate/user?modo='+vm.modo+'&ubicacion='+vm.ubicacion.selected.id+'').success(function(response){       
+                    $http.get('http://blackhop.api.dessin.com.ar/api/v1/authenticate/user?modo='+vm.modo+'&ubicacion='+vm.ubicacion.selected.id+'').success(function(response){       
 
 
                         if(response.modo != 'limite'){
@@ -214,7 +214,7 @@ vm.login2 = function() {
 
 
 
-            $http.get('http://45.55.160.227/api/pos/caja/canilla').success(function(canillas){    
+            $http.get('http://blackhop.api.dessin.com.ar/api/pos/caja/canilla').success(function(canillas){    
                 console.log(canillas);
                 $scope.canillas = canillas.data;
             }).error(function(error){
@@ -228,7 +228,7 @@ vm.login2 = function() {
 
 
         
-        $http.get('http://45.55.160.227/api/pos/caja/producto').success(function(productos){    
+        $http.get('http://blackhop.api.dessin.com.ar/api/pos/caja/producto').success(function(productos){    
             console.log(productos);
             $scope.ventaProductos = productos.data;
             for(var i = 0; i < $scope.ventaProductos.length; i++){
@@ -251,7 +251,7 @@ vm.login2 = function() {
         
     
         
-        $http.get('http://45.55.160.227/api/pos/caja/cliente').success(function(clientes){    
+        $http.get('http://blackhop.api.dessin.com.ar/api/pos/caja/cliente').success(function(clientes){    
             console.log(clientes);
             $scope.clientes = clientes.data;
         }).error(function(error){

@@ -221,7 +221,7 @@
             /*
             * Chequeo si el Token es valido, en caso de que no limpio el Local Storage
             */
-            $http.get('http://45.55.160.227/api/v1/authenticate/userservice').success(function(response){       
+            $http.get('http://blackhop.api.dessin.com.ar/api/v1/authenticate/userservice').success(function(response){       
                 console.log('########################');
                 console.log(response.usuarioName);
                 console.log(response.usuarioRole);
@@ -303,7 +303,7 @@
             
         }else{
 
-            $http.get('http://45.55.160.227/api/v1/authenticate/userservice').success(function(response){       
+            $http.get('http://blackhop.api.dessin.com.ar/api/v1/authenticate/userservice').success(function(response){       
 
                 var resUser = response.usuarioName;
                 var resRole = response.usuarioRole;
