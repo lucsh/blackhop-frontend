@@ -8518,8 +8518,7 @@ body.md-skin {
     color: #ffffff;
 }
 
-.barra-sesion .sesion-montoini,
-.barra-sesion .sesion-encaja{
+.barra-sesion .sesion-montoini{
     margin: 0 3px;
 }
 
@@ -8541,9 +8540,9 @@ body.md-skin {
 }
 
 .barra-sesion .sesion-encaja{
-    border: 3px solid #2f4050;    
-    background-color: white;
-    color: #2f4050;
+    /*border: 3px solid #2f4050;*/   
+    background-color: #2f4050;
+    color: #ffffff;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
 }

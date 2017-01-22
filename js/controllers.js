@@ -1345,6 +1345,7 @@ function crearGastoCtrl ($scope,$log,$uibModalInstance,gastos,gastoEdit){
             $scope.sesion.montoIni=response.inicial;
             $scope.sesion.ventasTotales=response.total;
             $scope.sesion.enCaja=response.caja;
+            $scope.sesion.tarjeta=response.tarjeta;
 
         }).error(function(error){
             console.log(error);

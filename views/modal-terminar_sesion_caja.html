@@ -19,9 +19,13 @@
                             <small class="pull-left m-l-sm text-white">Ventas totales:</small><br>
                             <h2 class="nopadding" >{{sesion.ventasTotales|currency:"$ "}}</h2>
                         </div>
-                        <div class="sesion-encaja">
+                        <div class="sesion-montoini">
                             <small class="pull-left m-l-sm text-inspinia">Dinero en Caja:</small><br>
                             <h2 class="nopadding" >{{ (sesion.enCaja) |currency:"$ "}}</h2>
+                        </div>
+                        <div class="sesion-encaja">
+                            <small class="pull-left m-l-sm text-white">Ventas con Tarjeta:</small><br>
+                            <h2 class="nopadding" >{{ (sesion.tarjeta) |currency:"$ "}}</h2>
                         </div>
                     </div> 
                 </div>
