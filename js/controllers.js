@@ -81,11 +81,20 @@ $scope.alquiler={}
         console.log (barril)
 
             if($scope.alquiler.desde){
+                
                 $scope.barrilSeleccionado = barril;
-                $scope.barrilSeleccionado.desde = $scope.alquiler.desde
-                $scope.barrilSeleccionado.desdeDiaId = $scope.alquiler.desdeDiaId
-                $scope.barrilSeleccionado.hasta = $scope.alquiler.hasta
-                $scope.barrilSeleccionado.hastaDiaId = $scope.alquiler.hastaDiaId
+
+                $scope.barrilSeleccionado.desdeDiaMysql = $scope.alquilables[0].dias[$scope.alquiler.desdeDiaId].fechaMysql;
+                $scope.barrilSeleccionado.hastaDiaMysql = $scope.alquilables[0].dias[$scope.alquiler.hastaDiaId].fechaMysql;
+
+
+
+                $scope.barrilSeleccionado.desde = $scope.alquiler.desde;
+                $scope.barrilSeleccionado.desdeDiaId = $scope.alquiler.desdeDiaId;
+                
+                $scope.barrilSeleccionado.hasta = $scope.alquiler.hasta;
+                $scope.barrilSeleccionado.hastaDiaId = $scope.alquiler.hastaDiaId;
+                $scope.barrilSeleccionado.valor = 1350;
 
                 //LIMPIO LAS CLASES DE LOS OTROS BARRILES, EN CASO QUE HAYA CAMBIADO LA SELECCION
                 for (var i = 0, len = $scope.alquilables.length; i < len; i++) {
@@ -112,7 +121,8 @@ $scope.alquiler={}
         function(inputValue){
             console.log("inputValue")
             console.log(inputValue)
-            $uibModalInstance.close();//devolver el alquilable y las fechas y los estilos                    
+            $scope.barrilSeleccionado.descripcion = inputValue;
+            $uibModalInstance.close($scope.barrilSeleccionado);//devolver el alquilable y las fechas y los estilos                    
         });
 
     }
@@ -806,10 +816,12 @@ $scope.alquiler={}
         for (var i = 0; i <  $scope.alquilables.length; i++) {  
             $scope.alquilables[i].dias[0].fecha =primerDiaDeEstaSamana.clone();
             $scope.alquilables[i].dias[0].diaFecha=primerDiaDeEstaSamana.clone().locale('es').format('DD');
+            $scope.alquilables[i].dias[0].fechaMysql=primerDiaDeEstaSamana.clone().locale('es').format('YYYY-MM-DD');
 
             for ( j = 1; j <  $scope.alquilables[i].dias.length; j++) {
                 $scope.alquilables[i].dias[j].fecha=$scope.alquilables[i].dias[j-1].fecha.clone().add(1, 'days');
                 $scope.alquilables[i].dias[j].diaFecha=$scope.alquilables[i].dias[j-1].fecha.clone().add(1, 'days').locale('es').format('DD');
+                $scope.alquilables[i].dias[j].fechaMysql=$scope.alquilables[i].dias[j-1].fecha.clone().add(1, 'days').locale('es').format('YYYY-MM-DD');
             }
         }
         /*
@@ -1190,7 +1202,7 @@ function devolucionAlquilerCtrl ($scope,$log,$uibModalInstance,SweetAlert,client
 
         }
         $scope.ok = function () {
-                    $uibModalInstance.close();
+                    $uibModalInstance.close($scope.seleccion.clienteSeleccionado);
 
 /*
             
@@ -1761,7 +1773,7 @@ function wizardProductoInvantarioCtrl ($http,$scope,$log,$uibModalInstance,Sweet
 }
 
 
-function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,WizardHandler,clienteSeleccionado,resumen){
+function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,WizardHandler,clienteSeleccionado,resumen,flagDevAlq){
 
     $scope.resumen=resumen;
     $scope.clienteSeleccionado=clienteSeleccionado;
@@ -1811,7 +1823,7 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
         $uibModalInstance.dismiss('cancel');
     };
     
-    $scope.ok = function () {    // ToDo, mandarle el flag a Laravel para que sepa que la venta fue con tarjeta     
+    $scope.ok = function () {
 
         $uibModalInstance.dismiss('ventaOK');
         
@@ -1820,16 +1832,25 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
         var itemsVenta=[];
 
         //console.log(JSON.stringify($scope.resumen));
+        console.log($scope.resumen.productos);
         for (var i=0;i<$scope.resumen.productos.length;i++){
 
             var item={};
+            if($scope.resumen.productos[i].productoReal.categoria == 'Alquiler'){
+                item.idProducto = $scope.resumen.productos[i].identificador;
+                item.cantidad = 1;
+                item.costo = $scope.resumen.productos[i].valor;
+                item.descripcion = $scope.resumen.productos[i].productoVirtual.descripcion;
+                item.diaDesde = $scope.resumen.productos[i].productoVirtual.desdeDiaMysql;
+                item.diaHasta = $scope.resumen.productos[i].productoVirtual.hastaDiaMysql;
 
-            item.idProducto = $scope.resumen.productos[i].productoReal.id;
-            item.cantidad = $scope.resumen.productos[i].cantidad;
-            item.costo = $scope.resumen.productos[i].productoReal.valor;
-
+            }else{
+                item.idProducto = $scope.resumen.productos[i].productoReal.id;
+                item.cantidad = $scope.resumen.productos[i].cantidad;
+                item.costo = $scope.resumen.productos[i].productoReal.valor;
+            }
             itemsVenta.push(item);
-
+            console.log(item);
             
             if ($scope.resumen.productos[i].productoReal.categoria=="Cupones"){            
                 totalLitrosCupones+=$scope.resumen.productos[i].cantidad;
@@ -1838,45 +1859,49 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
         
         var cupon={};
 
-        
-        $http.post('http://blackhop.api.dessin.com.ar/api/pos/caja/venta', {
+        //ToDo if flagDevAlq
+        if(!flagDevAlq && false){
+                    $http.post('http://blackhop.api.dessin.com.ar/api/pos/caja/venta', {
 
-            idCliente:$scope.clienteSeleccionado.id,
-            monto: $scope.resumen.total,
-            itemsVenta: JSON.stringify(itemsVenta),
-            pagoTarjeta: $scope.flagPagoTarjeta,
-        }).success(function(response) {
-            cupon.codigo=response.codigo;
-            if(cupon.codigo!="OK"){ //no genero cupon porque no es necesario (ie. vendí antares)
-                cupon.vigencia=response.vigencia;
-                cupon.fecha=response.fecha;
-                cupon.turnoNumero=response.turnoNumero;               
-            }
-                if (totalLitrosCupones>0){
-                    cupon.litros=totalLitrosCupones;
-
-                    var modalInstance = $uibModal.open({
-                        templateUrl: 'views/imprimir_cupon.html',
-                        controller: imprimirCuponCtrl, 
-                        windowClass: "animated flipInY",
-                        resolve: {
-                            cupon: function () {
-                                return cupon;
-                            }
+                        idCliente:$scope.clienteSeleccionado.id,
+                        monto: $scope.resumen.total,
+                        itemsVenta: JSON.stringify(itemsVenta),
+                        pagoTarjeta: $scope.flagPagoTarjeta,
+                    }).success(function(response) {
+                        cupon.codigo=response.codigo;
+                        if(cupon.codigo!="OK"){ //no genero cupon porque no es necesario (ie. vendí antares)
+                            cupon.vigencia=response.vigencia;
+                            cupon.fecha=response.fecha;
+                            cupon.turnoNumero=response.turnoNumero;               
                         }
-                        
-                    });
-                } 
-            $scope.borrarTodo();
-            console.log($scope);
+                            if (totalLitrosCupones>0){
+                                cupon.litros=totalLitrosCupones;
 
-        }).error(function(){
-          console.log("error asd");
-      });
-        
+                                var modalInstance = $uibModal.open({
+                                    templateUrl: 'views/imprimir_cupon.html',
+                                    controller: imprimirCuponCtrl, 
+                                    windowClass: "animated flipInY",
+                                    resolve: {
+                                        cupon: function () {
+                                            return cupon;
+                                        }
+                                    }
+                                    
+                                });
+                            } 
+                        $scope.borrarTodo();
+                        console.log($scope);
 
-            };   
-        }
+                    }).error(function(){
+                      console.log("error asd");
+                  });
+        }else {
+            //hace solo el post de devolucion
+            // alquileresDevueltos (solo ids)
+        } 
+
+    };   
+}
 function asdasdasdasdasd ($scope,$log,$uibModalInstance,alquilables,alquilableEdit){ // ToDo Borrar esto despues de hacer los alquileres
     $scope.alquilables=alquilables;
     $scope.alquilableEdit=alquilableEdit;

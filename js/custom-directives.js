@@ -76,7 +76,8 @@ angular
                     console.log("Clic en Alquilable");
                                         
                     //ToDo : Preguntar si deudor y mostrar modal para que el cajero decida
-                    //        (Obliga a seleccionar cliente previo a elejir el Alquilable)
+                    //        (Obliga a seleccionar cliente previo a elejir el Alquilable)p
+                    // ^^^ OLVIDATE
 
                         // Mostrar modal con calendario
                          var modalInstance = $uibModal.open({//ToDo preparar el nuevo "producto"
@@ -87,15 +88,52 @@ angular
                             size: "calendario",
                             //scope:$scope,
                             SweetAlert:SweetAlert,
-                            /*
-                            resolve:{
-                                gastoNuevo:function () {
-                                    return '';
-                                }
-                            }
-                            */
-                        }); 
+                        });                  
                         //cuando vuelve, darle forma al $scope.producto
+                        modalInstance.result.then(function (dato){
+
+
+                            //$scope.producto = dato;
+                            $scope.producto.esAlquiler = true;
+                            $scope.producto.stock = -1;                            
+                            $scope.valorProducto = dato.valor;
+
+
+                            $scope.resumen.numeroProductos ++;
+
+                            $scope.resumen.total+=Number($scope.valorProducto);
+
+                            var ordinalItem=$scope.resumen.numeroProductos;
+                            $scope.resumen.selected=ordinalItem;
+                            var productoAGuardar={
+                                id : ordinalItem,
+                                identificador: dato.id,
+                                valor : dato.valor,
+                                nombre: 'Alquiler - ' +  dato.nombre,
+                                unidad:{
+                                    abr: "Un",
+                                    id: 2,
+                                    plural: "Unidades",
+                                    singular: "Unidad"
+                                },
+                                cantidad : 1,
+                                valorTotal: dato.valor,
+                                descuento:'',
+                                stockActual:0,
+                                productoReal:$scope.producto,
+                                productoVirtual: dato
+                            }
+
+                            $scope.resumen.productos.push(productoAGuardar);
+ 
+
+                        },function(dato){
+                            console.log('dato2');
+                            console.log(dato);
+                        }); 
+
+
+                            
                         
                         
                 }else {
@@ -286,6 +324,7 @@ angular
                 $scope.funcDelete = function() {
 
                     $scope.resumen.display = $scope.resumen.display.substring(0, $scope.resumen.display.length - 1);
+
                     if($scope.resumen.display == ''){
                         $scope.resumen.display = '0';
                     }
@@ -296,14 +335,25 @@ angular
                     console.log($scope.resumen.productos[index]);
                     switch ($scope.selectedMod){
                         case 'Cnt':
+                        if($scope.resumen.display == '0' && $scope.resumen.productos[index].productoReal.esAlquiler){
 
-                        if($scope.resumen.productos[index].cantidad == 0){
                             $scope.resumen.productos.splice(index, 1);
                             $scope.resumen.numeroProductos--;
                             $scope.resumen.display='0';
                             $scope.resumen.selected= index - 1;
-                            $scope.resumen.productos[index].productoReal.stock = $scope.resumen.productos[index].stockActual;
-                        }else{
+                            if($scope.resumen.productos[index].cantidad != -1){
+                                $scope.resumen.productos[index].productoReal.stock = $scope.resumen.productos[index].stockActual;
+                            }
+                        }else {
+                            if($scope.resumen.productos[index].cantidad == 0){
+                                $scope.resumen.productos.splice(index, 1);
+                                $scope.resumen.numeroProductos--;
+                                $scope.resumen.display='0';
+                                $scope.resumen.selected= index - 1;
+                                if($scope.resumen.productos[index].cantidad != -1){
+                                    $scope.resumen.productos[index].productoReal.stock = $scope.resumen.productos[index].stockActual;
+                                }
+                            }else{
                                 //console.log($scope.resumen.productos[index]);
                                 $scope.resumen.productos[index].cantidad = $scope.resumen.display;
                                 $scope.resumen.productos[index].valorTotal = $scope.resumen.display * $scope.resumen.productos[index].valor;
@@ -312,6 +362,7 @@ angular
                                     $scope.resumen.productos[index].productoReal.stock = $scope.resumen.productos[index].stockActual-$scope.resumen.productos[index].cantidad;
                                 }
                             }
+                        }
                             break;
                             case 'Desc':
                             /* Lo deshabilito para la muestra
@@ -389,37 +440,40 @@ angular
                         //console.log($scope.resumen.display);
                         switch ($scope.selectedMod){
                             case 'Cnt':
-
-                                //console.log($scope.resumen.productos[index]);
-                                console.log($scope.resumen.productos[index].productoReal);
-                                console.log($scope.resumen.productos[index].stockActual);
-                                
-                                if($scope.resumen.productos[index].stockActual == -1){
-                                    //-1 stock infinito
+                                if(!$scope.resumen.productos[index].productoReal.esAlquiler){
+                                    console.log($scope.resumen.productos)
+                                    //console.log($scope.resumen.productos[index]);
+                                    console.log($scope.resumen.productos[index].productoReal);
+                                    console.log($scope.resumen.productos[index].stockActual);
                                     
+                                    if($scope.resumen.productos[index].stockActual == -1){
+                                        //-1 stock infinito
+                                        
+                                        $scope.resumen.productos[index].cantidad = $scope.resumen.display;
+                                        $scope.resumen.productos[index].valorTotal = $scope.resumen.display * $scope.resumen.productos[index].valor;
+                                        
+                                        $scope.resumen.recalculando(index,true);
+                                        
+                                        //$scope.ventaProductos[index].stock =$scope.ventaProductos[index].stock -$scope.resumen.display;
+                                       // $scope.resumen.productos[index].productoReal.stock = $scope.resumen.productos[index].stockActual-$scope.resumen.productos[index].cantidad;
+
+
+                                    }else if($scope.resumen.productos[index].stockActual >= Number($scope.resumen.display)){
+                                    console.log('more');
                                     $scope.resumen.productos[index].cantidad = $scope.resumen.display;
                                     $scope.resumen.productos[index].valorTotal = $scope.resumen.display * $scope.resumen.productos[index].valor;
-                                    
                                     $scope.resumen.recalculando(index,true);
-                                    
-                                    //$scope.ventaProductos[index].stock =$scope.ventaProductos[index].stock -$scope.resumen.display;
-                                   // $scope.resumen.productos[index].productoReal.stock = $scope.resumen.productos[index].stockActual-$scope.resumen.productos[index].cantidad;
-
-
-                               }else 
-
-                               if($scope.resumen.productos[index].stockActual >= Number($scope.resumen.display)){
-                                console.log('more');
-                                $scope.resumen.productos[index].cantidad = $scope.resumen.display;
-                                $scope.resumen.productos[index].valorTotal = $scope.resumen.display * $scope.resumen.productos[index].valor;
-                                $scope.resumen.recalculando(index,true);
-                                    //$scope.ventaProductos[index].stock =$scope.ventaProductos[index].stock -$scope.resumen.display;
-                                    $scope.resumen.productos[index].productoReal.stock = $scope.resumen.productos[index].stockActual-$scope.resumen.productos[index].cantidad;
+                                        //$scope.ventaProductos[index].stock =$scope.ventaProductos[index].stock -$scope.resumen.display;
+                                        $scope.resumen.productos[index].productoReal.stock = $scope.resumen.productos[index].stockActual-$scope.resumen.productos[index].cantidad;
+                                    }else{
+                                     $scope.resumen.display= $scope.resumen.display.substring(0,$scope.resumen.display.length-1);
+                                    }
                                 }else{
-                                 $scope.resumen.display= $scope.resumen.display.substring(0,$scope.resumen.display.length-1);
-                             }
+                                    $scope.resumen.display = '';
+                                }
+
                              break;
-                             case 'Desc':
+                        case 'Desc':
                              console.log('Descuento');
                              console.log($scope.resumen.display);
 

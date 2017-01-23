@@ -394,6 +394,9 @@ vm.login2 = function() {
 
     $scope.ventaProductos =[];
 
+    $scope.flagDevAlq = false;   
+
+
 
 
     $scope.getProductos = function (){
@@ -500,7 +503,8 @@ vm.login2 = function() {
 
     $scope.devolverAlqulier=function(){
 
-        $scope.bajar='';                
+        $scope.bajar='';  
+                     
 
         var modalInstance = $uibModal.open({
             templateUrl: 'views/modal-devolucion_alquiler.html',
@@ -514,6 +518,17 @@ vm.login2 = function() {
                             return $scope.clientes;
                         }
                     }
+                });                   
+                modalInstance.result.then(function (dato) {
+                    console.log('dato');
+                    console.log(dato);
+                    $scope.clienteSeleccionado = dato;
+                    $scope.modal.terminarVenta();
+                    $scope.flagDevAlq = true;   
+
+                },function(dato){
+                    console.log('dato2');
+                    console.log(dato);
                 });
     }
 
@@ -551,6 +566,9 @@ vm.login2 = function() {
                         },
                         resumen: function () {
                             return $scope.resumen;
+                        },
+                        flagDevAlq: function () {
+                            return $scope.flagDevAlq;
                         }
                     }
                 });                   

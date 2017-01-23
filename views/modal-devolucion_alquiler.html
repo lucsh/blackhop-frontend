@@ -5,7 +5,7 @@
                 <fieldset>
                     <h3 class="m-t-none m-b">Devolucion Alquiler</h3>
                     <div class="col-sm-12 ">
-                        <p>Por Nombre o Apellido o DNI</p>
+                        <p ng-if="!clienteElegido">Por Nombre o Apellido o DNI</p>
                         <form role="form">
                             <div class="form-group" ng-if="!clienteElegido">
                                 <div><input type="text" ng-model="query"  placeholder="Buscar" class="form-control"></div>
