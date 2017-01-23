@@ -50,7 +50,10 @@
 
 
 
-function calendarioAlquiler ($scope,$log,$uibModalInstance,$http,SweetAlert){
+function calendarioAlquiler ($scope,$filter,$log,$uibModalInstance,$http,SweetAlert,resumen){
+    
+    $scope.resumen = resumen;
+
     var disponible = 'background-color: #fff;';
     var nope = 'background-color: #ed5565';
     var warning ='background-color: #f0ad4e;';
@@ -58,6 +61,7 @@ function calendarioAlquiler ($scope,$log,$uibModalInstance,$http,SweetAlert){
     var hoy = 'background-color: #5bc0de';
     var noLaboral = 'background-color: #f9f9f9';
     var vencido ='background-color: #f9f9f9';
+
 
     //TODO
     //agregar si vencido >> no hace falta, Miqueas dice que queden disponibles
@@ -109,11 +113,27 @@ $scope.alquiler={}
     }
     $scope.guardarAlquiler = function(){
 
+    if($scope.barrilSeleccionado){ 
+
+        var barrilTemp = {
+            id : $scope.barrilSeleccionado.id,
+            desdeDiaId: $scope.barrilSeleccionado.desdeDiaId,
+            hastaDiaId: $scope.barrilSeleccionado.hastaDiaId    
+        }
+
+        if ( $scope.resumen.alquilerTemp ){
+            $scope.resumen.alquilerTemp.push(barrilTemp)
+        } else{
+            $scope.resumen.alquilerTemp = []
+            $scope.resumen.alquilerTemp.push(barrilTemp)
+
+        }
+
         SweetAlert.swal({
             title: "Ingresar Estilo/s",
             text: "¿Que estilos te gustaria?",
             type: "input",
-            showCancelButton: true,
+            showCancelButton: false,
             closeOnConfirm: true,
             animation: "slide-from-top",
             inputPlaceholder: "IPA / Scotish / Negra"
@@ -124,6 +144,7 @@ $scope.alquiler={}
             $scope.barrilSeleccionado.descripcion = inputValue;
             $uibModalInstance.close($scope.barrilSeleccionado);//devolver el alquilable y las fechas y los estilos                    
         });
+    }
 
     }
 
@@ -827,6 +848,42 @@ $scope.alquiler={}
         /*
         end SOLO PARA TESTING
         */
+
+console.log("$scope.alquilables)")
+console.log($scope.alquilables)
+
+
+
+
+if ($scope.resumen.alquilerTemp){
+    
+    for (var i = 0; i < $scope.resumen.alquilerTemp.length; i++) {
+
+        var id = $scope.resumen.alquilerTemp[i].id;
+
+        for (var j = 0; j < $scope.alquilables.length; j++) {
+            
+            if ($scope.alquilables[j].id == id){
+                console.log(i)
+                console.log(j)
+
+                //$scope.alquilables[i].dias[j].estado="vencido"    
+                for (var g = $scope.resumen.alquilerTemp[i].desdeDiaId + 1; g < $scope.resumen.alquilerTemp[i].hastaDiaId; g++) {
+
+                    console.log(i)
+                    console.log(j)
+                    console.log(g)
+
+                    $scope.alquilables[j].dias[g].estado="alquilado"
+
+                }            
+            }
+
+        }
+
+    }
+
+}
 
 
 for (var i = 0; i <  $scope.alquilables.length; i++) {

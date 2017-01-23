@@ -74,6 +74,7 @@ angular
 
                 if($scope.producto.categoria == "Alquiler"){
                     console.log("Clic en Alquilable");
+                    console.log($scope);
                                         
                     //ToDo : Preguntar si deudor y mostrar modal para que el cajero decida
                     //        (Obliga a seleccionar cliente previo a elejir el Alquilable)p
@@ -86,12 +87,19 @@ angular
                             //controler en controllers.js, no termino de entender porque no lo puedo armar como el resto y si o si tengo que poner una funcion                        
                             windowClass: "animated fadeIn",
                             size: "calendario",
-                            //scope:$scope,
                             SweetAlert:SweetAlert,
+                            resolve: {
+                                resumen: function () {
+                                    return $scope.resumen;
+                                }
+                        }
+                            
                         });                  
                         //cuando vuelve, darle forma al $scope.producto
                         modalInstance.result.then(function (dato){
 
+                            console.log("$scope ALEJO")
+                            console.log($scope)
 
                             //$scope.producto = dato;
                             $scope.producto.esAlquiler = true;
