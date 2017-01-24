@@ -50,7 +50,7 @@
 
 
 
-function calendarioAlquiler ($scope,$filter,$log,$uibModalInstance,$http,SweetAlert,resumen){
+function calendarioAlquiler ($scope,$log,$uibModalInstance,$http,SweetAlert,resumen){
     
     $scope.resumen = resumen;
 
@@ -831,13 +831,15 @@ $scope.alquiler={}
         /*
         start SOLO PARA TESTING
         */
-        var primerDiaDeEstaSamana=moment().startOf('isoWeek');//.subtract(7, 'days');//menos 7 para test
+        var primerDiaDeEstaSamana = moment().startOf('isoWeek');//.subtract(7, 'days');//menos 7 para test
+        
+        var primerDiaMySql = primerDiaDeEstaSamana.clone().format('YYYY-MM-DD');
         //usar esta variable para enviar la consulta a more
 
         for (var i = 0; i <  $scope.alquilables.length; i++) {  
-            $scope.alquilables[i].dias[0].fecha =primerDiaDeEstaSamana.clone();
-            $scope.alquilables[i].dias[0].diaFecha=primerDiaDeEstaSamana.clone().locale('es').format('DD');
-            $scope.alquilables[i].dias[0].fechaMysql=primerDiaDeEstaSamana.clone().locale('es').format('YYYY-MM-DD');
+            $scope.alquilables[i].dias[0].fecha = primerDiaDeEstaSamana.clone();
+            $scope.alquilables[i].dias[0].diaFecha = primerDiaDeEstaSamana.clone().locale('es').format('DD');
+            $scope.alquilables[i].dias[0].fechaMysql = primerDiaDeEstaSamana.clone().locale('es').format('YYYY-MM-DD');
 
             for ( j = 1; j <  $scope.alquilables[i].dias.length; j++) {
                 $scope.alquilables[i].dias[j].fecha=$scope.alquilables[i].dias[j-1].fecha.clone().add(1, 'days');
@@ -862,27 +864,14 @@ if ($scope.resumen.alquilerTemp){
         var id = $scope.resumen.alquilerTemp[i].id;
 
         for (var j = 0; j < $scope.alquilables.length; j++) {
-            
-            if ($scope.alquilables[j].id == id){
-                console.log(i)
-                console.log(j)
 
-                //$scope.alquilables[i].dias[j].estado="vencido"    
+            if ($scope.alquilables[j].id == id){ 
                 for (var g = $scope.resumen.alquilerTemp[i].desdeDiaId + 1; g < $scope.resumen.alquilerTemp[i].hastaDiaId; g++) {
-
-                    console.log(i)
-                    console.log(j)
-                    console.log(g)
-
                     $scope.alquilables[j].dias[g].estado="alquilado"
-
                 }            
             }
-
         }
-
     }
-
 }
 
 
