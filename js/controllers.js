@@ -832,7 +832,7 @@ $scope.alquiler={}
         start SOLO PARA TESTING
         */
         var primerDiaDeEstaSamana = moment().startOf('isoWeek');//.subtract(7, 'days');//menos 7 para test
-        
+
         var primerDiaMySql = primerDiaDeEstaSamana.clone().format('YYYY-MM-DD');
         //usar esta variable para enviar la consulta a more
 
@@ -850,11 +850,6 @@ $scope.alquiler={}
         /*
         end SOLO PARA TESTING
         */
-
-console.log("$scope.alquilables)")
-console.log($scope.alquilables)
-
-
 
 
 if ($scope.resumen.alquilerTemp){
