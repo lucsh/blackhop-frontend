@@ -295,12 +295,6 @@ angular
                             $scope.resumen.productos.push(productoAGuardar);
                         }
                     }
-
-                    //console.log($scope);
-
-                    //foeach valor de producto en resumen 
-
-                    //funcion aca
                     $scope.resumen.recalculando(-1,false);
                 }
             };
@@ -321,15 +315,14 @@ angular
         controller: function ($scope) {
 
             $scope.selectedMod='Cnt'; 
-                //console.log($scope);
                 var borrar = false;
                 $scope.selectMod = function($selected) {
                     $scope.selectedMod=$selected;
-                    //console.log($scope.selectedMod);
                     $scope.resumen.display = '';
                 }
 
                 $scope.funcDelete = function() {
+
 
                     $scope.resumen.display = $scope.resumen.display.substring(0, $scope.resumen.display.length - 1);
 
@@ -338,12 +331,17 @@ angular
                     }
 
                     var index = $scope.resumen.selected;
-                    //console.log($scope.resumen.selected);
-                    //$scope.resumen.display += $selected;
                     console.log($scope.resumen.productos[index]);
                     switch ($scope.selectedMod) {
                         case 'Cnt':
                             if ($scope.resumen.display == '0' && $scope.resumen.productos[index].productoReal.esAlquiler) {
+                                for (var i = 0; i < $scope.resumen.alquilerTemp.length; i++) {
+                                    if ($scope.resumen.productos[index].identificador === $scope.resumen.alquilerTemp[i].id){
+                                        if($scope.resumen.productos[index].productoVirtual.desdeDiaId === $scope.resumen.alquilerTemp[i].desdeDiaId ){
+                                           $scope.resumen.alquilerTemp.splice(i, 1);
+                                        }
+                                    }
+                                }
                                 $scope.resumen.productos.splice(index, 1);
                                 $scope.resumen.numeroProductos--;
                                 $scope.resumen.display = '0';
