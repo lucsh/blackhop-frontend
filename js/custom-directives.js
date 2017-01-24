@@ -341,38 +341,38 @@ angular
                     //console.log($scope.resumen.selected);
                     //$scope.resumen.display += $selected;
                     console.log($scope.resumen.productos[index]);
-                    switch ($scope.selectedMod){
+                    switch ($scope.selectedMod) {
                         case 'Cnt':
-                        if($scope.resumen.display == '0' && $scope.resumen.productos[index].productoReal.esAlquiler){
-
-                            $scope.resumen.productos.splice(index, 1);
-                            $scope.resumen.numeroProductos--;
-                            $scope.resumen.display='0';
-                            $scope.resumen.selected= index - 1;
-                            if($scope.resumen.productos[index].cantidad != -1){
-                                $scope.resumen.productos[index].productoReal.stock = $scope.resumen.productos[index].stockActual;
-                            }
-                        }else {
-                            if($scope.resumen.productos[index].cantidad == 0){
+                            if ($scope.resumen.display == '0' && $scope.resumen.productos[index].productoReal.esAlquiler) {
                                 $scope.resumen.productos.splice(index, 1);
                                 $scope.resumen.numeroProductos--;
-                                $scope.resumen.display='0';
-                                $scope.resumen.selected= index - 1;
-                                if($scope.resumen.productos[index].cantidad != -1){
+                                $scope.resumen.display = '0';
+                                $scope.resumen.selected = index - 1;
+                                if ($scope.resumen.productos[index] && $scope.resumen.productos[index].cantidad != -1) {
                                     $scope.resumen.productos[index].productoReal.stock = $scope.resumen.productos[index].stockActual;
                                 }
-                            }else{
-                                //console.log($scope.resumen.productos[index]);
-                                $scope.resumen.productos[index].cantidad = $scope.resumen.display;
-                                $scope.resumen.productos[index].valorTotal = $scope.resumen.display * $scope.resumen.productos[index].valor;
+                            } else {
+                                if ($scope.resumen.productos[index].cantidad == 0) {
+                                    $scope.resumen.productos.splice(index, 1);
+                                    $scope.resumen.numeroProductos--;
+                                    $scope.resumen.display = '0';
+                                    $scope.resumen.selected = index - 1;
+                                    if ($scope.resumen.productos[index] && $scope.resumen.productos[index].cantidad != -1) {
+                                        $scope.resumen.productos[index].productoReal.stock = $scope.resumen.productos[index].stockActual;
+                                    }
+                                } else {
+                                    //console.log($scope.resumen.productos[index]);
+                                    $scope.resumen.productos[index].cantidad = $scope.resumen.display;
+                                    $scope.resumen.productos[index].valorTotal = $scope.resumen.display * $scope.resumen.productos[index].valor;
 
-                                if($scope.resumen.productos[index].cantidad != -1){
-                                    $scope.resumen.productos[index].productoReal.stock = $scope.resumen.productos[index].stockActual-$scope.resumen.productos[index].cantidad;
+                                    if ($scope.resumen.productos[index].cantidad != -1) {
+                                        $scope.resumen.productos[index].productoReal.stock = $scope.resumen.productos[index].stockActual - $scope.resumen.productos[index].cantidad;
+                                    }
                                 }
                             }
-                        }
+
                             break;
-                            case 'Desc':
+                        case 'Desc':
                             /* Lo deshabilito para la muestra
                             var aux = $scope.resumen.productos[index].valorTotal;
                             $scope.resumen.productos[index].valorTotal = aux*($scope.resumen.display/100);
@@ -383,36 +383,37 @@ angular
 
                             }
                             */
-                            
+
                             console.log('Descuento');
                             console.log($scope.resumen.display);
 
-                            $scope.resumen.productos[index].valorTotal  = $scope.resumen.productos[index].productoReal.valor;
+                            $scope.resumen.productos[index].valorTotal = $scope.resumen.productos[index].productoReal.valor;
 
-                            $scope.resumen.productos[index].valorTotal = $scope.resumen.productos[index].valorTotal *(1-$scope.resumen.display/100);
+                            $scope.resumen.productos[index].valorTotal = $scope.resumen.productos[index].valorTotal * (1 - $scope.resumen.display / 100);
 
                             $scope.resumen.productos[index].descuento = $scope.resumen.display;
                             if ($scope.resumen.productos[index].descuento == 0) {
-                                $scope.resumen.productos[index].descuento ='';
+                                $scope.resumen.productos[index].descuento = '';
                                 $scope.resumen.display = '';
                             }
-                            $scope.resumen.recalculando(index,true);
+                            $scope.resumen.recalculando(index, true);
                             break;
-                            
-                            case 'Val':
-                            if($scope.resumen.productos[index].valorTotal == 0){
+
+                        case 'Val':
+                            if ($scope.resumen.productos[index].valorTotal == 0) {
                                 $scope.resumen.productos.splice(index, 1);
                                 $scope.resumen.numeroProductos--;
-                                $scope.resumen.display='0';
-                                $scope.resumen.selected= index - 1;
-                            }else{
+                                $scope.resumen.display = '0';
+                                $scope.resumen.selected = index - 1;
+                            } else {
                                 //console.log($scope.resumen.productos[index]);
                                 $scope.resumen.productos[index].valorTotal = $scope.resumen.display;
                             }
-                            
+
                             break;
-                        }
-                        $scope.resumen.recalculando(index,true);
+                    }
+                    console.log("mierda no te entiendo")
+                    $scope.resumen.recalculando(index, true);
                     /*$scope.resumen.total=0;
                     newOrder=0;
                     $scope.resumen.productos.forEach(function(producto) {
@@ -421,7 +422,7 @@ angular
                         newOrder++;
                         $scope.resumen.productos[index].valorTotal = $scope.resumen.productos[index].cantidad * $scope.resumen.productos[index].valor;
                     });*/
-                }
+                    }
 
                 $scope.selectBtn = function ($selected) {
                     if($selected=="C"){
