@@ -361,6 +361,8 @@ vm.login2 = function() {
                                 $scope.resumen.selected=-1;
                                 $scope.clienteSeleccionado='';
                                 $scope.cuponSeleccionado='';
+                                //Llamo al modal para dejar listo para escanear, pedido de Gaston
+                                $scope.modal.scanearCupon();
 
 
                             } else {
