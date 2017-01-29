@@ -351,8 +351,16 @@ vm.login2 = function() {
                                 }).error(function(error){
                                     console.log(error);
                                 });              
-                                SweetAlert.swal("¡Realizado!", "Venta realizada", "success");
-
+                                //SweetAlert.swal("¡Realizado!", "Venta realizada", "success");
+                                swal({
+                                    title: "¡Realizado!",
+                                    type: "success",
+                                    text: "Venta realizada",
+                                },
+                                function(){
+                                    //Llamo al modal para dejar listo para escanear, pedido de Gaston
+                                    $scope.modal.scanearCupon();
+                                });
                                 $scope.resumen.display='';
                                 $scope.resumen.numeroProductos=-1;
                                 $scope.resumen.productos=[];
@@ -361,12 +369,22 @@ vm.login2 = function() {
                                 $scope.resumen.selected=-1;
                                 $scope.clienteSeleccionado='';
                                 $scope.cuponSeleccionado='';
-                                //Llamo al modal para dejar listo para escanear, pedido de Gaston
-                                $scope.modal.scanearCupon();
+                                
 
 
                             } else {
-                                SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
+                                //SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
+                                swal({
+                                    title: "Cancelado!",
+                                    type: "error",
+                                    text: "Todo sigue como antes",
+                                },
+                                function(){
+                                    //Llamo al modal para dejar listo para escanear, pedido de Gaston
+                                    $scope.modal.scanearCupon();
+                                });
+
+                                //
                             }
                         });
 
