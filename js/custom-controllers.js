@@ -2029,47 +2029,37 @@ $scope.modal={
 
     }])
 
-.controller('alquilablesCtrl', ['$scope','$log','$uibModal','$filter','DTOptionsBuilder','DTColumnDefBuilder','SweetAlert', function($scope,$log,$uibModal,$filter,DTOptionsBuilder,DTColumnDefBuilder,SweetAlert){
+.controller('alquilablesCtrl', ['$scope','$http','$log','$uibModal','$filter','DTOptionsBuilder','DTColumnDefBuilder','SweetAlert', function($scope,$http,$log,$uibModal,$filter,DTOptionsBuilder,DTColumnDefBuilder,SweetAlert){
 
         //recibo 0 para alquilado y 1 para disponible
         //ToDo traer listado alquilables
-        $scope.alquilables =[
-        {
-            identificador:1,
-            codigo:"1001",
-            descripcion:"Barril de 10 lts.",
-            ubicacion:'Local Illia',
-            estado:0
-        },
-        {
-            identificador:2,
-            codigo:"1002",
-            descripcion:"Barril de 9 lts.",
-            ubicacion:'Local Illia',
-            estado:1
-        },
-        {
-            identificador:3,
-            codigo:"1003",
-            descripcion:"Barril de 18 lts.",
-            ubicacion:'Local Illia',
-            estado:0,
+
+        $scope.getAlquilables = function(){
+            $scope.alquilables = [];
+            $http.get('http://blackhop.api.dessin.com.ar/api/admin/alquilable')
+            .success(function(response){    
+                $scope.alquilables = response.data;
+
+                for(var i = 0; i < $scope.alquilables.length; i++){
+                    switch ($scope.alquilables[i].estado){
+                        case 'Disponible':
+                        //$scope.alquilables[i].estado= "Disponible"
+                        $scope.alquilables[i].class= "badge-primary";
+                        break;
+                        case 'Alquilado':
+                        //$scope.alquilables[i].estado= "Alquilado";
+                        $scope.alquilables[i].class= "badge-warning";
+                        break; 
+                    }
+                };
+            }).error(function(error){
+                console.log(error);
+            });
         }
 
-        ]
+        $scope.getAlquilables();
 
-        for(var i = 0; i < $scope.alquilables.length; i++){
-            switch ($scope.alquilables[i].estado){
-                case 1:
-                $scope.alquilables[i].estado= "Disponible"
-                $scope.alquilables[i].class= "badge-primary";
-                break;
-                case 0:
-                $scope.alquilables[i].estado= "Alquilado";
-                $scope.alquilables[i].class= "badge-warning";
-                break; 
-            }
-        };
+        
 
         $scope.dtOptions = DTOptionsBuilder.newOptions()
         .withDOM('<"html5buttons"B>lTfgitp')
@@ -2114,18 +2104,15 @@ $scope.modal={
                 closeOnCancel: false },
                 function (isConfirm) { 
                     if (isConfirm) {
-                        for(var i = 0; i < $scope.alquilables.length; i++){
-
-                            if ($scope.alquilables[i].estado != 'Alquilado'){
-                                if ($scope.alquilables[i].id == ident){                    
-                                    $scope.alquilables.splice(i, 1);                                
-                                    SweetAlert.swal("¡Eliminado!", "El producto ha sido eliminado", "success");
-
-                                } 
-                            } else {
-                                SweetAlert.swal("Cancelado", "El producto se encuentra alquilado al momento. Todo sigue como antes", "error");
-                            }
-                        }
+                        console.log(ident);
+                        $http.delete('http://blackhop.api.dessin.com.ar/api/admin/alquilable/'+ident)
+                        .success(function(data){    
+                            SweetAlert.swal("¡Eliminado!", data.data.message, "success");
+                            $scope.getAlquilables();
+                        }).error(function(data){
+                            console.log(data.error.message);
+                            SweetAlert.swal("Error", data.error.message, "error");
+                        });
                     } else {
                         SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
                     }
@@ -2152,7 +2139,7 @@ $scope.modal={
             },
             editar : function (alquilable){
                 var modalInstance = $uibModal.open({
-                    templateUrl: 'views/crear_alquilable.html',
+                    templateUrl: 'views/modal-crear_alquilable.html',
                     controller: crearAlquilableCtrl, 
                     //controler en controllers.js, no termino de entender porque no lo puedo armar como el resto y si o si tengo que poner una funcion                        
                     windowClass: "animated fadeIn",

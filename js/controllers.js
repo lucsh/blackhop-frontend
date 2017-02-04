@@ -2002,123 +2002,73 @@ function crearAlquilableCtrl ($http,$scope,$log,$uibModalInstance,SweetAlert,alq
 
    
 
-    //$scope.newProd = {};
+    $scope.newProd = {};
     $scope.alquilables=alquilables;
     $scope.alquilableEdit=alquilableEdit;
     $scope.newAlquilable = angular.copy(alquilableEdit);
     $scope.flagEditar=false;
 
-
-    /* Nueva Marca init */
-    $scope.tresdeStartVisibleClass = 'tresde-up-first-visible ';
-    $scope.tresdeStartHiddenClass = 'tresde-up-second-hidden ';
-    $scope.flagNuevaMarca=false;
-    /*
-    $http.get('http://blackhop.api.dessin.com.ar/api/admin/productodatos').success(function(datos){    
-        //console.log(cliente);
-        $scope.categorias = datos.categorias;
-        $scope.unidades = datos.unidades;
-        $scope.marcas = datos.marcas;
-        $scope.proveedores = datos.proveedores;
-
-        //console.log($scope.newProd);
-        if ($scope.newProd.nombre != undefined){
-
-            $scope.flagEditar=true;
-
-            $scope.categorias.forEach(function(categoria){
-                if(categoria.nombre == $scope.newProd.categoria){
-                    $scope.newProd.categoria = categoria;
-                }
-            });
-            $scope.unidades.forEach(function(unidad){
-                if(unidad.plural == $scope.newProd.unidad.plural){
-                    $scope.newProd.unidad = unidad;
-                }
-            });
-            $scope.marcas.forEach(function(marca){
-                if(marca.nombre == $scope.newProd.marca){
-                    $scope.newProd.marca = marca;
-                }
-            });
-            $scope.proveedores.forEach(function(proveedor){
-                if(proveedor.nombre == $scope.newProd.proveedor){
-                    $scope.newProd.proveedor = proveedor;
-                }
-            });
-        }
-
+    $http.get('http://blackhop.api.dessin.com.ar/api/info/ubicacion').success(function(ubicaciones){    
+        $scope.ubicaciones = ubicaciones.data;
     }).error(function(error){
         console.log(error);
     });  
-*/
+
 
 
     
     $scope.cargarNuevo = function(){
        
+        if(!$scope.newProd.nombre && !$scope.newProd.ubicacion && !$scope.newProd.valor && !$scope.newProd.costo){
+            SweetAlert.swal("Error", "Faltan Datos", "error");
+        }else{
+            //$uibModalInstance.dismiss('cancel');
+            
+            if ($scope.flagEditar){
+    /*
+                $http.put('http://blackhop.api.dessin.com.ar/api/admin/producto/'+$scope.newProd.id,{
+                    nombre:$scope.newProd.nombre,
+                    categoria:$scope.newProd.categoria.id,
+                    valor:$scope.newProd.valor,
+                    costo:$scope.newProd.costo,
+                    descripcion:$scope.newProd.descripcion,
+                    proveedor:$scope.newProd.proveedor.id,
+                    marca:$scope.newProd.marca,
+                    unidad:$scope.newProd.unidad.id,
+                    color:$scope.newProd.srm,
+                    ibu:$scope.newProd.ibu,
+                    origen:$scope.newProd.origen,
+                    alcohol:$scope.newProd.alcohol,
+                    flagMarca:$scope.flagNuevaMarca
+                }).success(function(response){    
+                    $scope.productos.forEach(function(producto,index,arreglo){
+                        if(producto.id == response.data.id){
+                            arreglo[index] = response.data;
+                        }
+                    });
+                    SweetAlert.swal("Producto Editado", "El producto fue editado", "success");
+                }).error(function(error){
+                 SweetAlert.swal("Error", error.message, "error");
+                 console.log(error);
+             });
+    */
+            } else{
+                $http.post('http://blackhop.api.dessin.com.ar/api/admin/productoLALA', {
+                    nombre:$scope.newProd.nombre,
+                    categoria:6,
+                    valor:$scope.newProd.valor,
+                    costo:$scope.newProd.costo,
+                    descripcion:$scope.newProd.descripcion,
+                    unidad:2
+                }).success(function(response) {
+                    $scope.productos.push(response.data);
 
-        $uibModalInstance.dismiss('cancel');
-        if($scope.flagNuevaMarca){
-            $scope.newProd.marca = $scope.newProd.marcaNueva;
-        } else {
-            $scope.newProd.marca = $scope.newProd.marca.id;
-        }
-        console.log($scope.flagEditar);
-        if ($scope.flagEditar){
-/*
-            $http.put('http://blackhop.api.dessin.com.ar/api/admin/producto/'+$scope.newProd.id,{
-                nombre:$scope.newProd.nombre,
-                categoria:$scope.newProd.categoria.id,
-                valor:$scope.newProd.valor,
-                costo:$scope.newProd.costo,
-                descripcion:$scope.newProd.descripcion,
-                proveedor:$scope.newProd.proveedor.id,
-                marca:$scope.newProd.marca,
-                unidad:$scope.newProd.unidad.id,
-                color:$scope.newProd.srm,
-                ibu:$scope.newProd.ibu,
-                origen:$scope.newProd.origen,
-                alcohol:$scope.newProd.alcohol,
-                flagMarca:$scope.flagNuevaMarca
-            }).success(function(response){    
-                $scope.productos.forEach(function(producto,index,arreglo){
-                    if(producto.id == response.data.id){
-                        arreglo[index] = response.data;
-                    }
+                    SweetAlert.swal("Producto Agregado", "El producto fue agregado", "success");
+                }).error(function(error){
+                    SweetAlert.swal("Error", error.message, "error");
+                    console.log(error);
                 });
-                SweetAlert.swal("Producto Editado", "El producto fue editado", "success");
-            }).error(function(error){
-             SweetAlert.swal("Error", error.message, "error");
-             console.log(error);
-         });
-*/
-        } else{
-/*
-            $http.post('http://blackhop.api.dessin.com.ar/api/admin/producto', {
-
-                nombre:$scope.newProd.nombre,
-                categoria:$scope.newProd.categoria.id,
-                valor:$scope.newProd.valor,
-                costo:$scope.newProd.costo,
-                descripcion:$scope.newProd.descripcion,
-                proveedor:$scope.newProd.proveedor.id,
-                marca:$scope.newProd.marca,
-                unidad:$scope.newProd.unidad.id,
-                color:$scope.newProd.srm,
-                ibu:$scope.newProd.ibu,
-                origen:$scope.newProd.origen,
-                alcohol:$scope.newProd.alcohol,
-                flagMarca:$scope.flagNuevaMarca
-            }).success(function(response) {
-                $scope.productos.push(response.data);
-
-                SweetAlert.swal("Producto Agregado", "El producto fue agregado", "success");
-            }).error(function(error){
-             SweetAlert.swal("Error", error.message, "error");
-             console.log(error);
-         });
-         */
+            }
         }
 
 
