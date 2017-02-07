@@ -1768,7 +1768,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
                         },
                         {
                             name: 'datePicker',
-                            files: ['css/plugins/datapicker/angular-datapicker.css','js/plugins/datapicker/angular-datepicker.js']
+                            files: ['js/plugins/moment/moment.min.js','css/plugins/datapicker/angular-datapicker.css','js/plugins/datapicker/angular-datepicker.js']
                         },
                         {
                             files: ['js/plugins/sweetalert/sweetalert.min.js', 'css/plugins/sweetalert/sweetalert.css']
