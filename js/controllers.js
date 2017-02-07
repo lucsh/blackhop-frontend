@@ -2022,32 +2022,40 @@ function asdasdasdasdasd ($scope,$log,$uibModalInstance,alquilables,alquilableEd
 }
 
 function crearAlquilableCtrl ($http,$scope,$log,$uibModalInstance,SweetAlert,alquilables,alquilableEdit){
-
-    $scope.newProd = {};
-
-    $scope.newAlquilable = angular.copy(alquilableEdit);
-    $scope.flagEditar=false;
-
-    if(alquilableEdit){
-        $scope.newProd.nombre = $scope.newAlquilable.codigo;
-        $scope.newProd.descripcion = $scope.newAlquilable.descripcion;
-        $scope.newProd.costo = $scope.newAlquilable.costo;
-        $scope.newProd.valor = $scope.newAlquilable.valor;
-        $scope.newProd.ubicacion = {
-            id: $scope.newAlquilable.ubicacion.id,
-            nombre: $scope.newAlquilable.ubicacion.nombre,
-            direccion: $scope.newAlquilable.ubicacion.direccion 
-        };
-
-        $scope.flagEditar=true;
-
-    }
-
+    
     $http.get('http://blackhop.api.dessin.com.ar/api/info/ubicacion').success(function(ubicaciones){    
         $scope.ubicaciones = ubicaciones.data;
+
+        $scope.newProd = {};
+
+        $scope.newAlquilable = angular.copy(alquilableEdit);
+        $scope.flagEditar=false;
+
+        if(alquilableEdit){
+            $scope.newProd.nombre = $scope.newAlquilable.codigo;
+            $scope.newProd.descripcion = $scope.newAlquilable.descripcion;
+            $scope.newProd.costo = $scope.newAlquilable.costo;
+            $scope.newProd.valor = $scope.newAlquilable.valor;
+            //$scope.newProd.ubicacion = {
+            //    id: $scope.newAlquilable.ubicacion.id,
+            //    nombre: $scope.newAlquilable.ubicacion.nombre,
+            //    direccion: $scope.newAlquilable.ubicacion.direccion 
+            //};
+            //ToDo NO ANDA
+            $scope.ubicaciones.forEach(function(ubicacion){
+                if(ubicacion.id == $scope.newProd.ubicacion.id){
+                    $scope.newProd.ubicacion = ubicacion;
+                }
+            });
+            $scope.flagEditar=true;
+        }
     }).error(function(error){
         console.log(error);
-    });  
+    });
+
+    
+
+      
 
 
 
@@ -2153,6 +2161,12 @@ function crearProductoCtrl ($http,$scope,$log,$uibModalInstance,SweetAlert,produ
                     $scope.newProd.proveedor = proveedor;
                 }
             });
+
+            if($scope.newProd.entregable == 1){
+                $scope.newProd.entregable = true;
+            }else{
+                $scope.newProd.entregable = false;
+            }
         }
 
     }).error(function(error){
@@ -2187,7 +2201,8 @@ function crearProductoCtrl ($http,$scope,$log,$uibModalInstance,SweetAlert,produ
                 ibu:$scope.newProd.ibu,
                 origen:$scope.newProd.origen,
                 alcohol:$scope.newProd.alcohol,
-                flagMarca:$scope.flagNuevaMarca
+                flagMarca:$scope.flagNuevaMarca,
+                entregable: $scope.newProd.entregable
             }).success(function(response){    
                 $scope.productos.forEach(function(producto,index,arreglo){
                     if(producto.id == response.data.id){
@@ -2216,7 +2231,9 @@ function crearProductoCtrl ($http,$scope,$log,$uibModalInstance,SweetAlert,produ
                 ibu:$scope.newProd.ibu,
                 origen:$scope.newProd.origen,
                 alcohol:$scope.newProd.alcohol,
-                flagMarca:$scope.flagNuevaMarca
+                flagMarca:$scope.flagNuevaMarca,
+                entregable: $scope.newProd.entregable
+
             }).success(function(response) {
                 $scope.productos.push(response.data);
 
