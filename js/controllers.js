@@ -2000,13 +2000,25 @@ function asdasdasdasdasd ($scope,$log,$uibModalInstance,alquilables,alquilableEd
 
 function crearAlquilableCtrl ($http,$scope,$log,$uibModalInstance,SweetAlert,alquilables,alquilableEdit){
 
-   
-
     $scope.newProd = {};
-    $scope.alquilables=alquilables;
-    $scope.alquilableEdit=alquilableEdit;
+
     $scope.newAlquilable = angular.copy(alquilableEdit);
     $scope.flagEditar=false;
+
+    if(alquilableEdit){
+        $scope.newProd.nombre = $scope.newAlquilable.codigo;
+        $scope.newProd.descripcion = $scope.newAlquilable.descripcion;
+        $scope.newProd.costo = $scope.newAlquilable.costo;
+        $scope.newProd.valor = $scope.newAlquilable.valor;
+        $scope.newProd.ubicacion = {
+            id: $scope.newAlquilable.ubicacion.id,
+            nombre: $scope.newAlquilable.ubicacion.nombre,
+            direccion: $scope.newAlquilable.ubicacion.direccion 
+        };
+
+        $scope.flagEditar=true;
+
+    }
 
     $http.get('http://blackhop.api.dessin.com.ar/api/info/ubicacion').success(function(ubicaciones){    
         $scope.ubicaciones = ubicaciones.data;
@@ -2022,46 +2034,34 @@ function crearAlquilableCtrl ($http,$scope,$log,$uibModalInstance,SweetAlert,alq
         if(!$scope.newProd.nombre && !$scope.newProd.ubicacion && !$scope.newProd.valor && !$scope.newProd.costo){
             SweetAlert.swal("Error", "Faltan Datos", "error");
         }else{
-            //$uibModalInstance.dismiss('cancel');
+            
             
             if ($scope.flagEditar){
-    /*
-                $http.put('http://blackhop.api.dessin.com.ar/api/admin/producto/'+$scope.newProd.id,{
+                console.log($scope.newProd);
+              //$http.put('http://blackhop.api.dessin.com.ar/api/admin/pr  oducto/'+$scope.newProd.id,{
+                $http.put('http://blackhop.api.dessin.com.ar/api/admin/alquilable/'+alquilableEdit.id, {
                     nombre:$scope.newProd.nombre,
-                    categoria:$scope.newProd.categoria.id,
                     valor:$scope.newProd.valor,
                     costo:$scope.newProd.costo,
                     descripcion:$scope.newProd.descripcion,
-                    proveedor:$scope.newProd.proveedor.id,
-                    marca:$scope.newProd.marca,
-                    unidad:$scope.newProd.unidad.id,
-                    color:$scope.newProd.srm,
-                    ibu:$scope.newProd.ibu,
-                    origen:$scope.newProd.origen,
-                    alcohol:$scope.newProd.alcohol,
-                    flagMarca:$scope.flagNuevaMarca
-                }).success(function(response){    
-                    $scope.productos.forEach(function(producto,index,arreglo){
-                        if(producto.id == response.data.id){
-                            arreglo[index] = response.data;
-                        }
-                    });
-                    SweetAlert.swal("Producto Editado", "El producto fue editado", "success");
-                }).error(function(error){
-                 SweetAlert.swal("Error", error.message, "error");
-                 console.log(error);
-             });
-    */
-            } else{
-                $http.post('http://blackhop.api.dessin.com.ar/api/admin/productoLALA', {
-                    nombre:$scope.newProd.nombre,
-                    categoria:6,
-                    valor:$scope.newProd.valor,
-                    costo:$scope.newProd.costo,
-                    descripcion:$scope.newProd.descripcion,
-                    unidad:2
+                    ubicacion:$scope.newProd.ubicacion.id
                 }).success(function(response) {
-                    $scope.productos.push(response.data);
+                    $uibModalInstance.dismiss(response.data);
+                    SweetAlert.swal("Producto Editado", "El producto fue editado", "success");
+                }).error(function(data){
+                    SweetAlert.swal("Error", data.error.message, "error");
+                    console.log(error);
+                });
+
+            } else{
+                $http.post('http://blackhop.api.dessin.com.ar/api/admin/alquilable', {
+                    nombre:$scope.newProd.nombre,
+                    valor:$scope.newProd.valor,
+                    costo:$scope.newProd.costo,
+                    descripcion:$scope.newProd.descripcion,
+                    ubicacion:$scope.newProd.ubicacion.id
+                }).success(function(response) {
+                    $uibModalInstance.dismiss(response.data);
 
                     SweetAlert.swal("Producto Agregado", "El producto fue agregado", "success");
                 }).error(function(error){
@@ -2073,22 +2073,6 @@ function crearAlquilableCtrl ($http,$scope,$log,$uibModalInstance,SweetAlert,alq
 
 
     };
-
-    /* 3D select marca */
-    
-    $scope.doOcultar=function(){
-        $scope.tresdeStartVisibleClass = 'tresde-up-first-visible ';
-        $scope.tresdeStartHiddenClass = 'tresde-up-second-hidden ';
-        $scope.flagNuevaMarca=false;
-    };
-    
-    $scope.doMostrar=function(){
-        $scope.tresdeStartVisibleClass = 'tresde-up-first-hidden ';
-        $scope.tresdeStartHiddenClass = 'tresde-up-second-visible ';
-        $scope.flagNuevaMarca=true;
-    };
-    
-    
 }
 function crearProductoCtrl ($http,$scope,$log,$uibModalInstance,SweetAlert,productos,productoEdit){
 

@@ -34,6 +34,8 @@
                                     <th>ID</th>
                                     <th>Codigo</th>
                                     <th>Ubicación</th>                            
+                                    <th>Litros</th>                            
+                                    <th>Valor</th>                            
                                     <th>Descripción</th>                            
                                     <th>Estado</th>
                                 </tr>
@@ -42,7 +44,9 @@
                                 <tr class="cursor-pointer" ng-repeat="alquilable in alquilables"  ng-init="isHover='tresde-right-hidden'" ng-mouseover="isHover='tresde-right-left';" ng-mouseleave="isHover='tresde-right-hidden'">
                                     <td>{{ alquilable.id}}</td>                            
                                     <td>{{ alquilable.codigo}}</td>                            
-                                    <td>{{ alquilable.ubicacion}}</td>
+                                    <td>{{ alquilable.ubicacion.nombre}}</td>
+                                    <td>{{ alquilable.costo}}</td>
+                                    <td>{{ alquilable.valor}}</td>
                                     <td>{{ alquilable.descripcion}}</td>
                                     <td><span class="badge {{ alquilable.class }}">{{ alquilable.estado }}</span>
                                         <div class="tresde-right-container" > 

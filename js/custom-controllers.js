@@ -2043,11 +2043,9 @@ $scope.modal={
                 for(var i = 0; i < $scope.alquilables.length; i++){
                     switch ($scope.alquilables[i].estado){
                         case 'Disponible':
-                        //$scope.alquilables[i].estado= "Disponible"
                         $scope.alquilables[i].class= "badge-primary";
                         break;
                         case 'Alquilado':
-                        //$scope.alquilables[i].estado= "Alquilado";
                         $scope.alquilables[i].class= "badge-warning";
                         break; 
                     }
@@ -2136,6 +2134,17 @@ $scope.modal={
                         }
                     }
                 });
+
+                modalInstance.result.then(
+                    function(data){
+                        console.log('Primer Result - '+data);
+                    },
+                    function(data){
+                        console.log('Segundo Result - '+data);
+                        data.class= "badge-primary";
+                        $scope.alquilables.push(data);
+                    }   
+                );
             },
             editar : function (alquilable){
                 var modalInstance = $uibModal.open({
@@ -2154,6 +2163,21 @@ $scope.modal={
                     }
 
                 });
+
+                modalInstance.result.then(
+                    function(data){
+                        console.log('Primer Result - '+data);
+                    },
+                    function(data){
+                        console.log('Segundo Result - '+data);
+                        data.class= "badge-primary";
+                        $scope.alquilables.forEach(function(elem,index,array){
+                            if(elem.id == data.id){
+                                array[index]=data;
+                            }
+                        });
+                    }   
+                );
             }
         }
     }])
