@@ -1907,7 +1907,7 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
             //para imprimir en el cupon
 
                 //categoria Envases y nombre Tapas (una pija -> ToDo)
-             if (($scope.resumen.productos[i].productoReal.categoria=="Envases")|| $scope.resumen.productos[i].productoReal.nombre=="Tapas"){
+            if ($scope.resumen.productos[i].productoReal.entregable == 1){
 
                 entregablesFormateados += " + " + $scope.resumen.productos[i].cantidad + " - " +$scope.resumen.productos[i].productoReal.nombre;
                 entregablesFormateados += '</br style="line-height: 2px;">';
@@ -1919,18 +1919,17 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
 
         cupon.entregablesFormateados = entregablesFormateados;
     
-        console.log("entregablesFormateados");
-        console.log(cupon.entregablesFormateados);
 
         //ToDo if flagDevAlq
-        if(!flagDevAlq && false){
-        //if(true){
+        //if(!flagDevAlq && false){
+        if(true){
                     $http.post('http://blackhop.api.dessin.com.ar/api/pos/caja/venta', {
 
                         idCliente:$scope.clienteSeleccionado.id,
                         monto: $scope.resumen.total,
                         itemsVenta: JSON.stringify(itemsVenta),
                         pagoTarjeta: $scope.flagPagoTarjeta,
+                        entregables: entregablesFormateados
                     }).success(function(response) {
                         cupon.codigo=response.codigo;
                         if(cupon.codigo!="OK"){ //no genero cupon porque no es necesario (ie. vendí antares)
