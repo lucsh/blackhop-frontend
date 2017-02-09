@@ -521,6 +521,54 @@ vm.login2 = function() {
                 });
     }    
 
+    $scope.anularCupon = function() {
+        SweetAlert.swal({
+                title: "Eliminar Cupon",
+                text: "Ingresa el numero de cupon a eliminar:",
+                type: "input",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "¡Eliminar!",
+                cancelButtonText: "Cancelar",
+                closeOnCancel: true,
+                closeOnConfirm: false
+            },
+            function(inputValue) {
+                if (inputValue === false) return false;
+
+                if (inputValue === "") {
+                    swal.showInputError("Tenes que escribir algo");
+                    return false
+                }
+
+                swal({
+                        title: "Estas seguro?",
+                        text: "Vas a eliminar el cupon N˚ <span style='color:#F8BB86; font-weight:600'>" + inputValue,
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "¡Si, Eliminalo!",
+                        cancelButtonText: "Cancelar",
+                        closeOnConfirm: false,
+                        closeOnCancel: false,
+                        html: true
+                    },
+                    function(isConfirm) {
+                        if (isConfirm) {
+                            $http.post('http://blackhop.api.dessin.com.ar/api/pos/caja/anularcupon/' + inputValue)
+                                .success(function() {
+                                    swal("¡Eliminado!", "El cupon fue borrado.", "success");
+                                }).error(function(error) {
+                                    console.log(error.error);
+                                    SweetAlert.swal("ERROR", error.error, "error"); 
+                                });
+                        } else {
+                        swal("Cancelado", "Todo sigue como antes", "error");
+                        }
+                    });
+        });
+    }
+        
     $scope.devolverAlqulier=function(){
 
         $scope.bajar='';  

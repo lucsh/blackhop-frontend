@@ -21,6 +21,11 @@
                         <i class="fa fa-database"></i> Devolucion de Alquiler
                     </a>
                 </li>
+                <li ng-if="$parent.$state.current.name=='pos.point_of_sale'">
+                    <a class="text-warning" ng-click="anularCupon()">
+                        <i class="fa fa-barcode"></i> Anular Cupon
+                    </a>
+                </li>
             </ul>
             <ul class="nav navbar-top-links navbar-left">
                 <li>                 
