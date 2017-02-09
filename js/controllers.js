@@ -1874,7 +1874,7 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
         
         var cupon={};
 
-        var entregablesFormateados = "";
+        var entregables = "";
 
 
         //console.log(JSON.stringify($scope.resumen));
@@ -1909,15 +1909,15 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
                 //categoria Envases y nombre Tapas (una pija -> ToDo)
             if ($scope.resumen.productos[i].productoReal.entregable == 1){
 
-                entregablesFormateados += " + " + $scope.resumen.productos[i].cantidad + " - " +$scope.resumen.productos[i].productoReal.nombre;
-                entregablesFormateados += '</br style="line-height: 2px;">';
+                entregables += " + " + $scope.resumen.productos[i].cantidad + " - " +$scope.resumen.productos[i].productoReal.nombre;
+                entregables += '</br style="line-height: 2px;">';
 
             }
         }
         
 
 
-        cupon.entregablesFormateados = entregablesFormateados;
+        cupon.entregables = entregables;
     
 
         //ToDo if flagDevAlq
@@ -1929,7 +1929,7 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
                         monto: $scope.resumen.total,
                         itemsVenta: JSON.stringify(itemsVenta),
                         pagoTarjeta: $scope.flagPagoTarjeta,
-                        entregables: entregablesFormateados
+                        entregables: entregables
                     }).success(function(response) {
                         cupon.codigo=response.codigo;
                         if(cupon.codigo!="OK"){ //no genero cupon porque no es necesario (ie. vendí antares)
@@ -2914,14 +2914,15 @@ $scope.toggleEditar = function() {
 
 };
 
-function imprimirCuponCtrl ($scope,$log,$uibModalInstance,cupon){
+function imprimirCuponCtrl ($scope,$sanitize,$log,$uibModalInstance,cupon){
 
         $scope.cupon=cupon;
+
+        console.log(cupon)
 
         //var f = moment($scope.cupon.fecha);          
         //var vencimiento =f.clone().add($scope.cupon.vigencia,'d');
         $scope.vencimiento=moment($scope.cupon.fecha,'YYYY-MM-DD').add($scope.cupon.vigencia,'days').locale('es').format('DD/MM/YYYY');
-
 
         ///$scope.vencimiento=moment($scope.cupon.fecha).locale('es').format('DD/MMM/YYYY');
         //$scope.vencimiento=$scope.vencimiento.clone().add($scope.cupon.vigencia,'d');
@@ -2993,7 +2994,7 @@ function imprimirCuponCtrl ($scope,$log,$uibModalInstance,cupon){
             +           $scope.cupon.codigo
             +'        </p>'
             +'        </div>'
-            +           $scope.cupon.entregablesFormateados
+            +           $scope.cupon.entregables
             +'        <br style="line-height: 2px;">'
             +'        <p style="font-family: Tahoma, sans-serif;margin:0 11px; padding:0;font-size: 10px;font-weight: 600;">Valido Hasta:</p><br style="line-height: 3px;">'
             +'        <p style="font-family: Impact, Charcoal, sans-serif;margin:0 8px; padding:0;font-size: 12px;font-weight: 600;line-height: 0px;">'+$scope.vencimiento+'</p>'

@@ -38,7 +38,8 @@
         <io-barcode code="{{ cupon.codigo }}" type="{{ barcodeType }}" options="barcodeOptions" class="codigodebarras"></io-barcode>
         
         </div>
-        <br>
+        <br>        
+        <h3 class="text-center print-full-width small nopadding nomargins" ng-bind-html="cupon.entregables"></h3><br>
         <h3 class="text-center print-full-width small nopadding nomargins">Valido Hasta:</h3><br>
         <h2 class="text-center print-full-width nopadding nomargins ">{{vencimiento}}</h2>
     <hr>
