@@ -1898,7 +1898,7 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
             itemsVenta.push(item);
             console.log(item);
             
-            if ($scope.resumen.productos[i].productoReal.categoria=="Cupones"){            
+            if ($scope.resumen.productos[i].productoReal.categoria=="Cupones" || $scope.resumen.productos[i].productoReal.categoria=="Voucher"){            
                 totalLitrosCupones+=$scope.resumen.productos[i].cantidad;
             }
 
