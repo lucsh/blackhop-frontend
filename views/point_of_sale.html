@@ -28,13 +28,42 @@
                 </li>
             </ul>
             <ul class="nav navbar-top-links navbar-left">
-                <li>                 
-                    <!-- Ver el tema del menú (cargar otro para los que estan en sesion)-->
+                <li>
                     <a ui-sref="app.canillas"><i class="fa fa-beer"></i><span class="nav-label">Canillas</span> </a>
                 </li>
 
             </ul>
             <ul class="nav navbar-top-links navbar-right">
+                <li uib-dropdown>
+                <a class="count-info" href uib-dropdown-toggle>
+                    <i class="fa fa-bell"></i> <span class="label label-primary">{{alertaAlquileres.length}}</span>
+                </a>
+                <ul class="dropdown-alerts" uib-dropdown-menu>
+
+                    <div ng-repeat="alquiler in alertaAlquileres">
+                    <li>
+                        <a ui-sref="" ng-click="">
+                            <div>
+                                <i class="fa fa-database fa-fw"></i> {{alquiler.nombreCliente}} - {{alquiler.nombreEquipo}}
+                                <span class="pull-right text-muted small">{{alquiler.fecha}}</span>
+                                <br><span class="small">{{alquiler.estilos}}</span>
+                                <span ng-if="alquiler.fecha =='Hoy' " class="pull-right text-navy">
+                                <i class="fa fa-check-square-o" aria-hidden="true"></i></span>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                    </div>
+                    <li>
+                        <div class="text-center link-block">
+                            <a ui-sref="">
+                                <strong>Ver todos los Alquileres</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </li>
                 <li ng-if="$parent.$state.current.name=='pos.point_of_sale'">
                     <a class="text-warning" ng-click="terminarSesionCaja()">
                         <i class="fa fa-sign-out"></i> Terminar sesión
