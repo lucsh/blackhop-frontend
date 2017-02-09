@@ -2035,12 +2035,13 @@ function crearAlquilableCtrl ($http,$scope,$log,$uibModalInstance,SweetAlert,alq
             $scope.newProd.descripcion = $scope.newAlquilable.descripcion;
             $scope.newProd.costo = $scope.newAlquilable.costo;
             $scope.newProd.valor = $scope.newAlquilable.valor;
-            //$scope.newProd.ubicacion = {
-            //    id: $scope.newAlquilable.ubicacion.id,
-            //    nombre: $scope.newAlquilable.ubicacion.nombre,
-            //    direccion: $scope.newAlquilable.ubicacion.direccion 
-            //};
-            //ToDo NO ANDA
+            $scope.newProd.ubicacion = {
+                id: $scope.newAlquilable.ubicacion.id,
+                nombre: $scope.newAlquilable.ubicacion.nombre,
+                direccion: $scope.newAlquilable.ubicacion.direccion 
+            };
+            //ToDo NO ANDA 
+            //DONE (y si te digo que descomente y anda?)
             $scope.ubicaciones.forEach(function(ubicacion){
                 if(ubicacion.id == $scope.newProd.ubicacion.id){
                     $scope.newProd.ubicacion = ubicacion;
