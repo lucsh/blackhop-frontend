@@ -416,30 +416,13 @@ vm.login2 = function() {
 
     $scope.flagDevAlq = false;   
 
+
     $scope.getAlertaAlquileres = function (){
-      $scope.alertaAlquileres = [
-                                  {
-                                    id: '3',
-                                    nombreCliente:'Luciano Marquez',                
-                                    fecha: 'Hoy',
-                                    nombreEquipo:'Barril 9 lts',
-                                    estilos:'Ipa o Negra'
-                                  },
-                                  {
-                                    id: '3',
-                                    nombreCliente:'Martin Garcia',                
-                                    fecha: 'Hoy',
-                                    nombreEquipo:'Barril 9 lts',
-                                    estilos:'Scotish'
-                                  },
-                                  {
-                                    id: '3',
-                                    nombreCliente:'Gabriel Martinez',                
-                                    fecha: 'Mañana',
-                                    nombreEquipo:'Barril 9 lts',
-                                    estilos:'Golden o Honey'
-                                  }
-                                ]
+        $http.get('http://blackhop.api.dessin.com.ar/api/pos/caja/alertaalquileres').success(function(response){    
+            $scope.alertaAlquileres = response.data;
+        }).error(function(error){
+            console.log(error);
+        }) 
     }
 
     $scope.getAlertaAlquileres();
