@@ -1637,6 +1637,7 @@ function wizardProductoInvantarioCtrl ($http,$scope,$log,$uibModalInstance,Sweet
                             /*
                             ACA VA EL PUT DE AJUSTAR
                             */
+                            $uibModalInstance.close();
                             $http.put('http://blackhop.api.dessin.com.ar/api/admin/inventarioajustar/'+$scope.productoEdit.id,{
                                 cantidad:cantidad
                             }).success(function(response){    
@@ -1655,7 +1656,7 @@ function wizardProductoInvantarioCtrl ($http,$scope,$log,$uibModalInstance,Sweet
 
                             //$scope.productoEdit.stock-=cantidad;
                             //SweetAlert.swal("¡Hecho!", "El ajuste fue aplicado", "success"); 
-                            $uibModalInstance.close();
+                            
                         } else {
                             SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
                         }
@@ -1678,6 +1679,7 @@ function wizardProductoInvantarioCtrl ($http,$scope,$log,$uibModalInstance,Sweet
                             /*
                             ACA VA EL PUT de AGREGAR
                             */
+                            $uibModalInstance.close();
                             $http.put('http://blackhop.api.dessin.com.ar/api/admin/inventarioagregar/'+$scope.productoEdit.id,{
                                 cantidad:cantidad
                             }).success(function(response){    
@@ -1698,7 +1700,7 @@ function wizardProductoInvantarioCtrl ($http,$scope,$log,$uibModalInstance,Sweet
 
                             //$scope.productoEdit.stock+=cantidad;
                             //SweetAlert.swal("¡Hecho!", "El ajuste fue aplicado", "success"); 
-                            $uibModalInstance.close();
+                            
                         } else {
                             SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
                         }
