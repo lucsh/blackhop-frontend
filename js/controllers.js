@@ -3831,38 +3831,38 @@ function MainCtrl() {
         }
     };
 
-    this.PieChart = {
+    this.aPieChart = {
         data: [1, 5],
         options: {
             fill: ["#1ab394", "#d7d7d7"]
         }
     };
 
-    this.PieChart2 = {
+    this.aPieChart2 = {
         data: [226, 360],
         options: {
             fill: ["#1ab394", "#d7d7d7"]
         }
     };
-    this.PieChart3 = {
+    this.aPieChart3 = {
         data: [0.52, 1.561],
         options: {
             fill: ["#1ab394", "#d7d7d7"]
         }
     };
-    this.PieChart4 = {
+    this.aPieChart4 = {
         data: [1, 4],
         options: {
             fill: ["#1ab394", "#d7d7d7"]
         }
     };
-    this.PieChart5 = {
+    this.aPieChart5 = {
         data: [226, 134],
         options: {
             fill: ["#1ab394", "#d7d7d7"]
         }
     };
-    this.PieChart6 = {
+    this.aPieChart6 = {
         data: [0.52, 1.041],
         options: {
             fill: ["#1ab394", "#d7d7d7"]

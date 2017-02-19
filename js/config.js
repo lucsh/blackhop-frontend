@@ -248,6 +248,9 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
                         },
                         {
                             files: ['js/plugins/sparkline/jquery.sparkline.min.js']
+                        },
+                        {
+                            files: ['css/plugins/iCheck/custom.css','js/plugins/iCheck/icheck.min.js']
                         }
                     ]);
                 }

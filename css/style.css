@@ -5643,6 +5643,26 @@ body.body-small .vote-icon {
     -webkit-transition-property: height, visibility;
     transition-property: height, visibility;
 }
+.sk-loading {
+  position: relative;
+}
+.sk-loading:after {
+  content: '';
+  background-color: rgba(255, 255, 255, 0.7);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.sk-loading > .sk-spinner {
+    display: block;
+    position: absolute;
+    top: 40%;
+    left: 0;
+    right: 0;
+    z-index: 2000;
+}
 /*
 *  Usage:
 *
@@ -5697,7 +5717,7 @@ body.body-small .vote-icon {
 .sk-spinner-double-bounce.sk-spinner {
     width: 40px;
     height: 40px;
-    position: relative;
+   /* position: relative;*/
     margin: 0 auto;
 }
 .sk-spinner-double-bounce .sk-double-bounce1,
