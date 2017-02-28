@@ -1,8 +1,9 @@
+<div ng-controller="dashboardCtrl as chart">
 
-<div class="wrapper wrapper-content animated fadeIn sk-loading" ng-controller="dashboardCtrl as chart">
+<div class="wrapper wrapper-content animated fadeIn" ng-class="{'sk-loading' : cargando}">
     <!-- ng-controller="dashboardFive as chart"> -->
-
-                                <div class="sk-spinner sk-spinner-double-bounce">
+    {{cargando}}
+                                <div ng-show="cargando" class="sk-spinner sk-spinner-double-bounce">
                                     <div class="sk-double-bounce1"></div>
                                     <div class="sk-double-bounce2"></div>
                                 </div>
@@ -205,11 +206,13 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <!--
                                         <tr ng-repeat ng-repeat="cerveza in cervezaStock">
                                             <td>{{cerveza.marca}}</td>
                                             <td>{{cerveza.nombre}}</td>
                                             <td class="text-navy"><i class="fa fa-database"></i> {{cerveza.cantidad}} l.</td>
                                         </tr>
+                                        -->
                                         <tr>
                                             <td>Crafter</td>
                                             <td>IPA</td>
@@ -314,4 +317,5 @@
     </div>
 
 
+</div>
 </div>

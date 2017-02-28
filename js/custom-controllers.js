@@ -3,14 +3,62 @@ angular
 
 .controller('dashboardCtrl', ['$scope', '$state', '$http', function($scope, $state, $http){
 
+    $scope.cargando = true;
 
+    $scope.getDatosDashboard = function (){
+
+        $http.get('http://blackhop.api.dessin.com.ar/api/admin/dashboard').success(function(datosDashboard){    
+            
+            $scope.cargando = false;
+
+            /*
+            *** ToDo ***
+            Ventas mes actual
+            Ventas semana
+
+            Ventas mes -1
+            Ventas año
+
+            Litros de cerveza mes
+            Growlers mes
+            Cerveza env mes
+
+            Litros de cerveza año
+            Growlers año
+            Cerveza env año
+
+            % de ventas por dia ultimas 4 smenas
+
+            Ventas anuales por mes (por locales)
+
+            Alquileres a devolver y a entregar hoy
+
+            Stock en local(es)
+                Filtrar por local (MORE?)
+
+            */
+
+            console.log("$scope.cargando")
+            console.log($scope.cargando)
+
+        }).error(function(error){
+            console.log(error);
+        });        
+    }
+    
+    $scope.getDatosDashboard();
+
+    //no sirve
     var data1 = [
         [0,4],[1,8],[2,5],[3,10],[4,4],[5,16],[6,5],[7,11],[8,6],[9,11],[10,20],[11,10],[12,13]
     ];
+
+    //no sirve
     var data2 = [
         [0,0],[1,2],[2,7],[3,4],[4,11],[5,4],[6,2],[7,5],[8,11],[9,5],[10,4],[11,1],[12,5]
     ];
 
+    //no sirve
     var options = {
         series: {
             lines: {
@@ -51,7 +99,7 @@ angular
     this.flotData = [data1, data2];
     this.flotOptions = options;
 
-
+    //Grafico 1
     var sparkline1Data = [34, 43, 43, 35, 44, 32, 44, 52];
     var sparkline1Options = {
         type: 'line',
@@ -61,6 +109,7 @@ angular
         fillColor: "transparent"
     };
 
+    //Grafico 2 
     var sparkline2Data = [32, 11, 25, 37, 41, 32, 34, 42];
     var sparkline2Options = {
         type: 'line',
@@ -74,6 +123,9 @@ angular
     this.sparkline1Options = sparkline1Options;
     this.sparkline2 = sparkline2Data;
     this.sparkline2Options = sparkline2Options;
+
+
+    //Tendencia de ventas
 
     $scope.lunesPieChart = {
         data: [8, 100],
