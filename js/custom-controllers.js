@@ -4,100 +4,216 @@ angular
 .controller('dashboardCtrl', ['$scope', '$state', '$http', function($scope, $state, $http){
 
     $scope.cargando = true;
+    $scope.datosDashboard = {};
+
+    // TODO BUG 
+    // Si inicializo los datos, no se sobre escriben en la carga
+    // Si no lo hago tengo un error por dato por dia 
+
+    $scope.lunesPieChart = { 
+        data: [0, 100], 
+        options: { 
+            fill: ["#1ab394", "#d7d7d7"] 
+        } 
+    }; 
+ 
+    $scope.martesPieChart = { 
+        data: [0, 100], 
+        options: { 
+            fill: ["#1ab394", "#d7d7d7"] 
+        } 
+    }; 
+    $scope.miercolesPieChart = { 
+        data: [0, 100], 
+        options: { 
+            fill: ["#1ab394", "#d7d7d7"] 
+        } 
+    }; 
+    $scope.juevesPieChart = { 
+        data: [0, 100], 
+        options: { 
+            fill: ["#1ab394", "#d7d7d7"] 
+        } 
+    }; 
+    $scope.viernesPieChart = { 
+        data: [0, 100], 
+        options: { 
+            fill: ["#1ab394", "#d7d7d7"] 
+        } 
+    }; 
+    $scope.sabadoPieChart = { 
+        data: [0, 100], 
+        options: { 
+            fill: ["#1ab394", "#d7d7d7"] 
+        } 
+    }; 
+    $scope.domingoPieChart = { 
+        data: [0, 100], 
+        options: { 
+            fill: ["#1ab394", "#d7d7d7"] 
+        } 
+    }; 
 
     $scope.getDatosDashboard = function (){
 
         $http.get('http://blackhop.api.dessin.com.ar/api/admin/dashboard').success(function(datosDashboard){    
             
+            $scope.datosDashboard = datosDashboard;
+       
+            //Tendencia de ventas
+
+            $scope.lunesPieChart = {
+                data: [$scope.datosDashboard.procVentaPorDia[0], 100],
+                options: {
+                    fill: ["#1ab394", "#d7d7d7"]
+                }
+            };
+
+            $scope.martesPieChart = {
+                data: [$scope.datosDashboard.procVentaPorDia[1], 100],
+                options: {
+                    fill: ["#1ab394", "#d7d7d7"]
+                }
+            };
+            $scope.miercolesPieChart = {
+                data: [$scope.datosDashboard.procVentaPorDia[2], 100],
+                options: {
+                    fill: ["#1ab394", "#d7d7d7"]
+                }
+            };
+            $scope.juevesPieChart = {
+                data: [$scope.datosDashboard.procVentaPorDia[3], 100],
+                options: {
+                    fill: ["#1ab394", "#d7d7d7"]
+                }
+            };
+            $scope.viernesPieChart = {
+                data: [$scope.datosDashboard.procVentaPorDia[4], 100],
+                options: {
+                    fill: ["#1ab394", "#d7d7d7"]
+                }
+            };
+            $scope.sabadoPieChart = {
+                data: [$scope.datosDashboard.procVentaPorDia[5], 100],
+                options: {
+                    fill: ["#1ab394", "#d7d7d7"]
+                }
+            };
+            $scope.domingoPieChart = {
+                data: [$scope.datosDashboard.procVentaPorDia[6], 100],
+                options: {
+                    fill: ["#1ab394", "#d7d7d7"]
+                }
+            };
+
+            for (var i = 0; i < $scope.datosDashboard.ventasAnualesPorMes[0].length; i++) {
+                if($scope.datosDashboard.ventasAnualesPorMes[0][i] == null){
+                    $scope.datosDashboard.ventasAnualesPorMes[0][i] = 0;           
+                }
+            }
+
+            //datos por local de ventas por mes
+                $scope.graficoVentasAnualesPorMes = [
+                    [0,0],
+                    [1,$scope.datosDashboard.ventasAnualesPorMes[0][0]],
+                    [2,$scope.datosDashboard.ventasAnualesPorMes[0][1]],
+                    [3,$scope.datosDashboard.ventasAnualesPorMes[0][2]],
+                    [4,$scope.datosDashboard.ventasAnualesPorMes[0][3]],
+                    [5,$scope.datosDashboard.ventasAnualesPorMes[0][4]],
+                    [6,$scope.datosDashboard.ventasAnualesPorMes[0][5]],
+                    [7,$scope.datosDashboard.ventasAnualesPorMes[0][6]],
+                    [8,$scope.datosDashboard.ventasAnualesPorMes[0][7]],
+                    [9,$scope.datosDashboard.ventasAnualesPorMes[0][8]],
+                    [10,$scope.datosDashboard.ventasAnualesPorMes[0][9]],
+                    [11,$scope.datosDashboard.ventasAnualesPorMes[0][10]],
+                    [12,$scope.datosDashboard.ventasAnualesPorMes[0][11]]
+                ];
+                /*
+                data2 = [
+                    [0,0],
+                    [1,2],
+                    [2,7],
+                    [3,4],
+                    [4,11],
+                    [5,4],
+                    [6,2],
+                    [7,5],
+                    [8,11],
+                    [9,5],
+                    [10,4],
+                    [11,1],
+                    [12,5]
+                ];
+
+                data3 = [
+                    [0,0],
+                    [1,2],
+                    [2,7],
+                    [3,4],
+                    [4,11],
+                    [5,4],
+                    [6,2],
+                    [7,5],
+                    [8,11],
+                    [9,5],
+                    [10,4],
+                    [11,1],
+                    [12,5]
+                ];
+                
+                */
+
+            var flotOptions = {
+                series: {
+                    lines: {
+                        show: false,
+                        fill: true
+                    },
+                    splines: {
+                        show: true,
+                        tension: 0.4,
+                        lineWidth: 1,
+                        fill: 0.4
+                    },
+                    points: {
+                        radius: 0,
+                        show: true
+                    },
+                    shadowSize: 2
+                },
+                grid: {
+                    hoverable: true,
+                    clickable: true,
+
+                    borderWidth: 2,
+                    color: 'transparent'
+                },
+                colors: ["#1ab394", "#1C84C6"],//un color por local
+                xaxis:{
+                },
+                yaxis: {
+                },
+                tooltip: false
+            };
+
+            /**
+             * Flot chart
+             */
+            //this.flotData = [data1, data2, data3];
+            $scope.chart.flotData = [$scope.graficoVentasAnualesPorMes];
+            $scope.chart.flotOptions = flotOptions;
+
             $scope.cargando = false;
 
-            /*
-            *** ToDo ***
-            Ventas mes actual
-            Ventas semana
-
-            Ventas mes -1
-            Ventas año
-
-            Litros de cerveza mes
-            Growlers mes
-            Cerveza env mes
-
-            Litros de cerveza año
-            Growlers año
-            Cerveza env año
-
-            % de ventas por dia ultimas 4 smenas
-
-            Ventas anuales por mes (por locales)
-
-            Alquileres a devolver y a entregar hoy
-
-            Stock en local(es)
-                Filtrar por local (MORE?)
-
-            */
-
-            console.log("$scope.cargando")
-            console.log($scope.cargando)
 
         }).error(function(error){
             console.log(error);
         });        
     }
-    
+
     $scope.getDatosDashboard();
 
-    //no sirve
-    var data1 = [
-        [0,4],[1,8],[2,5],[3,10],[4,4],[5,16],[6,5],[7,11],[8,6],[9,11],[10,20],[11,10],[12,13]
-    ];
 
-    //no sirve
-    var data2 = [
-        [0,0],[1,2],[2,7],[3,4],[4,11],[5,4],[6,2],[7,5],[8,11],[9,5],[10,4],[11,1],[12,5]
-    ];
-
-    //no sirve
-    var options = {
-        series: {
-            lines: {
-                show: false,
-                fill: true
-            },
-            splines: {
-                show: true,
-                tension: 0.4,
-                lineWidth: 1,
-                fill: 0.4
-            },
-            points: {
-                radius: 0,
-                show: true
-            },
-            shadowSize: 2
-        },
-        grid: {
-            hoverable: true,
-            clickable: true,
-
-            borderWidth: 2,
-            color: 'transparent'
-        },
-        colors: ["#1ab394", "#1C84C6"],
-        xaxis:{
-        },
-        yaxis: {
-        },
-        tooltip: false
-    };
-
-    /**
-     * Definition of variables
-     * Flot chart
-     */
-    this.flotData = [data1, data2];
-    this.flotOptions = options;
 
     //Grafico 1
     var sparkline1Data = [34, 43, 43, 35, 44, 32, 44, 52];
@@ -125,51 +241,7 @@ angular
     this.sparkline2Options = sparkline2Options;
 
 
-    //Tendencia de ventas
-
-    $scope.lunesPieChart = {
-        data: [8, 100],
-        options: {
-            fill: ["#1ab394", "#d7d7d7"]
-        }
-    };
-
-    $scope.martesPieChart = {
-        data: [12, 100],
-        options: {
-            fill: ["#1ab394", "#d7d7d7"]
-        }
-    };
-    $scope.miercolesPieChart = {
-        data: [20, 100],
-        options: {
-            fill: ["#1ab394", "#d7d7d7"]
-        }
-    };
-    $scope.juevesPieChart = {
-        data: [15, 100],
-        options: {
-            fill: ["#1ab394", "#d7d7d7"]
-        }
-    };
-    $scope.viernesPieChart = {
-        data: [18, 100],
-        options: {
-            fill: ["#1ab394", "#d7d7d7"]
-        }
-    };
-    $scope.sabadoPieChart = {
-        data: [20, 100],
-        options: {
-            fill: ["#1ab394", "#d7d7d7"]
-        }
-    };
-    $scope.domingoPieChart = {
-        data: [7, 100],
-        options: {
-            fill: ["#1ab394", "#d7d7d7"]
-        }
-    };
+    
 }])
 
 
