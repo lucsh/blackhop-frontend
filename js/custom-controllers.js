@@ -6,53 +6,7 @@ angular
     $scope.cargando = true;
     $scope.datosDashboard = {};
 
-    // TODO BUG 
-    // Si inicializo los datos, no se sobre escriben en la carga
-    // Si no lo hago tengo un error por dato por dia 
-
-    $scope.lunesPieChart = { 
-        data: [0, 100], 
-        options: { 
-            fill: ["#1ab394", "#d7d7d7"] 
-        } 
-    }; 
- 
-    $scope.martesPieChart = { 
-        data: [0, 100], 
-        options: { 
-            fill: ["#1ab394", "#d7d7d7"] 
-        } 
-    }; 
-    $scope.miercolesPieChart = { 
-        data: [0, 100], 
-        options: { 
-            fill: ["#1ab394", "#d7d7d7"] 
-        } 
-    }; 
-    $scope.juevesPieChart = { 
-        data: [0, 100], 
-        options: { 
-            fill: ["#1ab394", "#d7d7d7"] 
-        } 
-    }; 
-    $scope.viernesPieChart = { 
-        data: [0, 100], 
-        options: { 
-            fill: ["#1ab394", "#d7d7d7"] 
-        } 
-    }; 
-    $scope.sabadoPieChart = { 
-        data: [0, 100], 
-        options: { 
-            fill: ["#1ab394", "#d7d7d7"] 
-        } 
-    }; 
-    $scope.domingoPieChart = { 
-        data: [0, 100], 
-        options: { 
-            fill: ["#1ab394", "#d7d7d7"] 
-        } 
-    }; 
+   
 
     $scope.getDatosDashboard = function (){
 
@@ -203,8 +157,22 @@ angular
             $scope.chart.flotData = [$scope.graficoVentasAnualesPorMes];
             $scope.chart.flotOptions = flotOptions;
 
-            $scope.cargando = false;
+            for (var i = 0; i < $scope.datosDashboard.ultimosSiete.length; i++) {
+                 if($scope.datosDashboard.ultimosSiete[i] == null){
+                    $scope.datosDashboard.ultimosSiete[i] = 0;           
+                }
+            }
+            for (var i = 0; i < $scope.datosDashboard.ultimasCuatroWeeks.length; i++) {
+                 if($scope.datosDashboard.ultimasCuatroWeeks[i] == null){
+                    $scope.datosDashboard.ultimasCuatroWeeks[i] = 0;           
+                }
+            }
+           
 
+
+            $scope.cargando = false;
+            console.log("$scope")
+            console.log($scope)
 
         }).error(function(error){
             console.log(error);
@@ -212,33 +180,21 @@ angular
     }
 
     $scope.getDatosDashboard();
+     
+            //var sparkline1Data = $scope.datosDashboard.ultimosSiete;
+            var sparklineOptions = {
+                type: 'line',
+                width: '100%',
+                height: '50',
+                lineColor: '#1ab394',
+                fillColor: "transparent"
+            };
+            //$scope.datosDashboard.ultimosSiete = [0,100,200,700,400,500,600];
+            //$scope.datosDashboard.ultimasCuatroWeeks = [200,300,200,700];
+            
+            $scope.chart.sparklineOptions = sparklineOptions;
 
-
-
-    //Grafico 1
-    var sparkline1Data = [34, 43, 43, 35, 44, 32, 44, 52];
-    var sparkline1Options = {
-        type: 'line',
-        width: '100%',
-        height: '50',
-        lineColor: '#1ab394',
-        fillColor: "transparent"
-    };
-
-    //Grafico 2 
-    var sparkline2Data = [32, 11, 25, 37, 41, 32, 34, 42];
-    var sparkline2Options = {
-        type: 'line',
-        width: '100%',
-        height: '50',
-        lineColor: '#1ab394',
-        fillColor: "transparent"
-    };
-
-    this.sparkline1 = sparkline1Data;
-    this.sparkline1Options = sparkline1Options;
-    this.sparkline2 = sparkline2Data;
-    this.sparkline2Options = sparkline2Options;
+   
 
 
     

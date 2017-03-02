@@ -18,7 +18,7 @@
                     Ventas en el mes acumuladas
                 </small>
                 <div class="m-b-sm">
-                    <div sparkline spark-data="chart.sparkline1" spark-options="chart.sparkline1Options"></div>
+                    <div ng-if="datosDashboard.ultimosSiete" sparkline spark-data="datosDashboard.ultimosSiete" spark-options="chart.sparklineOptions"></div>
                 </div>
                 <div class="row ">
                     <div class="col-xs-4">
@@ -45,7 +45,7 @@
                     Ventas en la semana
                 </small>
                 <div class="m-b-sm">
-                    <div sparkline spark-data="chart.sparkline2" spark-options="chart.sparkline2Options"></div>
+                    <div ng-if="datosDashboard.ultimasCuatroWeeks" sparkline spark-data="datosDashboard.ultimasCuatroWeeks" spark-options="chart.sparklineOptions"></div>
                 </div>
                 <div class="row">
                     <div class="col-xs-4">
@@ -140,9 +140,9 @@
 
                 <div class="row">
                     <div class="col-lg-6">
-                        <div class="ibox float-e-margins">
+                        <div class="ibox float-e-margins" ng-repeat="local in datosDashboard.stock">
                             <div class="ibox-title">
-                                <h5>Stock de Cerveza en Local</h5>
+                                <h5>Stock de Cerveza en "{{local[0]}}"</h5>
                                 <div ibox-tools></div>
                             </div>
                             <div class="ibox-content">
@@ -156,10 +156,10 @@
                                     </thead>
                                     <tbody>
                                         
-                                        <tr ng-repeat="cerveza in datosDashboard.stock" ng-if="cerveza.stock > 0">
-                                            <td>{{cerveza.marca}}</td>
-                                            <td>{{cerveza.nombre}}</td>
-                                            <td class="text-navy"><i class="fa fa-database"></i> {{cerveza.stock}} l.</td>
+                                        <tr ng-repeat="item in local" ng-if="item.stock > 0 && item.categoria=='Cerveza Tirada'">
+                                            <td>{{item.marca}}</td>
+                                            <td>{{item.nombre}}</td>
+                                            <td class="text-navy"><i class="fa fa-database"></i> {{item.stock}} l.</td>
                                         </tr>
                                         
                                         
@@ -182,37 +182,37 @@
                                 <table class="table table-hover">
                                     <tbody>
                                         <tr>
-                                            <td><pie-chart data="lunesPieChart.data" options="lunesPieChart.options"></pie-chart></td>
+                                            <td><pie-chart ng-if="lunesPieChart" data="lunesPieChart.data" options="lunesPieChart.options"></pie-chart></td>
                                             <td>Lunes</td>
                                             <td class="text-navy">{{lunesPieChart.data[0]}} %</td>
                                         </tr>
                                         <tr>
-                                            <td><pie-chart data="martesPieChart.data" options="martesPieChart.options"></pie-chart></td>
+                                            <td><pie-chart ng-if="martesPieChart" data="martesPieChart.data" options="martesPieChart.options"></pie-chart></td>
                                             <td>Martes</td>
                                             <td class="text-navy">{{martesPieChart.data[0]}} %</td>
                                         </tr>
                                         <tr>
-                                            <td><pie-chart data="miercolesPieChart.data" options="miercolesPieChart.options"></pie-chart></td>
+                                            <td><pie-chart ng-if="miercolesPieChart" data="miercolesPieChart.data" options="miercolesPieChart.options"></pie-chart></td>
                                             <td>Miercoles</td>
                                             <td class="text-navy">{{miercolesPieChart.data[0]}} %</td>
                                         </tr>
                                         <tr>
-                                            <td><pie-chart data="juevesPieChart.data" options="juevesPieChart.options"></pie-chart></td>
+                                            <td><pie-chart ng-if="juevesPieChart" data="juevesPieChart.data" options="juevesPieChart.options"></pie-chart></td>
                                             <td>Jueves</td>
                                             <td class="text-navy">{{juevesPieChart.data[0]}} %</td>
                                         </tr>
                                         <tr>
-                                            <td><pie-chart data="viernesPieChart.data" options="viernesPieChart.options"></pie-chart></td>
+                                            <td><pie-chart ng-if="viernesPieChart" data="viernesPieChart.data" options="viernesPieChart.options"></pie-chart></td>
                                             <td>Viernes</td>
                                             <td class="text-navy">{{viernesPieChart.data[0]}} %</td>
                                         </tr>
                                         <tr>
-                                            <td><pie-chart data="sabadoPieChart.data" options="sabadoPieChart.options"></pie-chart></td>
+                                            <td><pie-chart ng-if="sabadoPieChart" data="sabadoPieChart.data" options="sabadoPieChart.options"></pie-chart></td>
                                             <td>Sabado</td>
                                             <td class="text-navy">{{sabadoPieChart.data[0]}} %</td>
                                         </tr>
                                         <tr>
-                                            <td><pie-chart data="domingoPieChart.data" options="domingoPieChart.options"></pie-chart></td>
+                                            <td><pie-chart ng-if="domingoPieChart" data="domingoPieChart.data" options="domingoPieChart.options"></pie-chart></td>
                                             <td>Domingo</td>
                                             <td class="text-navy">{{domingoPieChart.data[0]}} %</td>
                                         </tr>
