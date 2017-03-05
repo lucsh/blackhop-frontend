@@ -98,7 +98,7 @@ angular
                         //cuando vuelve, darle forma al $scope.producto
                         modalInstance.result.then(function (dato){
 
-                            console.log("$scope ALEJO")
+                            console.log("$scope")
                             console.log($scope)
 
                             //$scope.producto = dato;
@@ -139,10 +139,6 @@ angular
                             console.log('dato2');
                             console.log(dato);
                         }); 
-
-
-                            
-                        
                         
                 }else {
                     $scope.addProduct();

@@ -618,13 +618,120 @@ vm.login2 = function() {
 
     $scope.getAlertaAlquileres = function (){
         $http.get('http://blackhop.api.dessin.com.ar/api/pos/caja/alertaalquileres').success(function(response){    
-            $scope.alertaAlquileres = response.data;
+            $scope.alertaAlquileresRetiros = response.retiros;
+            $scope.alertaAlquileresDevoluciones = response.devoluciones;
+
+    $scope.alertaAlquileresRetiros=[
+        {
+        id:"777",
+        bandera:"retira",
+        nombreCliente:"Lucas Del Pozzi",
+        nombreEquipo:"Equipo 2",
+        fecha:"Hoy",
+        estilos:"IPA - Negra sucia",
+        valor:"200"//dif valor - seña
+        },
+        {
+        id:"778",
+        bandera:"retira",
+        nombreCliente:"Moresino",
+        nombreEquipo:"Equipo 45",
+        fecha:"Hoy",
+        estilos:"No tiene idea",
+        valor:"300"//dif valor - seña
+        },
+        {
+        id:"779",
+        bandera:"retiraM",
+        nombreCliente:"Alejoys",
+        nombreEquipo:"Equipo 123",
+        fecha:"Mañana",
+        estilos:"Gilada y Gilada"
+        }
+    ]
+    $scope.alertaAlquileresDevoluciones=[
+        {
+        id:"780",
+        bandera:"devuelve",
+        nombreCliente:"Cochis Mochis",
+        nombreEquipo:"Equipo 22",
+        fecha:"Hoy"
+        },
+        {
+        id:"781",
+        bandera:"devuelve",
+        nombreCliente:"Matias ",
+        nombreEquipo:"Equipo 12",
+        fecha:"Hoy"
+        }
+    ]
+
         }).error(function(error){
             console.log(error);
         }) 
     }
 
     $scope.getAlertaAlquileres();
+
+    $scope.clickNotificacion = function(dato){
+
+        //if id ya esta
+        
+
+        if(dato.bandera === "retiraM"){
+            //Nada nene
+        } else if (dato.bandera === "retira"){
+            //Agrego a lista de con monto de saldo (dato.valor)
+            var flagEsta = true;
+            $scope.resumen.productos.forEach(function(elem,array){
+                if(elem.identificador == dato.id){
+                    flagEsta = false;
+                }
+            });
+            if(flagEsta){
+                console.log("$scopasddsasdasade")
+                console.log($scope)
+                $scope.producto = dato;
+
+                $scope.producto.categoria = "Retiro";
+                $scope.producto.stock = -1;                            
+                $scope.valorProducto = dato.valor;
+
+
+                $scope.resumen.numeroProductos ++;
+
+                $scope.resumen.total+=Number($scope.valorProducto);
+
+                var ordinalItem=$scope.resumen.numeroProductos;
+                $scope.resumen.selected=ordinalItem;
+                var productoAGuardar={
+                    id : ordinalItem,
+                    identificador: dato.id,
+                    valor : dato.valor,
+                    nombre: 'Retiro alquiler - ' +  dato.nombreEquipo,
+                    unidad:{
+                        abr: "Un",
+                        id: 2,
+                        plural: "Unidades",
+                        singular: "Unidad"
+                    },
+                    cantidad : 1,
+                    valorTotal: dato.valor,
+                    descuento:'',
+                    stockActual:0,
+                    productoReal:$scope.producto,
+                    productoVirtual: dato
+                }
+
+                $scope.resumen.productos.push(productoAGuardar);
+                          
+            }              
+
+
+        } else if (dato.bandera === "devolucion"){
+            //Modal preguntando si confirma devolucion
+        }
+    }
 
     $scope.getProductos = function (){
         $http.get('http://blackhop.api.dessin.com.ar/api/pos/caja/producto').success(function(productos){    

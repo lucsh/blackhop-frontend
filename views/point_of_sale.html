@@ -36,13 +36,20 @@
             <ul class="nav navbar-top-links navbar-right">
                 <li uib-dropdown>
                 <a class="count-info" href uib-dropdown-toggle>
-                    <i class="fa fa-bell"></i> <span class="label label-primary">{{alertaAlquileres.length}}</span>
+                    <i class="fa fa-bell"></i> <span class="label label-primary">{{alertaAlquileresRetiros.length + alertaAlquileresDevoluciones.length }}</span>
                 </a>
-                <ul class="dropdown-alerts" uib-dropdown-menu>
+                <ul ng-if="alertaAlquileresRetiros || alertaAlquileresDevoluciones" class="dropdown-alerts" uib-dropdown-menu>
 
-                    <div ng-repeat="alquiler in alertaAlquileres">
+                        <div ng-if="alertaAlquileresRetiros" class="text-center link-block">
+                            <a>
+                                <strong>Retiros</strong>
+                            </a>
+                        </div>
+                    <div ng-repeat="alquiler in alertaAlquileresRetiros" >
+                    <li class="divider"></li>
+
                     <li>
-                        <a ui-sref="" ng-click="">
+                        <a ng-click="clickNotificacion(alquiler)">
                             <div>
                                 <i class="fa fa-database fa-fw"></i> {{alquiler.nombreCliente}} - {{alquiler.nombreEquipo}}
                                 <span class="pull-right text-muted small">{{alquiler.fecha}}</span>
@@ -52,8 +59,28 @@
                             </div>
                         </a>
                     </li>
-                    <li class="divider"></li>
                     </div>
+                        <div ng-if="alertaAlquileresDevoluciones" class="text-center link-block">
+                            <a>
+                                <strong>Devoluciones</strong>
+                            </a>
+                        </div>
+                    <div ng-repeat="alquiler in alertaAlquileresDevoluciones" >
+                    <li class="divider"></li>
+
+                    <li>
+                        <a  ng-click="clickNotificacion(alquiler)">
+                            <div>
+                                <i class="fa fa-database fa-fw"></i> {{alquiler.nombreCliente}} - {{alquiler.nombreEquipo}}
+                                <span class="pull-right text-muted small">{{alquiler.fecha}}</span>
+                                <br><span class="small">{{alquiler.estilos}}</span>
+                                <span ng-if="alquiler.fecha =='Hoy' " class="pull-right text-navy">
+                                <i class="fa fa-check-square-o" aria-hidden="true"></i></span>
+                            </div>
+                        </a>
+                    </li>
+                    </div>
+                    <!--
                     <li>
                         <div class="text-center link-block">
                             <a ui-sref="">
@@ -62,6 +89,7 @@
                             </a>
                         </div>
                     </li>
+                    -->
                 </ul>
             </li>
                 <li ng-if="$parent.$state.current.name=='pos.point_of_sale'">

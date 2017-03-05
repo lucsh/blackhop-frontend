@@ -315,6 +315,7 @@ $scope.alquiler={}
     $scope.alquilables=[
     {
         id:1,
+        identificador:666,
         nombre: "9 lts. No˚01",
         dias:[
         {
@@ -417,6 +418,7 @@ $scope.alquiler={}
     },
     {
         id:2,
+        identificador:667,
         nombre: "9 lts. No˚02",
         dias:[
         {
@@ -519,6 +521,7 @@ $scope.alquiler={}
     },
     {
         id:3,
+        identificador:668,
         nombre: "9 lts. No˚03",
         dias:[
         {
@@ -621,6 +624,7 @@ $scope.alquiler={}
     },
     {
         id:4,
+        identificador:669,
         nombre: "9 lts. No˚04",
         dias:[
         {
@@ -724,6 +728,7 @@ $scope.alquiler={}
     
     {
         id:5,
+        identificador:670,
         nombre: "9 lts. No˚05",
         dias:[
         {
@@ -1869,29 +1874,30 @@ function terminarVentaCtrl ($http,$scope,$log,$uibModalInstance,$uibModal,Wizard
     $scope.ok = function () {
 
         $uibModalInstance.dismiss('ventaOK');
-        
         var totalLitrosCupones=0;
-        
         var itemsVenta=[];
-        
         var cupon={};
-
         var entregables = "";
 
-
         //console.log(JSON.stringify($scope.resumen));
+        //mariobross
         console.log($scope.resumen.productos);
         for (var i=0;i<$scope.resumen.productos.length;i++){
 
             var item={};
             if($scope.resumen.productos[i].productoReal.categoria == 'Alquiler'){
-                item.idProducto = $scope.resumen.productos[i].identificador;
+                item.idProducto = $scope.resumen.productos[i].productoVirtual.identificador;
                 item.cantidad = 1;
-                item.costo = $scope.resumen.productos[i].valor;
+                item.costo = $scope.resumen.productos[i].valor;//seña 
+                //agregar valor --> item.valor
                 item.descripcion = $scope.resumen.productos[i].productoVirtual.descripcion;
                 item.diaDesde = $scope.resumen.productos[i].productoVirtual.desdeDiaMysql;
                 item.diaHasta = $scope.resumen.productos[i].productoVirtual.hastaDiaMysql;
 
+            }else if($scope.resumen.productos[i].productoReal.categoria == 'Retiro'){
+                item.idProducto = $scope.resumen.productos[i].identificador;
+                item.cantidad = 1;
+                item.costo = $scope.resumen.productos[i].valor;
             }else{
                 item.idProducto = $scope.resumen.productos[i].productoReal.id;
                 item.cantidad = $scope.resumen.productos[i].cantidad;
