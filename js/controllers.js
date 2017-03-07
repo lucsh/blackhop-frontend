@@ -98,7 +98,7 @@ $scope.alquiler={}
                 
                 $scope.barrilSeleccionado.hasta = $scope.alquiler.hasta;
                 $scope.barrilSeleccionado.hastaDiaId = $scope.alquiler.hastaDiaId;
-                $scope.barrilSeleccionado.valor = 1350;
+                //$scope.barrilSeleccionado.valor = 1350;
 
                 //LIMPIO LAS CLASES DE LOS OTROS BARRILES, EN CASO QUE HAYA CAMBIADO LA SELECCION
                 for (var i = 0, len = $scope.alquilables.length; i < len; i++) {
@@ -128,25 +128,63 @@ $scope.alquiler={}
             $scope.resumen.alquilerTemp.push(barrilTemp)
 
         }
+                SweetAlert.swal({
+                    title: "Ingresar Estilo/s",
+                    text: "¿Que estilos te gustaria?",
+                    type: "input",
+                    showCancelButton: false,
+                    closeOnConfirm: false,//<<< clave para nested swal
+                    animation: "slide-from-top",
+                    inputPlaceholder: "IPA / Scotish / Negra"
+                },
+                function(inputValue){
+                    console.log("inputValue")
+                    console.log(inputValue)
+                    $scope.barrilSeleccionado.descripcion = inputValue;
 
-        SweetAlert.swal({
-            title: "Ingresar Estilo/s",
-            text: "¿Que estilos te gustaria?",
-            type: "input",
-            showCancelButton: false,
-            closeOnConfirm: true,
-            animation: "slide-from-top",
-            inputPlaceholder: "IPA / Scotish / Negra"
-        },
-        function(inputValue){
-            console.log("inputValue")
-            console.log(inputValue)
-            $scope.barrilSeleccionado.descripcion = inputValue;
-            $uibModalInstance.close($scope.barrilSeleccionado);//devolver el alquilable y las fechas y los estilos                    
-        });
+                    SweetAlert.swal({
+                        title: "Ingresar Seña",
+                        text: "¿Cuanto va a dejar de seña?",
+                        type: "input",
+                        showCancelButton: false,
+                        closeOnConfirm: false,
+                        animation: "slide-from-top",
+                        inputPlaceholder: "$123"
+                    },
+                    function(valor){
+                        console.log("valor")
+                        console.log(valor)
+
+                        if (valor === false){
+                            console.log("CANCEL");
+                            $state.reload(); 
+                            return false;
+                        } 
+                        //validación
+                        //item.costo = $scope.resumen.productos[i].valor;//seña 
+
+                        if (valor === "") {
+                            swal.showInputError("Tenes que ingresar el monto de la seña");
+                            return false
+                        }    
+                        if (isNaN(valor)){
+                            swal.showInputError("Tenes que ingresar un numero!");
+                            return false
+                        }
+                        swal("Seña", "La seña es de: " + valor, "success");
+                        $scope.barrilSeleccionado.valor = valor;
+                        $uibModalInstance.close($scope.barrilSeleccionado);//devolver el alquilable y las fechas y los estilos                    
+
+                    });
+
+                });
+        
+                
+         
+        
     }
 
-    }
+}
 
     $scope.calculateClassAnterior = function(alquilable,dia){
 
