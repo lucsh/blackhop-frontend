@@ -729,7 +729,31 @@ vm.login2 = function() {
 
 
         } else if (dato.bandera === "devolucion"){
-            //Modal preguntando si confirma devolucion
+            //Modal preguntando si confirma devolucion MarioBros
+                    SweetAlert.swal({
+                        title: "Devolver Alquiler",
+                        text: "Vas a ingresar la devolucion del" +  dato.nombreEquipo,
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "Devolver",
+                        cancelButtonText: "Cancelar",
+                        closeOnCancel: true,
+                        closeOnConfirm: true
+                    },
+                    function(isConfirm) {
+                        if (isConfirm) {
+                            //mariobros Cambiar Ruta 
+                            $http.post('http://blackhop.api.dessin.com.ar/api/pos/caja/anularcupon/' + inputValue)
+                                .success(function() {
+                                    swal("¡Devuelto!", "El Alquiler fue devuelto.", "success");
+                                }).error(function(error) {
+                                    console.log(error.error);
+                                    SweetAlert.swal("ERROR", error.error, "error"); 
+                                });
+                        } else {
+                        swal("Cancelado", "Todo sigue como antes", "error");
+                        }
+                    });
         }
     }
 
