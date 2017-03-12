@@ -1,0 +1,66 @@
+<div class="modal-body">
+    <!--
+
+            id: '4',
+            nombreEquipo: 'Equipo 7',
+            litros: '9 l',
+            nombreCliente:'Antonio Rodriguez',                
+            fecha: '2017-04-01 22:23:44.657',
+            fechaDevolucion: '2017-04-03 22:23:44.657',
+            estilos: 'Rubia',
+            cupon:1753735687464,
+            sena:'500'
+
+-->
+    
+
+    <button class="btn btn-info btn-xs pull-right" type="button" ng-click="cancel()" tooltip-placement="top" uib-tooltip="Cerrar"><i class="fa fa-times"></i></button>
+
+    <div id="printThisElement" class="text-center"> 
+    <!-- <Print> -->
+    <div id="samplePrintBody">
+        <img class="cupon-bg-img" src="../img/bh_bg.jpg">
+        <row>
+        <div class="text-center print-full-width">
+            <img alt="image" class="" src="/img/blackhop-isologo.png">
+        </div>
+        </row>
+        <br>
+        <h3 class="text-center nopadding print-full-width">
+        Alquiler
+        </h3>
+        <br>
+        <h1 class="text-center nopadding print-full-width font-huge">
+        {{alquiler.nombreEquipo}}
+        </h1>
+        <h1 class="text-center print-full-width">
+        {{alquiler.litros}}
+        </h1>
+        <h1 class="text-center print-full-width">
+        {{alquiler.nombreCliente}}
+        </h1>
+        <br>
+        <div  class="text-center print-full-width">
+        
+        <io-barcode code="{{ cupon }}" type="{{ barcodeType }}" options="barcodeOptions" class="codigodebarras"></io-barcode>
+        
+        </div>
+        <br>        
+        <h3 class="text-center print-full-width small nopadding nomargins">Estilos:</h3>
+        <h2 class="text-center print-full-width nopadding nomargins ">{{alquiler.estilos}}</h2><br>
+        <h3 class="text-center print-full-width small nopadding nomargins">Fecha de Entrega:</h3>
+        <h2 class="text-center print-full-width nopadding nomargins ">{{alquiler.fecha}}</h2><br>
+        <h3 class="text-center print-full-width small nopadding nomargins">Fecha de Devolucion:</h3>
+        <h2 class="text-center print-full-width nopadding nomargins ">{{alquiler.fechaDevolucion}}</h2>
+    <hr>
+    </div>
+    </div>
+    <!-- </Print> -->
+    
+    <div class="col-md-12">
+    <button class="pull-right btn btn-primary hide-in-print" ng-click="imprimirAlquiler()">
+      <i class="fa fa-print"></i> Imprimir</button>
+    </div>
+
+    <hr>
+</div>

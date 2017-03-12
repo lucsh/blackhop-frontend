@@ -22,7 +22,7 @@
         <div class="row equal">
 
             <div class="col-md-1">
-            <a href="#" id="prev"></a>
+            <a ng-click="traerCalendario('restar')" id="prev"></a>
             </div>
             <div class="col-md-8">
                 <table class="alquileres center-block">
@@ -58,7 +58,7 @@
                             <td>{{alquilable.nombre}}</td>
                             <td ng-repeat="dia in alquilable.dias" 
                             style="{{dia.hover}}"
-                            ng-if="dia.id < 50"
+                            ng-if="dia.id < 22"
                             ng-mouseenter="calculateClass(alquilable.id,dia.id);mostrarDia=true"
                             ng-mouseleave="calculateClassAnterior(alquilable.id,dia.id);mostrarDia=false"
                             ng-click="seleccionarBarril(alquilable)"
@@ -69,7 +69,7 @@
             </div>
 
           <div class="col-md-1">
-          <a href="#" id="next"></a>
+          <a ng-click="traerCalendario('agregar')"  id="next"></a>
           </div>
        </div> 
      

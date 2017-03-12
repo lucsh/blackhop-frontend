@@ -613,9 +613,6 @@ vm.login2 = function() {
 
     $scope.ventaProductos =[];
 
-    $scope.flagDevAlq = false;   
-
-
     $scope.getAlertaAlquileres = function (){
         $http.get('http://blackhop.api.dessin.com.ar/api/pos/caja/alertaalquileres').success(function(response){    
             $scope.alertaAlquileresRetiros = response.retiros;
@@ -743,7 +740,7 @@ vm.login2 = function() {
                     function(isConfirm) {
                         if (isConfirm) {
                             //mariobros Cambiar Ruta 
-                            $http.post('http://blackhop.api.dessin.com.ar/api/pos/caja/anularcupon/' + inputValue)
+                            $http.post('http://blackhop.api.dessin.com.ar/api/pos/caja/devolucionalquiler/' + inputValue)
                                 .success(function() {
                                     swal("¡Devuelto!", "El Alquiler fue devuelto.", "success");
                                 }).error(function(error) {
@@ -924,17 +921,6 @@ vm.login2 = function() {
                             return $scope.clientes;
                         }
                     }
-                });                   
-                modalInstance.result.then(function (dato) {
-                    console.log('dato');
-                    console.log(dato);
-                    $scope.clienteSeleccionado = dato;
-                    $scope.modal.terminarVenta();
-                    $scope.flagDevAlq = true;   
-
-                },function(dato){
-                    console.log('dato2');
-                    console.log(dato);
                 });
     }
 
@@ -972,9 +958,6 @@ vm.login2 = function() {
                         },
                         resumen: function () {
                             return $scope.resumen;
-                        },
-                        flagDevAlq: function () {
-                            return $scope.flagDevAlq;
                         }
                     }
                 });                   
