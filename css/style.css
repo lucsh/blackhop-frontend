@@ -9259,9 +9259,8 @@ Tabla
     background: #333;
     content: "";
     display: block;
-    height: 2px;
+    height: 5px;
     position: absolute;
-
     top: 50%;
     width: 30px;
 }
