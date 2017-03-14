@@ -255,7 +255,7 @@ $scope.alquiler={}
                     
                 }
 
-        $http.get('http://blackhop.api.dessin.com.ar/lucascapo',{//mariobross cambiar el url
+        $http.get('http://blackhop.api.dessin.com.ar/api/pos/caja/calendarioalquileres',{
             params : {
                 fechaInicial: primerDiaMySql
             }
