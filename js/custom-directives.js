@@ -115,7 +115,7 @@ angular
                             $scope.resumen.selected=ordinalItem;
                             var productoAGuardar={
                                 id : ordinalItem,
-                                identificador: dato.id,
+                                identificador: dato.identificador,
                                 valor : dato.valor,
                                 nombre: 'Alquiler - ' +  dato.nombre,
                                 unidad:{
@@ -181,6 +181,9 @@ angular
                             console.log(producto.identificador);
                             console.log(producto.id);
                             console.log($scope.producto.id);
+                            console.log('moreCAPO');
+                            console.log($scope.producto);
+                            console.log(producto);
                             if(producto.identificador==$scope.producto.id){
                                 //console.info("existe producto");
                                 esta = 1;

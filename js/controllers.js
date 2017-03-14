@@ -100,7 +100,7 @@ $scope.alquiler={}
                 
                 $scope.barrilSeleccionado.hasta = $scope.alquiler.hasta;
                 $scope.barrilSeleccionado.hastaDiaId = $scope.alquiler.hastaDiaId;
-                //$scope.barrilSeleccionado.valor = 1350;
+                $scope.barrilSeleccionado.valorReal = barril.valor;
 
                 //LIMPIO LAS CLASES DE LOS OTROS BARRILES, EN CASO QUE HAYA CAMBIADO LA SELECCION
                 for (var i = 0, len = $scope.alquilables.length; i < len; i++) {
@@ -119,7 +119,8 @@ $scope.alquiler={}
         var barrilTemp = {
             id : $scope.barrilSeleccionado.id,
             desdeDiaId: $scope.barrilSeleccionado.desdeDiaId,
-            hastaDiaId: $scope.barrilSeleccionado.hastaDiaId    
+            hastaDiaId: $scope.barrilSeleccionado.hastaDiaId,
+            estadoCalendario: $scope.estadoCalendario    
         }
 
         if ( $scope.resumen.alquilerTemp ){
@@ -220,31 +221,38 @@ $scope.alquiler={}
         $scope.traerCalendario = function(caso){
 
         switch (caso){
-                case 'comienzo':
+
+                case 'agregar':
+                    console.log(caso)
+                     if($scope.estadoCalendario<3){
+                        $scope.primerDiaDeEstaSamana.add(7, 'days');
+                        var primerDiaMySql = $scope.primerDiaDeEstaSamana.clone().format('YYYY-MM-DD');
+                        $scope.estadoCalendario++;
+                        }                
+                    break;
+                        
+                case 'restar':
+                    console.log(caso)
+                    if($scope.estadoCalendario>0){                    
+                        $scope.primerDiaDeEstaSamana.subtract(7, 'days');
+                        var primerDiaMySql = $scope.primerDiaDeEstaSamana.clone().format('YYYY-MM-DD');
+                        $scope.estadoCalendario--;
+                    }
+                    break;
+                case 'comienzo':                    
+                default:
                     console.log(caso)
                     $scope.primerDiaDeEstaSamana = moment().startOf('isoWeek');     
                     var primerDiaMySql = $scope.primerDiaDeEstaSamana.clone().format('YYYY-MM-DD');
+                    $scope.estadoCalendario = 0;
                     break;
+                }
 
-                case 'agregar': //mariobross verificar que no se vaya a la mierda?
-                    console.log(caso)
 
-                    $scope.primerDiaDeEstaSamana.add(7, 'days');
-                    var primerDiaMySql = $scope.primerDiaDeEstaSamana.clone().format('YYYY-MM-DD');
-                    break;
-                        
-                case 'restar': //mariobross verificar que no se vaya a la mierda?
-                    console.log(caso)
-
-                    $scope.primerDiaDeEstaSamana.subtract(7, 'days');
-                    var primerDiaMySql = $scope.primerDiaDeEstaSamana.clone().format('YYYY-MM-DD');
-                    break;
-                default:
-                    console.log(caso)
-
-                    $scope.primerDiaDeEstaSamana = moment().startOf('isoWeek');//.subtract(7, 'days');//menos 7 para test        
-                    var primerDiaMySql = $scope.primerDiaDeEstaSamana.clone().format('YYYY-MM-DD');
-                    break; 
+                for (var i = 0, len = $scope.alquilables.length; i < len; i++) {
+                    
+                      $scope.limpiarClases(i+1);
+                    
                 }
 
         $http.get('http://blackhop.api.dessin.com.ar/lucascapo',{//mariobross cambiar el url
@@ -253,7 +261,7 @@ $scope.alquiler={}
             }
         }).success(function(response){    
             $scope.alquilables = response.data;
-
+            $scope.barrilSeleccionado = undefined;
              /*
             start SOLO PARA TESTING
             */
@@ -274,16 +282,25 @@ $scope.alquiler={}
             */
 
             if ($scope.resumen.alquilerTemp){
-    
             for (var i = 0; i < $scope.resumen.alquilerTemp.length; i++) {
+
 
                         var id = $scope.resumen.alquilerTemp[i].id;
 
                         for (var j = 0; j < $scope.alquilables.length; j++) {
 
                             if ($scope.alquilables[j].id == id){ 
+
                                 for (var g = $scope.resumen.alquilerTemp[i].desdeDiaId + 1; g < $scope.resumen.alquilerTemp[i].hastaDiaId; g++) {
-                                    $scope.alquilables[j].dias[g].estado="alquilado"
+
+                                    diffDia = g - ( ($scope.estadoCalendario - $scope.resumen.alquilerTemp[i].estadoCalendario) * 7);
+
+                                    console.log (diffDia  + " = " + g + " - ( (" + $scope.estadoCalendario + " - " + $scope.resumen.alquilerTemp[i].estadoCalendario + ") * "  + 7+" )");
+                              
+                                    if(diffDia > -1 && diffDia < 22){
+                                        $scope.alquilables[j].dias[diffDia].estado="alquilado";
+                                    }
+
                                 }            
                             }
                         }
@@ -764,7 +781,7 @@ function detalleVentaCtrl ($http,$scope,$log,$uibModalInstance,venta){
    
 };
 
-function devolucionAlquilerCtrl ($scope,$log,$uibModalInstance,SweetAlert,clientes){
+function devolucionAlquilerCtrl ($http,$scope,$log,$uibModalInstance,SweetAlert,clientes){
 
         $scope.seleccion={};
         $scope.clienteElegido=false;
@@ -775,7 +792,7 @@ function devolucionAlquilerCtrl ($scope,$log,$uibModalInstance,SweetAlert,client
             if (filteredData.length == 1) {
 
                 if ($scope.seleccion.clienteSeleccionado!=filteredData[0].id){
-                    $scope.seleccionarNuevo(filteredData[0].id);
+                    $scope.seleccionarNuevo(filteredData[0]);
                 }
 
                 return filteredData;
@@ -789,20 +806,35 @@ function devolucionAlquilerCtrl ($scope,$log,$uibModalInstance,SweetAlert,client
 
         $scope.seleccionarNuevo= function(cliente){
             //borrar tabla y mantener seleccion            
-            $scope.clienteElegido=true
-            $scope.seleccion.clienteSeleccionado=cliente;
+            $scope.clienteElegido=true;
+            //var clienteSelect;
+            //clienteSelect = cliente; 
+            $scope.seleccion.clienteSeleccionado = cliente;
+            console.log('cliente cliente.id');
+            console.log(cliente);
 
-            //mostrar alquileres del cliente (si tiene)            
-            $scope.alquileresCliente=[
+            //mostrar alquileres del cliente (si tiene)     
+            $http.get('http://blackhop.api.dessin.com.ar/api/pos/caja/alquileresdevcliente/'+cliente.id)
+            .success(function(response) {
+                if(response.data != "vacio"){                    
+                    $scope.alquileresCliente = response.data;
+                    console.log($scope.alquileresCliente);
+                }
+
+            }).error(function(error) {
+                console.log(error.error);
+                SweetAlert.swal("ERROR", error.error, "error"); 
+            });  
+
+            
+            $scope.alquileresCliente2=[
                 {
                 id:1,
                 nombre: "9 lts. No˚01"
-                },
-                {
-                id:2,
-                nombre: "9 lts. No˚03"
                 }
-            ]
+            ];
+                console.log($scope.alquileresCliente2);
+            
 
         }
         $scope.chkChange = function(alquileresCliente){
@@ -816,23 +848,31 @@ function devolucionAlquilerCtrl ($scope,$log,$uibModalInstance,SweetAlert,client
             }
             console.log($scope.alquileresCliente)
 
-        }
-        $scope.ok = function () {
-            alquileresCliente.forEach(function(alquiler){
-                    if(alquiler.chk){
-                        $http.post('http://blackhop.api.dessin.com.ar/api/pos/caja/devolucionalquiler/' + alquiler.id)//mariobross
-                        .success(function() {
-                            swal("¡Devuelto!", "El Alquiler fue devuelto.", "success");
-                            $uibModalInstance.close();
+        }        
 
-                        }).error(function(error) {
-                            console.log(error.error);
-                            SweetAlert.swal("ERROR", error.error, "error"); 
-                        });
-                    }
+        $scope.ok = function () {
+            var itemsDevolucion = [];
+            $scope.alquileresCliente.forEach(function(alquiler){
+                if(alquiler.chk){
+                    itemsDevolucion.push(alquiler.id);
                 }
-                    
-        )};
+            });
+            $http.post('http://blackhop.api.dessin.com.ar/api/pos/caja/devolucionalquiler',{
+                itemsDevolucion: JSON.stringify(itemsDevolucion)
+            })//mariobross
+            .success(function() {
+                if(itemsDevolucion.length > 1){
+                    swal("¡Devueltos!", "Los Alquileres fueron devueltos.", "success"); 
+                }else{
+                    swal("¡Devuelto!", "El Alquiler fue devuelto.", "success");
+                }
+                $uibModalInstance.close();
+
+            }).error(function(error) {
+                console.log(error.error);
+                SweetAlert.swal("ERROR", error.error, "error"); 
+            });        
+        };
 
         $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');
@@ -1457,7 +1497,7 @@ function terminarVentaCtrl ($q,$http,$scope,$log,$uibModalInstance,SweetAlert,$u
                 item.cantidad = 1;
                 item.costo = $scope.resumen.productos[i].valor;//seña 
                 //agregar valor --> item.valor
-                item.valor = $scope.resumen.productos[i].productoVirtual.valorDeVerdadVerdadera;//mariobross
+                item.valor = $scope.resumen.productos[i].productoVirtual.valorReal;//mariobross
                 item.descripcion = $scope.resumen.productos[i].productoVirtual.descripcion;
                 item.diaDesde = $scope.resumen.productos[i].productoVirtual.desdeDiaMysql;
                 item.diaHasta = $scope.resumen.productos[i].productoVirtual.hastaDiaMysql;
@@ -1500,75 +1540,75 @@ function terminarVentaCtrl ($q,$http,$scope,$log,$uibModalInstance,SweetAlert,$u
 
 
         $scope.imprimirCuponesAlquiler = function(cuponesAlquileres){
+                /*
+                cuponesAlquileres = [
+                    {
+                        id: '1',
+                        nombreEquipo: 'Equipo 9',
+                        litros:' 9 l',
+                        nombreCliente:'Martin Rodriguez',                
+                        fecha: '2017-04-10 22:23:44.657',
+                        fechaDevolucion: '2017-04-13 22:23:44.657',
+                        estilos: 'IPA o Negra',
+                        cupon:1753735687464,
+                        sena:'300'
+                    },
+                    {
+                        id: '2',
+                        nombreEquipo: 'Equipo 2',
+                        litros: '20 l',
+                        nombreCliente:'Matias Garcia',                
+                        fecha: '2017-04-05 22:23:44.657',
+                        fechaDevolucion: '2017-04-08 22:23:44.657',
+                        estilos: 'Roja o Negra',
+                        cupon:1753735687464,
+                        sena:'200'
+                    },
+                    {
+                        id: '3',
+                        nombreEquipo: 'Equipo 3',
+                        litros: '9 l',
+                        nombreCliente:'Alejo Perez',                
+                        fecha: '2017-04-02 22:23:44.657',
+                        fechaDevolucion: '2017-04-05 22:23:44.657',
+                        estilos: 'Negra',
+                        cupon:1753735687464,
+                        sena:'150'
+                    },
+                    {
+                        id: '4',
+                        nombreEquipo: 'Equipo 7',
+                        litros: '9 l',
+                        nombreCliente:'Lucas Martinez',                
+                        fecha: '2017-04-01 22:23:44.657',
+                        fechaDevolucion: '2017-04-03 22:23:44.657',
+                        estilos: 'Rubia',
+                        cupon:1753735687464,
+                        sena:'500'
+                    },
+                ]
+                    */
+            console.log(cuponesAlquileres);
+            
 
-                                        cuponesAlquileres = [
-                                            {
-                                                id: '1',
-                                                nombreEquipo: 'Equipo 9',
-                                                litros:' 9 l',
-                                                nombreCliente:'Martin Rodriguez',                
-                                                fecha: '2017-04-10 22:23:44.657',
-                                                fechaDevolucion: '2017-04-13 22:23:44.657',
-                                                estilos: 'IPA o Negra',
-                                                cupon:1753735687464,
-                                                sena:'300'
-                                            },
-                                            {
-                                                id: '2',
-                                                nombreEquipo: 'Equipo 2',
-                                                litros: '20 l',
-                                                nombreCliente:'Matias Garcia',                
-                                                fecha: '2017-04-05 22:23:44.657',
-                                                fechaDevolucion: '2017-04-08 22:23:44.657',
-                                                estilos: 'Roja o Negra',
-                                                cupon:1753735687464,
-                                                sena:'200'
-                                            },
-                                            {
-                                                id: '3',
-                                                nombreEquipo: 'Equipo 3',
-                                                litros: '9 l',
-                                                nombreCliente:'Alejo Perez',                
-                                                fecha: '2017-04-02 22:23:44.657',
-                                                fechaDevolucion: '2017-04-05 22:23:44.657',
-                                                estilos: 'Negra',
-                                                cupon:1753735687464,
-                                                sena:'150'
-                                            },
-                                            {
-                                                id: '4',
-                                                nombreEquipo: 'Equipo 7',
-                                                litros: '9 l',
-                                                nombreCliente:'Lucas Martinez',                
-                                                fecha: '2017-04-01 22:23:44.657',
-                                                fechaDevolucion: '2017-04-03 22:23:44.657',
-                                                estilos: 'Rubia',
-                                                cupon:1753735687464,
-                                                sena:'500'
-                                            },
-                                        ]
+            cuponesAlquileres.forEach(function(alquiler){
 
-                                    console.log(cuponesAlquileres);
-                                    
+                console.log(alquiler)
 
-                                    cuponesAlquileres.forEach(function(alquiler){
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'views/imprimir_alquiler.html',
+                    controller: imprimirAlquilerCtrl,
+                    windowClass: "animated flipInY",
+                    resolve: {
+                        alquiler: function () {
+                            return alquiler;
+                        }
+                    }
+                }).closed.then(function(){
+                    console.log('modal imprimir alquiler closed');
+                });
 
-                                        console.log(alquiler)
-
-                                        var modalInstance = $uibModal.open({
-                                            templateUrl: 'views/imprimir_alquiler.html',
-                                            controller: imprimirAlquilerCtrl,
-                                            windowClass: "animated flipInY",
-                                            resolve: {
-                                                alquiler: function () {
-                                                    return alquiler;
-                                                }
-                                            }
-                                        }).closed.then(function(){
-                                            console.log('modal imprimir alquiler closed');
-                                        });
-
-                                    });
+            });
         }
 
 
@@ -1603,20 +1643,20 @@ function terminarVentaCtrl ($q,$http,$scope,$log,$uibModalInstance,SweetAlert,$u
                     }).closed.then(function(){
 
                         console.log('modal imprimir_cupon closed');
-                        if (response.cuponesAlquileres){//si ademas hay alquileres en la compra
+                        if (response.cuponesAlq){//si ademas hay alquileres en la compra
 
-                            $scope.imprimirCuponesAlquiler(response.cuponesAlquileres);
+                            $scope.imprimirCuponesAlquiler(response.cuponesAlq);
                             //duplico para el bartender
-                            $scope.imprimirCuponesAlquiler(response.cuponesAlquileres);
+                            $scope.imprimirCuponesAlquiler(response.cuponesAlq);
 
                         }
 
                     });
-                } else if (response.cuponesAlquileres){//si solo hay alquileres en la compra
+                } else if (response.cuponesAlq){//si solo hay alquileres en la compra
 
-                            $scope.imprimirCuponesAlquiler(response.cuponesAlquileres);
+                            $scope.imprimirCuponesAlquiler(response.cuponesAlq);
                             //duplico para el bartender
-                            $scope.imprimirCuponesAlquiler(response.cuponesAlquileres);
+                            $scope.imprimirCuponesAlquiler(response.cuponesAlq);
 
                         }
 
@@ -1880,194 +1920,20 @@ function crearProductoCtrl ($http,$scope,$log,$uibModalInstance,SweetAlert,produ
     
 }
 
-function detalleAlquilerClienteCtrl ($scope,$log,$uibModalInstance,alquiler){
+function detalleAlquilerClienteCtrl ($http,$scope,$log,$uibModalInstance,SweetAlert,alquiler){
 
     $scope.alquiler=alquiler;
-    $scope.clientes=[
-        /*
-              estado =
-              Activo : si compro algo en el utlimo mes
-              Con Alquiler: Si tiene algo alquilado
-              Deudor : Si tiene un alquiler sin devolver
-              '' : Si ninguno de los anteriores
-              */
-
-              {
-                identificador:1,
-                nombre:"Luciano",
-                apellido:"Marquez",
-                dni:"32523681",
-                telefono:4412007,
-                celular:2996041216,
-                email:"correo@direccion.com.ar",
-                fNac:new Date("11/07/1982"),
-                direccion:"San Martin 546",
-                GIS:null,
-                estado:'Con Alquiler'
-
-            },
-            {
-                identificador:2,
-                nombre:"Antonio",
-                apellido:"Rodriguez",
-                dni:"23598745",
-                telefono:4460286,
-                celular:2995433634,
-                email:"correo@direccion.com.ar",
-                fNac:new Date("10/05/1982"),
-                direccion:"Rosa de los Vientos 12",
-                GIS:null,
-                estado:'Activo'
-
-            },
-            {
-                identificador:3,
-                nombre:"Fiorella",
-                apellido:"Salas",
-                dni:"12369854",
-                telefono:4432504,
-                celular:2995691627,
-                email:"correo@direccion.com.ar",
-                fNac:new Date("10/06/1983"),
-                direccion:"Garganta de los Montes 455",
-                GIS:null,
-                estado:''
-
-            },
-            {
-                identificador:4,
-                nombre:"Mafalda",
-                apellido:"Barela",
-                dni:"35698756",
-                telefono:4416250,
-                celular:2996888259,
-                email:"correo@direccion.com.ar",
-                fNac:new Date("02/09/1983"),
-                direccion:"Constitución 26",
-                GIS:null,
-                estado:'Activo'
-
-            },
-            {
-                identificador:5,
-                nombre:"Liza",
-                apellido:"Ortega",
-                dni:"35478123",
-                telefono:4412007,
-                celular:2996440850,
-                email:"correo@direccion.com.ar",
-                fNac:new Date("04/05/1985"),
-                direccion:"Rivadavia 568",
-                GIS:null,
-                estado:''
-
-            },
-            {
-                identificador:6,
-                nombre:"Juan",
-                apellido:"Colón",
-                dni:"18721770",
-                telefono:4401698,
-                celular:2995664192,
-                email:"correo@direccion.com.ar",
-                fNac:new Date("10/05/1995"),
-                direccion:"Ant Argentina 382",
-                GIS:null,
-                estado:''
-
-            },
-            {
-                identificador:7,
-                nombre:"Ruben",
-                apellido:"Pacheco",
-                dni:"28278982",
-                telefono:4420691,
-                celular:2996646540,
-                email:"correo@direccion.com.ar",
-                fNac:new Date("06/04/1995"),
-                direccion:"Juan B. Justo 452",
-                GIS:null,
-                estado:'Activo'
-
-            },
-            {
-                identificador:8,
-                nombre:"Simon",
-                apellido:"Garcia",
-                dni:"31926283",
-                telefono:4401919,
-                celular:2995025237,
-                email:"correo@direccion.com.ar",
-                fNac:new Date("08/06/1994"),
-                direccion:"Rio Desaguadero 672",
-                GIS:null,
-                estado:''
-
-            },
-            {
-                identificador:9,
-                nombre:"Roberto",
-                apellido:"Estrada",
-                dni:"28081048",
-                telefono:4467043,
-                celular:2996950755,
-                email:"correo@direccion.com.ar",
-                fNac:new Date("09/05/1990"),
-                direccion:"Independencia 823",
-                GIS:null,
-                estado:'Deudor'
-
-            },
-            {
-                identificador:10,
-                nombre:"Lionel",
-                apellido:"Villar",
-                dni:"35933306",
-                telefono:4467043,
-                celular:2995184011,
-                email:"correo@direccion.com.ar",
-                fNac:new Date("11/04/1986"),
-                direccion:"Brown 933",
-                GIS:null,
-                estado:'Activo'
-
-            },
-            {
-                identificador:11,
-                nombre:"Esteban",
-                apellido:"Varella",
-                dni:"30993900",
-                telefono:4406768,
-                celular:2996950755,
-                email:"correo@direccion.com.ar",
-                fNac:new Date("04/01/1990"),
-                direccion:"Jujuy 856",
-                GIS:null,
-                estado:'Activo'
-
-            },
-            {
-                identificador:12,
-                nombre:"Nicolas",
-                apellido:"Franccesco",
-                dni:"31058801",
-                telefono:4434850,
-                celular:2995830889,
-                email:"correo@direccion.com.ar",
-                fNac:new Date("06/07/1989"),
-                direccion:"Alderete 596",
-                GIS:null,
-                estado:'Activo'
-            }]
-
+   
+        
+            
             switch ($scope.alquiler.estado){
                 case 'Con Retraso':
                 $scope.borde= "border: 2px solid #ed5565";
                 break;
-                case 'Devuelve Hoy':
+                case 'Retirado':
                 $scope.borde= "border: 2px solid #f8ac59";
                 break; 
-                case 'Vigente':
+                case 'Creado':
                 $scope.borde= "border: 2px solid #1ab394";
                 break; 
                 case 'Finalizado':
@@ -2075,7 +1941,7 @@ function detalleAlquilerClienteCtrl ($scope,$log,$uibModalInstance,alquiler){
                 break;
             };    
 
-
+            /*
             var fA = moment($scope.alquiler.fecha);
             var fD = moment($scope.alquiler.fechaDevolucion);
             alquiler.diffDias = fD.diff(fA, 'days'); 
@@ -2086,10 +1952,41 @@ function detalleAlquilerClienteCtrl ($scope,$log,$uibModalInstance,alquiler){
                     break;
                 }
             }
-
+            */
             $scope.ok = function () {
                 $uibModalInstance.close();
             };
+
+
+            $scope.eliminar = function(id){
+
+                SweetAlert.swal({
+                title: "¿Estas Seguro?",
+                text: "¡Se va a eliminar el Alquiler y el cupon!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Si, eliminala!",
+                cancelButtonText: "No, cancelar!",
+                closeOnConfirm: false,
+                closeOnCancel: false },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $http.delete('http://blackhop.api.dessin.com.ar/api/admin/alquiler/'+ id)
+                        .success(function(response){    
+                            SweetAlert.swal("¡Eliminado!", response.message, "success");
+                        }).error(function(response){
+                            SweetAlert.swal("¡Error!", response.error.message, "error");
+                            console.log(response);
+                        });
+                        $uibModalInstance.dismiss('eliminado');
+                        
+
+                    } else {
+                        SweetAlert.swal("Cancelado", "Todo sigue como antes", "error");
+                    }
+                });
+            }
 
             $scope.cancel = function () {
                 $uibModalInstance.dismiss('cancel');
@@ -2539,6 +2436,7 @@ function imprimirAlquilerCtrl($scope, $sanitize, $log, $uibModalInstance, alquil
     Cantidad de litros 
 
     */
+    $scope.barcodeType = 'EAN';
 
     $scope.alquiler = alquiler;
     console.log(alquiler);

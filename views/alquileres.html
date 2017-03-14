@@ -33,10 +33,10 @@
                         <tbody>
                         <tr class="cursor-pointer" ng-repeat="alquiler in alquileres" ng-click="modal.abrir(alquiler)">
                             <td class="text-center">{{ alquiler.id }}</td>
-                            <td>{{ alquiler.nombreCliente }}</td>
-                            <td>{{ alquiler.fecha }}</td>
-                            <td>{{ alquiler.fechaDevolucion }}</td>
-                            <td class="text-center">{{ alquiler.equipo }}</td>
+                            <td>{{ alquiler.cliente.nombre }} {{ alquiler.cliente.apellido }}</td>
+                            <td>{{ alquiler.fechaIni }}</td>
+                            <td>{{ alquiler.fechaFin }}</td>
+                            <td class="text-center">{{ alquiler.nombreEquipo }}</td>
                             <td><span class="badge {{ alquiler.class }}">{{ alquiler.estado }}</span></td>
                         </tr>
                         </tbody>

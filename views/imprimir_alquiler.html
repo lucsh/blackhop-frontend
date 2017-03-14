@@ -13,8 +13,9 @@
 
 -->
     
-
+<div class="row">
     <button class="btn btn-info btn-xs pull-right" type="button" ng-click="cancel()" tooltip-placement="top" uib-tooltip="Cerrar"><i class="fa fa-times"></i></button>
+</div>
 
     <div id="printThisElement" class="text-center"> 
     <!-- <Print> -->
@@ -40,9 +41,9 @@
         {{alquiler.nombreCliente}}
         </h1>
         <br>
-        <div  class="text-center print-full-width">
+        <div ng-if='alquiler.cupon' class="text-center print-full-width">
         
-        <io-barcode code="{{ cupon }}" type="{{ barcodeType }}" options="barcodeOptions" class="codigodebarras"></io-barcode>
+        <io-barcode code="{{ alquiler.cupon }}" type="{{ barcodeType }}" options="barcodeOptions" class="codigodebarras"></io-barcode>
         
         </div>
         <br>        

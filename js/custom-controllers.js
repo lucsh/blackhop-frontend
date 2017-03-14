@@ -614,10 +614,10 @@ vm.login2 = function() {
     $scope.ventaProductos =[];
 
     $scope.getAlertaAlquileres = function (){
-        $http.get('http://blackhop.api.dessin.com.ar/api/pos/caja/alertaalquileres').success(function(response){    
+        $http.get('http://blackhop.api.dessin.com.ar/api/pos/caja/alertaalquileres').success(function(response){
             $scope.alertaAlquileresRetiros = response.retiros;
             $scope.alertaAlquileresDevoluciones = response.devoluciones;
-
+/*
     $scope.alertaAlquileresRetiros=[
         {
         id:"777",
@@ -649,20 +649,20 @@ vm.login2 = function() {
     $scope.alertaAlquileresDevoluciones=[
         {
         id:"780",
-        bandera:"devuelve",
+        bandera:"devolucion",
         nombreCliente:"Cochis Mochis",
         nombreEquipo:"Equipo 22",
         fecha:"Hoy"
         },
         {
         id:"781",
-        bandera:"devuelve",
+        bandera:"devolucion",
         nombreCliente:"Matias ",
         nombreEquipo:"Equipo 12",
         fecha:"Hoy"
         }
     ]
-
+*/
         }).error(function(error){
             console.log(error);
         }) 
@@ -721,15 +721,20 @@ vm.login2 = function() {
                 }
 
                 $scope.resumen.productos.push(productoAGuardar);
+
+                $scope.clienteSeleccionado = dato.cliente;
+                if($scope.clienteSeleccionado){
+                    $scope.resumen.nombreClienteSeleccionado = $scope.clienteSeleccionado.nombre + ' '+ $scope.clienteSeleccionado.apellido ;
+                }
                           
             }              
 
 
-        } else if (dato.bandera === "devolucion"){
+        } else if (dato.bandera == "devuelve"){
             //Modal preguntando si confirma devolucion MarioBros
                     SweetAlert.swal({
                         title: "Devolver Alquiler",
-                        text: "Vas a ingresar la devolucion del" +  dato.nombreEquipo,
+                        text: "Vas a ingresar la devolucion del " +  dato.nombreEquipo,
                         showCancelButton: true,
                         confirmButtonColor: "#DD6B55",
                         confirmButtonText: "Devolver",
@@ -740,9 +745,10 @@ vm.login2 = function() {
                     function(isConfirm) {
                         if (isConfirm) {
                             //mariobros Cambiar Ruta 
-                            $http.post('http://blackhop.api.dessin.com.ar/api/pos/caja/devolucionalquiler/' + inputValue)
+                            $http.post('http://blackhop.api.dessin.com.ar/api/pos/caja/devolucionalquiler/' + dato.id)
                                 .success(function() {
                                     swal("¡Devuelto!", "El Alquiler fue devuelto.", "success");
+                                     $scope.getAlertaAlquileres();
                                 }).error(function(error) {
                                     console.log(error.error);
                                     SweetAlert.swal("ERROR", error.error, "error"); 
@@ -1734,10 +1740,11 @@ $scope.modal={
     DTColumnDefBuilder.newColumnDef(0).notVisible(),
     DTColumnDefBuilder.newColumnDef(1),
     DTColumnDefBuilder.newColumnDef(2).withOption('sWidth', '30px'),
-    DTColumnDefBuilder.newColumnDef(3).notSortable(),
+    DTColumnDefBuilder.newColumnDef(3),
     DTColumnDefBuilder.newColumnDef(4),
     DTColumnDefBuilder.newColumnDef(5),
-    DTColumnDefBuilder.newColumnDef(6).notSortable().withOption('sWidth', '200px'),
+    DTColumnDefBuilder.newColumnDef(6),
+    DTColumnDefBuilder.newColumnDef(7).notSortable().withOption('sWidth', '200px'),
     ]
 
 
@@ -1889,23 +1896,36 @@ $scope.modal={
             }
             */
         };  
-
+        //EL MORE WN
         $scope.imprimir= function (cupon){
             console.log(cupon);
-
-            var modalInstance = $uibModal.open({
-                templateUrl: 'views/imprimir_cupon.html',
-                controller: imprimirCuponCtrl,
-                windowClass: "animated flipInY",
-                resolve: {
-                    cupon: function () {
-                        return cupon;
+            if(cupon.tipo == 'Alquiler'){
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'views/imprimir_alquiler.html',
+                    controller: imprimirAlquilerCtrl,
+                    windowClass: "animated flipInY",
+                    resolve: {
+                        alquiler: function () {
+                            return cupon.cuponAlq;
+                        }
                     }
-                }
-            }).closed.then(function(){
-                console.log('modal closed');
-            });
-
+                }).closed.then(function(){
+                    console.log('modal imprimir alquiler closed');
+                });
+            }else{
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'views/imprimir_cupon.html',
+                    controller: imprimirCuponCtrl,
+                    windowClass: "animated flipInY",
+                    resolve: {
+                        cupon: function () {
+                            return cupon;
+                        }
+                    }
+                }).closed.then(function(){
+                    console.log('modal closed');
+                });
+            }
         }
 
 
@@ -2014,7 +2034,7 @@ $scope.modal={
     }
 }])
 
-.controller('alquileresCtrl', ['$scope','$log','$uibModal','DTOptionsBuilder','DTColumnDefBuilder', function($scope,$log,$uibModal,DTOptionsBuilder,DTColumnDefBuilder){
+.controller('alquileresCtrl', ['$http','$scope','$log','$uibModal','DTOptionsBuilder','DTColumnDefBuilder','SweetAlert', function($http,$scope,$log,$uibModal,DTOptionsBuilder,DTColumnDefBuilder,SweetAlert){
 
     $scope.dtOptions = DTOptionsBuilder.newOptions()
 
@@ -2026,19 +2046,17 @@ $scope.modal={
         {extend: 'pdf', title: 'Alquileres'},
 
         {extend: 'print',
-        customize: function (win){
-         $(win.document.body).addClass('white-bg');
-         $(win.document.body).css('font-size', '10px');
+            customize: function (win){
+                $(win.document.body).addClass('white-bg');
+                $(win.document.body).css('font-size', '10px');
 
-         $(win.document.body).find('table')
-         .addClass('compact')
-         .css('font-size', 'inherit');
-     }
-     , text: 'Imprimir'
- }
- ])
+                $(win.document.body).find('table')
+                .addClass('compact')
+                .css('font-size', 'inherit');
+            }, text: 'Imprimir'
+        }
+    ])
     .withOption('order', [0, 'desc']);
-
     $scope.dtColumnDefs = [
     DTColumnDefBuilder.newColumnDef(0).withOption('sWidth', '25px'),
     DTColumnDefBuilder.newColumnDef(1),
@@ -2051,187 +2069,34 @@ $scope.modal={
          * alquileres 
          */
 
-         //ToDO traer listado de alquileres
-         $scope.alquileres = [
-         {
-            id: '1',
-            idCliente: '1',
-            nombreCliente:'Luciano Marquez',                
-            fecha: '2016-06-10 22:23:44.657',
-                fechaDevolucion: '2016-06-13 22:23:44.657',//cambiar en drawio
-                estado: 'Finalizado',//calcular si !Finalizado
-                equipo:'1'
-            },
-            {
-                id: '2',
-                idCliente: '2',
-                nombreCliente:'Antonio Rodriguez',                
-                fecha: '2016-06-13 22:23:44.657',
-                fechaDevolucion: '2016-06-16 22:23:44.657',
-                estado: 'Finalizado',
-                equipo:'1'
-            },
-            {
-                id: '3',
-                idCliente: '3',
-                nombreCliente:'Fiorella Salas',                
-                fecha: '2016-06-17 22:23:44.657',
-                fechaDevolucion: '2016-06-20 22:23:44.657',
-                estado: 'Finalizado',
-                equipo:'1'
-            },
-            {
-                id: '4',
-                idCliente: '4',
-                nombreCliente:'Mafalda Barela',                
-                fecha: '2016-06-21 22:23:44.657',
-                fechaDevolucion: '2016-06-25 22:23:44.657',
-                estado: 'Finalizado',
-                equipo:'1'
-            },
-            {
-                id: '5',
-                idCliente: '5',
-                nombreCliente:'Liza Ortega',                
-                fecha: '2016-06-21 22:23:44.657',
-                fechaDevolucion: '2016-06-25 22:23:44.657',
-                estado: 'Finalizado',
-                equipo:'2'
-            },
-            {
-                id: '6',
-                id: '6',
-                nombreCliente:'Juan Colón',                
-                fecha: '2016-07-16 22:23:44.657',
-                fechaDevolucion: '2016-07-25 22:23:44.657',
-                estado: 'Finalizado',
-                equipo:'3'
-            },
-            {
-                id: '7',
-                idCliente: '7',
-                nombreCliente:'Ruben Pacheco',                
-                fecha: '2016-08-01 22:23:44.657',
-                fechaDevolucion: '2016-08-03 22:23:44.657',
-                estado: 'Finalizado',
-                equipo:'3'
-            },
-            {
-                id: '8',
-                idCliente: '8',
-                nombreCliente:'Simon Garcia',                
-                fecha: '2016-08-03 22:23:44.657',
-                fechaDevolucion: '2016-08-06 22:23:44.657',
-                estado: 'Finalizado',
-                equipo:'3'
-            },
-            {
-                id: '9',
-                idCliente: '9',
-                nombreCliente:'Roberto Estrada',                
-                fecha: '2016-08-07 22:23:44.657',
-                fechaDevolucion: '2016-08-10 22:23:44.657',//con retraso
-                estado: '',
-                equipo:'2'
-            },
-            {
-                id: '10',
-                idCliente: '10',
-                nombreCliente:'Lionel Villar',                
-                fecha: '2016-08-10 22:23:44.657',
-                fechaDevolucion: '2016-08-13 22:23:44.657',
-                estado: 'Finalizado',
-                equipo:'1'
-            },
-            {
-                id: '11',
-                idCliente: '11',
-                nombreCliente:'Esteban Varella',                
-                fecha: '2016-08-13 22:23:44.657',
-                fechaDevolucion: '2016-08-16 22:23:44.657',
-                estado: 'Finalizado',
-                equipo:'1'
-            },
-            {
-                id: '12',
-                idCliente: '12',
-                nombreCliente:'Nicolas Franccesco',                
-                fecha: '2016-08-17 22:23:44.657',
-                fechaDevolucion: '2016-08-20 22:23:44.657',
-                estado: 'Finalizado',
-                equipo:'1'
-            },
-            {
-                id: '13',
-                idCliente: '1',
-                nombreCliente:'Luciano Marquez',                
-                fecha: '2016-08-25 22:23:44.657',
-                fechaDevolucion: '2016-09-15 22:23:44.657',
-                estado: '',
-                equipo:'1'
-            },
-            {
-                id: '14',
-                idCliente: '1',
-                nombreCliente:'Luciano Marquez',                
-                fecha: '2016-08-25 22:23:44.657',
-                fechaDevolucion: '2016-09-15 22:23:44.657',
-                estado: '',
-                equipo:'3'
-            }
-            ];
-
+        $scope.getAlquileres=function(){
+            $http.get('http://blackhop.api.dessin.com.ar/api/admin/alquiler')
+            .success(function(response){    
+                $scope.alquileres = response.data;
+                for(var i = 0; i < $scope.alquileres.length; i++){            
+                        $scope.calcularEstado(i);                
+                }
+                
+            }).error(function(error){
+                console.log(error);
+            }); 
+       }; 
+        $scope.getAlquileres();
         //calculo estado en base a las fechas si !Finalizado
 
         $scope.calcularEstado=function(indice){
-
-            var now = moment(); 
-            var fD = moment($scope.alquileres[indice].fechaDevolucion);
-
-            /*
-                now - fD
-                < 0 : Con Retraso
-                = 0 : Devuelve Hoy
-                > 0 : Alquilado
-                */
-
-                var diffDias = fD.diff(now, 'days'); 
-
-                if (diffDias < 0){
-                    $scope.alquileres[indice].estado='Con Retraso';                            
-                } else if(diffDias == 0){
-                    $scope.alquileres[indice].estado='Devuelve Hoy';
-                } else {
-                    $scope.alquileres[indice].estado='Vigente';
-                };
-
-                switch ($scope.alquileres[indice].estado){
-                    case 'Con Retraso':
+            switch ($scope.alquileres[indice].estado){
+                case 'Con Retraso':
                     $scope.alquileres[indice].class= "badge-danger";
-                    break;
-                    case 'Devuelve Hoy':
-                    $scope.alquileres[indice].class= "badge-warning";
-                    break; 
-                    case 'Vigente':
+                break;
+                case 'Creado':
                     $scope.alquileres[indice].class= "badge-primary";
-                    break;
-                };
-                $scope.alquileres[indice].fecha=moment($scope.alquileres[indice].fecha).locale('es').format('DD/MMM/YYYY');
-                $scope.alquileres[indice].fechaDevolucion=moment($scope.alquileres[indice].fechaDevolucion).locale('es').format('DD/MMM/YYYY');
-
+                break; 
+                case 'Retirado':
+                    $scope.alquileres[indice].class= "badge-warning";
+                break;
             };
-
-
-            for(var i = 0; i < $scope.alquileres.length; i++){
-            //calcular estado
-            if ($scope.alquileres[i].estado!="Finalizado"){                
-                $scope.calcularEstado(i);                
-            }else{
-                $scope.alquileres[i].fecha=moment($scope.alquileres[i].fecha).locale('es').format('DD/MMM/YYYY');
-                $scope.alquileres[i].fechaDevolucion=moment($scope.alquileres[i].fechaDevolucion).locale('es').format('DD/MMM/YYYY');
-                $scope.alquileres[i].class= "badge-success";
-            }
-
+            
         };
 
         $scope.ok = function () {
@@ -2250,12 +2115,22 @@ $scope.modal={
                     controller: detalleAlquilerClienteCtrl, 
                     //controler en controllers.js, no termino de entender porque no lo puedo armar como el resto y si o si tengo que poner una funcion                        
                     windowClass: "animated fadeIn",
+                    SweetAlert:SweetAlert,
                     resolve: {
                         alquiler: function () {
                             return alquiler;
                         }
+                        
                     }
                 });
+                modalInstance.result.then(function(data){
+                    //console.log('PRI ' + data);
+                },function(data){
+                    if(data == 'eliminado'){
+                        $scope.getAlquileres();
+                    }
+                });
+
             }
         }
     }])

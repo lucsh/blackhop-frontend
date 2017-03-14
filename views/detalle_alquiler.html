@@ -2,25 +2,26 @@
 
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-12">
-            <h3 class="pull-right">{{alquiler.fecha}}</h3>
+            <h3 class="pull-right">{{alquiler.fechaIni}} - {{alquiler.fechaFin}}</h3>
         </div>
 
         <div class="col-lg-12 text-center">            
-            <h4 class="">Equipo {{alquiler.equipo}}</h4>
-            <h4 class="">Alquiler por <ng-pluralize count="alquiler.diffDias" when="{'0': '', 'one': '1 día', 'other': '{} días'}"></ng-pluralize></h4>
-            <h2 class="softpadding">{{alquiler.nombreCliente}}</h2>
-            <h3 class="">DNI: {{cliente.dni}}</h3>
+            <h4 class="">Equipo {{alquiler.nombreEquipo}}</h4>
+            <!--h4 class="">Alquiler por <ng-pluralize count="alquiler.diffDias" when="{'0': '', 'one': '1 día', 'other': '{} días'}"></ng-pluralize></h4-->
+            <h2 class="softpadding">{{alquiler.cliente.nombre}} {{alquiler.cliente.apellido}}</h2>
+            <h3 class="">DNI: {{alquiler.cliente.dni}}</h3>
         </div>
 
     </div>
 
     <div class="ibox-content">
         <div class="row">                
-            <div class="col-lg-12 margin-20"><h3><i class="fa fa-home"></i> Direccion: <span>{{ cliente.direccion}}</span></h3></div>
-            <div class="col-lg-5 margin-20"><h3><i class="fa fa-phone"></i> Telefono: <span>{{ cliente.telefono}}</span></h3></div>
-            <div class="col-lg-5 margin-20"><h3><i class="fa fa-mobile"></i> Celular: <span>{{ cliente.celular}}</span></h3></div>
-            <div class="col-lg-12 margin-20"><h3><i class="fa fa-envelope"></i> email: <span>{{ cliente.email}}</span></h3></div>
+            <div class="col-lg-12 margin-20"><h3><i class="fa fa-home"></i> Direccion: <span>{{ alquiler.cliente.direccion}}</span></h3></div>
+            <div ng-if="alquiler.cliente.telefono != '' " class="col-lg-5 margin-20"><h3><i class="fa fa-phone"></i> Telefono: <span>{{ alquiler.cliente.telefono}}</span></h3></div>
+            <div class="col-lg-5 margin-20"><h3><i class="fa fa-mobile"></i> Celular: <span>{{ alquiler.cliente.celular}}</span></h3></div>
+            <div class="col-lg-12 margin-20"><h3><i class="fa fa-envelope"></i> email: <span>{{ alquiler.cliente.email}}</span></h3></div>
         </div>
+        <button class="btn-danger btn pull-right" ng-click="eliminar(alquiler.id)"><i class='fa fa-trash'></i> Eliminar</button>
     </div>
 
 </div>

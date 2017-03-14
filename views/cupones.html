@@ -26,6 +26,7 @@
                             <th>Cliente</th>                            
                             <th>Litros</th>
                             <th>Codigo</th>
+                            <th>Tipo</th>
                             <th>Fecha</th>
                             <th>Estado</th>
                             <th>Vigencia</th>                            
@@ -37,7 +38,8 @@
                             <td>{{ cupon.nombreCliente }}</td>                            
                             <td class="text-center">{{ cupon.litros }}</td>
                             <td>{{ cupon.codigo }}</td>
-                            <td>{{ cupon.fecha }}</td>
+                            <td>{{ cupon.tipo }}</td>
+                            <td>{{ cupon.fechaFormat }}</td>
                             <td><span class="badge {{ cupon.class }}">{{ cupon.estado }}</span></td>
                             <td><div class="col-lg-5">{{ cupon.vigencia }} días</div>
                             <div ng-if="cupon.estado!='Usado'" class="tresde-right-container" >

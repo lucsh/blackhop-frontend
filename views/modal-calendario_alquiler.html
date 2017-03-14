@@ -22,7 +22,7 @@
         <div class="row equal">
 
             <div class="col-md-1">
-            <a ng-click="traerCalendario('restar')" id="prev"></a>
+            <a ng-if="estadoCalendario > 0" ng-click="traerCalendario('restar')" id="prev"></a>
             </div>
             <div class="col-md-8">
                 <table class="alquileres center-block">
@@ -69,7 +69,7 @@
             </div>
 
           <div class="col-md-1">
-          <a ng-click="traerCalendario('agregar')"  id="next"></a>
+          <a ng-if="estadoCalendario < 3" ng-click="traerCalendario('agregar')"  id="next"></a>
           </div>
        </div> 
      
