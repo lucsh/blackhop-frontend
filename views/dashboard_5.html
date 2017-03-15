@@ -15,11 +15,12 @@
                     {{ datosDashboard.ventasMesActual ? datosDashboard.ventasMesActual : 0 | currency:"$ "}}
                 </h1>
                 <small>
-                    Ventas en el mes acumuladas
+                    Ventas ultimos siete d&iacute;as
                 </small>
                 <div class="m-b-sm">
                     <div ng-if="datosDashboard.ultimosSiete" sparkline spark-data="datosDashboard.ultimosSiete" spark-options="chart.sparklineOptions"></div>
                 </div>
+                <!--
                 <div class="row ">
                     <div class="col-xs-4">
                         <small class="stats-label">Cantidad de Clientes</small>
@@ -35,18 +36,19 @@
                         <h4>4604</h4>
                     </div>
                 </div>
-
+                -->
             </div>
             <div class="col-sm-4">
                 <h1 class="m-b-xs">
                     {{ datosDashboard.ventasSemana ? datosDashboard.ventasSemana : 0 | currency:"$ "}}
                 </h1>
                 <small>
-                    Ventas en la semana
+                    Ventas ultimas cuatro semanas
                 </small>
                 <div class="m-b-sm">
                     <div ng-if="datosDashboard.ultimasCuatroWeeks" sparkline spark-data="datosDashboard.ultimasCuatroWeeks" spark-options="chart.sparklineOptions"></div>
                 </div>
+                <!--
                 <div class="row">
                     <div class="col-xs-4">
                         <small class="stats-label">Cantidad de clientes</small>
@@ -62,7 +64,7 @@
                         <h4>1625</h4>
                     </div>
                 </div>
-
+                -->
 
             </div>
             <div class="col-sm-4">
