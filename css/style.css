@@ -8617,8 +8617,8 @@ body.md-skin {
 
 .canillas-bottom-top:hover {
     opacity: 1;
-    -webkit-transform: rotate3d(1, 0, 0,0) rotate(-90deg) translate3d(105px,160px, 0px);
-    transform: rotate3d(1, 0, 0,0) rotate(-90deg) translate3d(105px,160px, 0px);
+    -webkit-transform: rotate3d(1, 0, 0,0) rotate(-90deg) translate3d(0px,160px, 0px);
+    transform: rotate3d(1, 0, 0,0) rotate(-90deg) translate3d(0px,160px, 0px);
     -webkit-transition: -webkit-transform 0.7s cubic-bezier(0.26, 0.86, 0.44, 0.985);
     transition: transform 1s cubic-bezier(0.26, 0.86, 0.44, 0.985);
 }
