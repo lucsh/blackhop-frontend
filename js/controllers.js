@@ -1629,6 +1629,7 @@ function terminarVentaCtrl ($q,$http,$scope,$log,$uibModalInstance,SweetAlert,$u
             }
                 if (totalLitrosCupones>0){
                     //cupon.litros=totalLitrosCupones;
+                    cupon.litros=response.litros;
 
                     var modalInstance = $uibModal.open({
                         templateUrl: 'views/imprimir_cupon.html',
