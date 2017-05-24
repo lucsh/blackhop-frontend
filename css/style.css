@@ -8607,7 +8607,7 @@ body.md-skin {
     perspective: 100px;
     position: fixed;
     display: block;
-    height: 160px;
+    height: 80px;
     width: 100%;
     overflow: hidden;
     left: -30px;
@@ -8617,8 +8617,8 @@ body.md-skin {
 
 .canillas-bottom-top:hover {
     opacity: 1;
-    -webkit-transform: rotate3d(1, 0, 0,0) rotate(-90deg) translate3d(0px,160px, 0px);
-    transform: rotate3d(1, 0, 0,0) rotate(-90deg) translate3d(0px,160px, 0px);
+    -webkit-transform: rotate3d(1, 0, 1, 8deg) rotate(-96deg) translate3d(43px,202px, -10px);
+    transform: rotate3d(1, 0, 1, 8deg) rotate(-96deg) translate3d(43px,202px, -10px);
     -webkit-transition: -webkit-transform 0.7s cubic-bezier(0.26, 0.86, 0.44, 0.985);
     transition: transform 1s cubic-bezier(0.26, 0.86, 0.44, 0.985);
 }
@@ -8626,13 +8626,17 @@ body.md-skin {
 .canillas-bottom-top {
     cursor: default;
     z-index: 9999;
-    position: fixed;    
+    position: fixed;
     opacity: 1;
     display: inline;
-    -webkit-transform: rotate3d(3, 0, 1, -1deg) rotate(-90deg) translate3d(10px,120px, -10px);
-    transform: rotate3d(3, 0, 1, -1deg) rotate(-90deg) translate3d(10px,120px, -10px);
+    -webkit-transform: rotate3d(3, 0, 1, -1deg) rotate(-90deg) translate3d(185px,200px, -10px);
+    transform: rotate3d(3, 0, 1, -1deg) rotate(-90deg) translate3d(0px,200px, -10px);
     -webkit-transition: -webkit-transform 1s cubic-bezier(0.26, 0.86, 0.44, 0.985) 0s, opacity 0.3s cubic-bezier(0.26, 0.86, 0.44, 0.985) 0s;
     transition: transform 1s cubic-bezier(0.26, 0.86, 0.44, 0.985) 0s, opacity 0.3s cubic-bezier(0.26, 0.86, 0.44, 0.985) 0s;
+    margin-top: -240px;
+    /* Fix para posicion random de las canillas, depende del tamaño por el transform */
+    width: 340px;
+    height: 650px;
 }
 
 
