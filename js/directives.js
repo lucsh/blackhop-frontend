@@ -580,7 +580,7 @@ function resumenSlimScroll($timeout){
             $timeout(function(){
                 alturaDeVentana = $(window).height();
                 alturaCalculadora = 306;
-                alturaResumen = alturaDeVentana - alturaCalculadora - 150;
+                alturaResumen = alturaDeVentana - alturaCalculadora - 20;
 
                 element.slimscroll({
                     height: alturaResumen,
